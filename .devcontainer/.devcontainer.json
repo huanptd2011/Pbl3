@@ -1,0 +1,29 @@
+{
+  "name": "Spring Boot + SQL Server",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "springboot",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "pivotal.vscode-spring-boot",
+        "ms-azuretools.vscode-docker",
+        "redhat.java",
+        "vscjava.vscode-maven",
+        "ms-mssql.mssql"
+      ]
+    }
+  },
+  "remoteUser": "root",
+  "postCreateCommand": "source /app/command.env && $MAVEN_CMD",
+  "mounts": [
+      "source=${localWorkspaceFolder}/.devcontainer/backend.env,target=/app/backend.env,type=bind",
+      "source=${localWorkspaceFolder}/.devcontainer/command.env,target=/app/command.env,type=bind"
+  ]
+  }
+}

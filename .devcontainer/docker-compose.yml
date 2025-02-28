@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  springboot:
+    build: .
+    container_name: shopnhn_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - backend.env
+      - command.env
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: ["mvn", "spring-boot:run"]
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: shopnhn_db
+    restart: always
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "123456789"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:

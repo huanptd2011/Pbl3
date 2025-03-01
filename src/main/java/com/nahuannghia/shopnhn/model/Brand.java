@@ -29,7 +29,17 @@ public class Brand {
 
     @Column(name = "brand_email", length = 100)
     private String brandEmail;
-
+    public Brand() {
+    }
+    public Brand(String brandid, String brandName, String brandDescription, String brandImage, String brandAddress, String brandPhone, String brandEmail) {
+        this.brandid = brandid;
+        this.brandName = brandName;
+        this.brandDescription = brandDescription;
+        this.brandImage = brandImage;
+        this.brandAddress = brandAddress;
+        this.brandPhone = brandPhone;
+        this.brandEmail = brandEmail;
+    }
     // Getters
     public String getBrandid() {
         return brandid;

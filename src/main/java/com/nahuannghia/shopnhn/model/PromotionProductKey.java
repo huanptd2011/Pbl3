@@ -1,12 +1,16 @@
 package com.nahuannghia.shopnhn.model;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-public class PromotionProductKey implements java.io.Serializable {
+public class PromotionProductKey implements Serializable {
     @Column(name = "product_id", length = 30, nullable = false)
     private String productId;
+
     @Column(name = "promotion_id", length = 30, nullable = false)
     private String promotionId;
 
@@ -18,7 +22,7 @@ public class PromotionProductKey implements java.io.Serializable {
         this.promotionId = promotionId;
     }
 
-    // getters
+    // Getters
     public String getProductId() {
         return productId;
     }
@@ -27,7 +31,7 @@ public class PromotionProductKey implements java.io.Serializable {
         return promotionId;
     }
 
-    // setters
+    // Setters
     public void setProductId(String productId) {
         this.productId = productId;
     }
@@ -36,4 +40,19 @@ public class PromotionProductKey implements java.io.Serializable {
         this.promotionId = promotionId;
     }
 
+    // Override equals() để so sánh hai đối tượng
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PromotionProductKey that = (PromotionProductKey) o;
+        return Objects.equals(productId, that.productId) &&
+               Objects.equals(promotionId, that.promotionId);
+    }
+
+    // Override hashCode() để sinh mã băm từ productId và promotionId
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, promotionId);
+    }
 }

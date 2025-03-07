@@ -4,7 +4,6 @@ package com.nahuannghia.shopnhn.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,16 +18,16 @@ public class ImageURLProduct {
     private String imageURL;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
-    private Product productID;
+    @JoinColumn(name = "product_id", referencedColumnName="product_id", nullable = false)
+    private Product product;
     public ImageURLProduct() {
     }
 
-    public ImageURLProduct(ImageURLProductKey id, String imageURL, Product productID, ProductColor productColorID,
-            ProductSize productSizeID) {
+    public ImageURLProduct(ImageURLProductKey id, String imageURL, Product product) {
         this.id = id;
         this.imageURL = imageURL;
-        this.productID = productID;
+        this.product = product;
+        
   
     }
 
@@ -41,8 +40,8 @@ public class ImageURLProduct {
         return imageURL;
     }
 
-    public Product getProductID() {
-        return productID;
+    public Product getProduct() {
+        return product;
     }
 
 
@@ -55,8 +54,8 @@ public class ImageURLProduct {
         this.imageURL = imageURL;
     }
 
-    public void setProductID(Product productID) {
-        this.productID = productID;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
 }

@@ -10,7 +10,11 @@ import jakarta.persistence.Column;
 public class Brand {
     @Id
     @Column(name = "brand_id", length = 30, nullable = false)
+<<<<<<< HEAD
     private String brandid;
+=======
+    private String brandId;
+>>>>>>> 9d98321 (push code)
 
     @Column(name = "brand_name", length = 100, nullable = false)
     private String brandName;
@@ -31,8 +35,13 @@ public class Brand {
     private String brandEmail;
     public Brand() {
     }
+<<<<<<< HEAD
     public Brand(String brandid, String brandName, String brandDescription, String brandImage, String brandAddress, String brandPhone, String brandEmail) {
         this.brandid = brandid;
+=======
+    public Brand(String brandId, String brandName, String brandDescription, String brandImage, String brandAddress, String brandPhone, String brandEmail) {
+        this.brandId = brandId;
+>>>>>>> 9d98321 (push code)
         this.brandName = brandName;
         this.brandDescription = brandDescription;
         this.brandImage = brandImage;
@@ -41,8 +50,13 @@ public class Brand {
         this.brandEmail = brandEmail;
     }
     // Getters
+<<<<<<< HEAD
     public String getBrandid() {
         return brandid;
+=======
+    public String getBrandId() {
+        return brandId;
+>>>>>>> 9d98321 (push code)
     }
 
     public String getBrandName() {
@@ -70,8 +84,13 @@ public class Brand {
     }
 
     // Setters
+<<<<<<< HEAD
     public void setBrandid(String brandid) {
         this.brandid = brandid;
+=======
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+>>>>>>> 9d98321 (push code)
     }
 
     public void setBrandName(String brandName) {

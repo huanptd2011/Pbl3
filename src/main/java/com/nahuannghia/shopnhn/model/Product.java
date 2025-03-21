@@ -53,6 +53,14 @@ public class Product {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+<<<<<<< HEAD
+=======
+
+    public Product(String productId) {
+        this.productId = productId;
+    }
+
+>>>>>>> 9d98321 (push code)
     // Getters
     public String getProductId() {
         return productId;

@@ -1,17 +1,5 @@
 package com.nahuannghia.shopnhn.model;
 import java.time.LocalDateTime;
-<<<<<<< HEAD
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-@Entity
-@Table(name = "inventory")
-public class Inventory {
-    @Id 
-=======
 
 import jakarta.persistence.*;
 
@@ -21,7 +9,6 @@ public class Inventory {
     @Id
     private Long inventoryId;
     @MapsId
->>>>>>> 9d98321 (push code)
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -40,8 +27,6 @@ public class Inventory {
         this.location = location;
     }
     // Getters
-<<<<<<< HEAD
-=======
 
     public Long getInventoryId() {
         return inventoryId;
@@ -51,7 +36,6 @@ public class Inventory {
         this.inventoryId = inventoryId;
     }
 
->>>>>>> 9d98321 (push code)
     public Product getProduct() {
         return product;
     }
@@ -77,10 +61,5 @@ public class Inventory {
     public void setLocation(String location) {
         this.location = location;
     }
-<<<<<<< HEAD
-    
 
-
-=======
->>>>>>> 9d98321 (push code)
 }

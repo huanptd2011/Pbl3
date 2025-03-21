@@ -43,8 +43,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "shipping_company_id", nullable = false)
     private ShipingCompany shippingCompany; // Giả sử có entity ShippingCompany
-<<<<<<< HEAD
-=======
 
     public Order() {
     }
@@ -132,5 +130,4 @@ public class Order {
     public void setShippingCompany(ShipingCompany shippingCompany) {
         this.shippingCompany = shippingCompany;
     }
->>>>>>> 9d98321 (push code)
 }

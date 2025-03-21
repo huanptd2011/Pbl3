@@ -38,9 +38,6 @@ public class OrderDetails {
 
     @Transient // Bỏ qua cột computed TotalPrice
     private BigDecimal totalPrice;
-<<<<<<< HEAD
-=======
-
     public OrderDetails() {
     }
 
@@ -118,6 +115,5 @@ public class OrderDetails {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
->>>>>>> 9d98321 (push code)
 }
 

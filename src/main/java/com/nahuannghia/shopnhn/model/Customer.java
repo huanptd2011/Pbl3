@@ -30,17 +30,8 @@ public class Customer {
     public Customer() {
     }
 
-<<<<<<< HEAD
-    public Customer(String customerID, String customerName, String customerEmail, String customerPhone,
-            String customerAddress, LocalDateTime customerDOB, String customerGender) {
-=======
-    public Customer(String customerID) {
-        this.customerID = customerID;
-    }
-
     public Customer(String customerID, String customerName, String customerEmail, String customerPhone,
                     String customerAddress, LocalDateTime customerDOB, String customerGender) {
->>>>>>> 9d98321 (push code)
         this.customerID = customerID;
         this.customerName = customerName;
         this.customerEmail = customerEmail;

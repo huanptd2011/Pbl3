@@ -1,5 +1,7 @@
 package com.nahuannghia.shopnhn.service;
 
+import com.nahuannghia.shopnhn.Response.ProductSizeResponse;
+import com.nahuannghia.shopnhn.model.Product;
 import com.nahuannghia.shopnhn.model.ProductSize;
 import com.nahuannghia.shopnhn.model.ProductSizeKey;
 import com.nahuannghia.shopnhn.repository.ProductSizeRepository;
@@ -7,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductSizeService {
@@ -20,12 +24,22 @@ public class ProductSizeService {
         }
     }
 
-    public List<ProductSize> getAllProductSize(){
-        List<ProductSize> listSize = productSizeRepository.findAll();
-        if(listSize.isEmpty()){
-            throw new RuntimeException("No size");
+    public ProductSizeResponse getAllProductSize(String productId){
+
+        List<ProductSize> productSizes = productSizeRepository.findByProduct_ProductId(productId);
+        if (productSizes == null || productSizes.isEmpty()) {
+            return null;
         }
-        return listSize;
+        Product product = productSizes.get(0).getProduct();
+        List<String> sizes = productSizes.stream()
+                .map(ProductSize::getSize)
+                .distinct()
+                .collect(Collectors.toList());
+
+        ProductSizeResponse response = new ProductSizeResponse();
+        response.setProduct(product);
+        response.setSizes(sizes);
+        return response;
     }
 
     public ProductSize getProductSize(ProductSizeKey productSizeKey){

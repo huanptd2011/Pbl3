@@ -1,52 +1,42 @@
 package com.nahuannghia.shopnhn.model;
 
 import jakarta.persistence.*;
-
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "product_category_mapping")
-
+@Table(name = "productCategoryMapping")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductCategoryMapping {
 
     @EmbeddedId
-    private ProductCategoryMappingKey id;
+    private ProductCategoryMappingId id;
 
     @ManyToOne
     @MapsId("productId")
-    @JoinColumn(name = "Product_id", nullable = false)
+    @JoinColumn(name = "productId")
     private Product product;
 
     @ManyToOne
     @MapsId("categoryId")
-    @JoinColumn(name = "category_id", nullable = false)
-    private ProductCategory productCategory;
-    public ProductCategoryMapping() {
+    @JoinColumn(name = "categoryId")
+    private ProductCategory category;
+
+    // Composite primary key class, nested
+    @Embeddable
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductCategoryMappingId implements Serializable {
+
+        @Column(name = "productId")
+        private Integer productId;
+
+        @Column(name = "categoryId")
+        private Integer categoryId;
     }
-    public ProductCategoryMapping(ProductCategoryMappingKey id, Product product, ProductCategory productCategory) {
-        this.id = id;
-        this.product = product;
-        this.productCategory = productCategory;
-    }
-    //getters
-    public ProductCategoryMappingKey getId() {
-        return id;
-    }
-    public Product getProduct() {
-        return product;
-    }
-    public ProductCategory getProductCategory() {
-        return productCategory;
-    }
-    //setters
-    public void setId(ProductCategoryMappingKey id) {
-        this.id = id;
-    }
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-    }
-    
 }

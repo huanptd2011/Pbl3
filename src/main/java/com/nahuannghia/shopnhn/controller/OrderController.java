@@ -1,6 +1,7 @@
 package com.nahuannghia.shopnhn.controller;
 
-import com.nahuannghia.shopnhn.model.Order;
+import com.nahuannghia.shopnhn.request.OrderRequest;
+import com.nahuannghia.shopnhn.Response.OrderResponse;
 import com.nahuannghia.shopnhn.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,28 +9,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
+
     @Autowired
     private OrderService orderService;
+
     @PostMapping
-    public Order addOrder(@RequestBody Order order){
-        return orderService.addOrder(order);
+    public OrderResponse createOrder(@RequestBody OrderRequest request) {
+        return orderService.createOrder(request);
     }
+
     @GetMapping
-    public List<Order> getAllOrders(){
+    public List<OrderResponse> getAllOrders() {
         return orderService.getAllOrders();
     }
+
     @GetMapping("/{orderId}")
-    public Order getOrder(@PathVariable String orderId){
-        return orderService.getOrder(orderId);
+    public OrderResponse getOrderById(@PathVariable Integer orderId) {
+        return orderService.getOrderById(orderId);
     }
-    @PutMapping("/{orderId}")
-    public Order updateOrder(@PathVariable String orderId, @RequestBody Order order){
-        return orderService.updateOrder(orderId, order);
+
+    @PutMapping("/{orderId}/status")
+    public OrderResponse updateOrderStatus(@PathVariable Integer orderId, @RequestParam String status) {
+        return orderService.updateOrderStatus(orderId, status);
     }
+
     @DeleteMapping("/{orderId}")
-    public void deleteOrder(@PathVariable String orderId){
+    public void deleteOrder(@PathVariable Integer orderId) {
         orderService.deleteOrder(orderId);
     }
 }

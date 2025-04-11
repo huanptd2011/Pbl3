@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
+    // Có thể thêm các phương thức tùy chỉnh nếu cần
 }
+

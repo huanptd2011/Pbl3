@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang Sản Phẩm với Bộ Lọc</title>
+  <link rel="stylesheet" href="../CSS/products.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="logo">
+    <img src="https://png.pngtree.com/template/20200809/ourmid/pngtree-modern-sneaker-shoe-logo-image_401564.jpg" alt="Shop Giày">
+  </div>
+
+  <nav class="nav-links">
+    <ul>
+      <li><a href="../HTML/home.html">Trang chủ</a></li>
+      <li><a href="../HTML/products.html">Sản phẩm</a></li>
+      <li><a href="#">Danh mục</a></li>
+      <li><a href="#">Khuyến mãi</a></li>
+      <li><a href="#contact">Liên Hệ</a></li>
+    </ul>
+  </nav>
+
+  <div class="search-bar">
+    <input class="search-bar-text" type="text" placeholder="Tìm kiếm sản phẩm...">
+    <button type="submit">Tìm</button>
+  </div>
+
+  <div class="nav-icons">
+    <a href="#" class="cart-icon"><img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Giỏ hàng"></a>
+    <a href="#" class="user-icon"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Tài khoản"></a>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Filter Sidebar -->
+  <aside class="filter-sidebar">
+    <div class="filter-section">
+      <h3 class="filter-title">Thương hiệu</h3>
+      <div class="filter-options">
+        <label class="filter-option">
+          <input type="checkbox" name="brand" value="nike" checked> Nike
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" name="brand" value="adidas" checked> Adidas
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" name="brand" value="puma" checked> Puma
+        </label>
+        <label class="filter-option">
+          <input type="checkbox" name="brand" value="new-balance" checked> New Balance
+        </label>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h3 class="filter-title">Mức giá</h3>
+      <div class="filter-options">
+        <label class="filter-option">
+          <input type="radio" name="price" value="all" checked> Tất cả
+        </label>
+        <label class="filter-option">
+          <input type="radio" name="price" value="under1m"> Dưới 1 triệu
+        </label>
+        <label class="filter-option">
+          <input type="radio" name="price" value="1m-2m"> 1 - 2 triệu
+        </label>
+        <label class="filter-option">
+          <input type="radio" name="price" value="2m-3m"> 2 - 3 triệu
+        </label>
+        <label class="filter-option">
+          <input type="radio" name="price" value="over3m"> Trên 3 triệu
+        </label>
+      </div>
+      <div class="price-range">
+        <input type="number" placeholder="Từ" min="0">
+        <input type="number" placeholder="Đến" min="0">
+      </div>
+    </div>
+
+    <!-- <div class="filter-section">
+        <h3 class="filter-title">Màu sắc</h3>
+        <div class="color-options">
+            <div class="color-option selected" style="background: #000;"></div>
+            <div class="color-option" style="background: #fff; border: 1px solid #ddd;"></div>
+            <div class="color-option" style="background: #e74c3c;"></div>
+            <div class="color-option" style="background: #3498db;"></div>
+            <div class="color-option" style="background: #2ecc71;"></div>
+        </div>
+    </div>
+
+    <div class="filter-section">
+        <h3 class="filter-title">Kích cỡ</h3>
+        <div class="size-options">
+            <div class="size-option">36</div>
+            <div class="size-option selected">37</div>
+            <div class="size-option">38</div>
+            <div class="size-option">39</div>
+            <div class="size-option">40</div>
+            <div class="size-option">41</div>
+            <div class="size-option">42</div>
+            <div class="size-option">43</div>
+        </div>
+    </div> -->
+
+    <button id="apply-filters" style="width: 100%; padding: 10px; margin-top: 20px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer;">
+      Áp dụng bộ lọc
+    </button>
+  </aside>
+
+  <!-- Product Grid -->
+  <main class="product-grid">
+    <div class="product-header">
+      <h2>Giày thể thao</h2>
+      <div class="sort-options">
+        <select id="sort-by">
+          <option value="default">Sắp xếp theo</option>
+          <option value="price-asc">Giá thấp đến cao</option>
+          <option value="price-desc">Giá cao đến thấp</option>
+          <option value="popular">Bán chạy nhất</option>
+          <option value="newest">Mới nhất</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="product-list">
+      <div id="products-container" class="products">
+        <!-- Products will be loaded here by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination">
+      <!-- Pagination links will be generated by JavaScript -->
+    </div>
+  </main>
+</div>
+
+
+
+<!-- Product Detail Modal -->
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="product-detail" id="product-detail-content">
+      <!-- Product detail will be loaded here -->
+    </div>
+  </div>
+</div>
+
+<footer id="contact" style="background-color: #333; color: white; padding: 20px 0; text-align: center; margin-top: 20px;">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    <p>&copy; 2025 Shop Giày. All rights reserved.</p>
+    <p>
+      <a href="#" style="color: #ff6347; text-decoration: none; margin: 0 10px;">Chính sách bảo mật</a> |
+      <a href="#" style="color: #ff6347; text-decoration: none; margin: 0 10px;">Điều khoản sử dụng</a> |
+      <a href="#" style="color: #ff6347; text-decoration: none; margin: 0 10px;">Liên hệ</a>
+    </p>
+    <p>Theo dõi chúng tôi:</p>
+    <div style="margin-top: 10px;">
+      <a href="#" style="margin: 0 10px;"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" style="width: 24px;"></a>
+      <a href="#" style="margin: 0 10px;"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Twitter" style="width: 24px;"></a>
+      <a href="#" style="margin: 0 10px;"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Instagram" style="width: 24px;"></a>
+    </div>
+  </div>
+</footer>
+
+<script src="../JS/products.js"></script>
+</body>
+</html>

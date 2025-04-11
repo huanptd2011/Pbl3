@@ -1,133 +1,44 @@
 
 package com.nahuannghia.shopnhn.model;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "[Order]")
-
+@Table(name = "order")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
 
     @Id
-    @Column( length = 30, nullable = false)
-    private String orderId; 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "orderId")
+    private Integer orderId;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer; 
-
-    @Column( name = "order_status", length = 50, nullable = false)
-    private String orderStatus;
-
-    @Column(name = "total_amount", precision = 10, scale = 2, nullable = false)
-    private BigDecimal totalAmount;
+    @JoinColumn(name = "customerId", nullable = false)
+    private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "payment_method_id", nullable = false)
-    private PaymentMethod paymentMethod; // Giả sử có entity PaymentMethod
+    @JoinColumn(name = "paymentMethod_id", nullable = false)
+    private PaymentMethod paymentMethod;
 
-    @Column( name = "shipping_address", length = 500, nullable = false)
-    private String shippingAddress;
-
-    @Column(name = "notes", length = 2000)
-    private String notes;
-
-    @Column(name = "order_date", nullable = false)
+    @Column(name = "order_date", nullable = false, columnDefinition = "DATETIME DEFAULT GETDATE()")
     private LocalDateTime orderDate;
 
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "shipping_company_id", nullable = false)
-    private ShipingCompany shippingCompany; // Giả sử có entity ShippingCompany
+    @Column(name = "order_state", nullable = false, length = 20)
+    private String orderState = "Chờ xác nhận"; // Default value
 
-    public Order() {
-    }
+    @Column(name = "note", length = 2000)
+    private String note;
 
-    public Order(String orderId, Customer customer, String orderStatus, BigDecimal totalAmount, PaymentMethod paymentMethod, String shippingAddress, String notes, LocalDateTime orderDate, ShipingCompany shippingCompany) {
-        this.orderId = orderId;
-        this.customer = customer;
-        this.orderStatus = orderStatus;
-        this.totalAmount = totalAmount;
-        this.paymentMethod = paymentMethod;
-        this.shippingAddress = shippingAddress;
-        this.notes = notes;
-        this.orderDate = orderDate;
-        this.shippingCompany = shippingCompany;
-    }
-
-    public String getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(String shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public ShipingCompany getShippingCompany() {
-        return shippingCompany;
-    }
-
-    public void setShippingCompany(ShipingCompany shippingCompany) {
-        this.shippingCompany = shippingCompany;
-    }
 }

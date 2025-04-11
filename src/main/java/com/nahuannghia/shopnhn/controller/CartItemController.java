@@ -1,6 +1,7 @@
 package com.nahuannghia.shopnhn.controller;
 
-import com.nahuannghia.shopnhn.model.CartItem;
+import com.nahuannghia.shopnhn.Response.CartItemResponse;
+import com.nahuannghia.shopnhn.request.CartItemRequest;
 import com.nahuannghia.shopnhn.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,28 +10,34 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cart-items")
+@CrossOrigin(origins = {"http://localhost:63342", "http://127.0.0.1:5501", "http://127.0.0.1:5500"})
 public class CartItemController {
+
     @Autowired
     private CartItemService cartItemService;
-    @PostMapping
-    public CartItem addCartItem(@RequestBody CartItem cartItem){
-        return cartItemService.addCartItem(cartItem);
+
+    @PostMapping("/add")
+    public CartItemResponse addToCart(@RequestBody CartItemRequest request) {
+        return cartItemService.addOrUpdateCartItem(request);
     }
-    @GetMapping
-    public List<CartItem> getAllCartItem(){
-        return cartItemService.getAllCartItem();
+
+    @GetMapping("/{cartId}")
+    public List<CartItemResponse> getCartItems(@PathVariable Integer cartId) {
+        return cartItemService.getItemsByCartId(cartId);
     }
-    @GetMapping("/{cartItemId}")
-    public CartItem getCardItem(@PathVariable Long cartItemId){
-        return cartItemService.getCartItem(cartItemId);
+
+    @PutMapping("/update-quantity/{cartItemId}")
+    public CartItemResponse updateQuantity(@PathVariable Integer cartItemId, @RequestParam int quantity) {
+        return cartItemService.updateQuantity(cartItemId, quantity);
     }
-    @PutMapping("/{cartItemId}")
-    public CartItem updateCartItem(@PathVariable Long cartItemId, CartItem cartItem){
-        return cartItemService.updateCartItem(cartItemId, cartItem);
-    }
-    @DeleteMapping("/{cartItemId}")
-    public void deleteCartItem(@PathVariable Long cartItemId){
+
+    @DeleteMapping("/delete/{cartItemId}")
+    public void deleteCartItem(@PathVariable Integer cartItemId) {
         cartItemService.deleteCartItem(cartItemId);
     }
-}
 
+    @DeleteMapping("/clear/{cartId}")
+    public void clearCart(@PathVariable Integer cartId) {
+        cartItemService.clearCart(cartId);
+    }
+}

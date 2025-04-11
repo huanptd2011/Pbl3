@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Sản Phẩm</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Header Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px 5%;
+            flex-wrap: wrap;
+        }
+
+        .logo img {
+            height: 50px;
+            max-width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links ul {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        .search-bar {
+            display: flex;
+            margin: 10px 0;
+            flex-grow: 1;
+            max-width: 400px;
+            padding: 0 15px;
+        }
+
+        .search-bar-text {
+            flex-grow: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #ff6347;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-icons img {
+            height: 24px;
+            filter: brightness(0) invert(1);
+            transition: all 0.3s ease;
+        }
+
+        /* Product Section */
+        .product-list {
+            padding: 20px 5%;
+        }
+
+        .product-list h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-brand {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-weight: bold;
+            font-size: 18px;
+            color: #e74c3c;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .discount {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #555;
+        }
+
+        /* Modal chi tiết sản phẩm */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 900px;
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .product-detail {
+            display: flex;
+            gap: 30px;
+        }
+
+        .product-images {
+            flex: 1;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail.active {
+            border-color: #e74c3c;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            margin: 20px 0;
+        }
+
+        .current-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-left: 10px;
+        }
+
+        .discount {
+            background: #e74c3c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .product-description {
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .size-selection {
+            margin: 20px 0;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .size-option {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .size-option.selected {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        .add-to-cart-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .logo {
+                margin-bottom: 10px;
+            }
+
+            .nav-links {
+                margin: 10px 0;
+            }
+
+            .search-bar {
+                width: 100%;
+                max-width: 100%;
+                margin: 10px 0;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .product-detail {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+                margin: 20px auto;
+            }
+
+            .main-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-icons {
+                margin-top: 10px;
+            }
+
+            .products {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .product-info h3 {
+                font-size: 0.9rem;
+            }
+
+            .price {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header class="navbar">
+    <div class="logo">
+        <img src="https://png.pngtree.com/template/20200809/ourmid/pngtree-modern-sneaker-shoe-logo-image_401564.jpg" alt="Shop Giày">
+    </div>
+
+    <nav class="nav-links">
+        <ul>
+            <li><a href="../HTML/home.html">Trang chủ</a></li>
+            <li><a href="../HTML/products.html">Sản phẩm</a></li>
+            <li><a href="#">Danh mục</a></li>
+            <li><a href="#">Khuyến mãi</a></li>
+            <li><a href="#">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <div class="search-bar">
+        <input class="search-bar-text" type="text" placeholder="Tìm kiếm sản phẩm...">
+        <button type="submit">Tìm</button>
+    </div>
+
+    <div class="nav-icons">
+        <a href="#" class="cart-icon"><img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Giỏ hàng"></a>
+        <a href="#" class="user-icon"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Tài khoản"></a>
+    </div>
+</header>
+
+<!-- San Pham Noi Bat -->
+<section class="product-list">
+    <h2>Sản Phẩm Nổi Bật</h2>
+    <div id="products-container" class="products">
+        <!-- Sản phẩm sẽ được thêm bằng JavaScript -->
+    </div>
+</section>
+
+<!-- Modal chi tiết sản phẩm -->
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="product-detail">
+            <div class="product-images">
+                <img id="mainProductImage" src="" alt="Product Image" class="main-image">
+                <div class="thumbnail-container">
+                    <img src="" alt="Thumbnail 1" class="thumbnail active" onclick="changeMainImage(this)">
+                    <img src="" alt="Thumbnail 2" class="thumbnail" onclick="changeMainImage(this)">
+                    <img src="" alt="Thumbnail 3" class="thumbnail" onclick="changeMainImage(this)">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1 id="productTitle" class="product-title"></h1>
+                <div id="productBrand" class="product-brand"></div>
+
+                <div class="product-price">
+                    <span id="currentPrice" class="current-price"></span>
+                    <span id="originalPrice" class="original-price"></span>
+                    <span id="productDiscount" class="discount"></span>
+                </div>
+
+                <div id="productDescription" class="product-description">
+                    <!-- Mô tả sản phẩm sẽ được thêm bằng JavaScript -->
+                </div>
+
+                <div class="size-selection">
+                    <h3>Chọn size:</h3>
+                    <div class="size-options">
+                        <div class="size-option">36</div>
+                        <div class="size-option">37</div>
+                        <div class="size-option selected">38</div>
+                        <div class="size-option">39</div>
+                        <div class="size-option">40</div>
+                        <div class="size-option">41</div>
+                        <div class="size-option">42</div>
+                        <div class="size-option">43</div>
+                    </div>
+                </div>
+
+                <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hiển thị sản phẩm lên trang
+    document.addEventListener('DOMContentLoaded', function() {
+        const productsContainer = document.getElementById('products-container');
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.setAttribute('data-id', product.id);
+            productCard.onclick = function() { openProductModal(product.id); };
+
+            productCard.innerHTML = `
+                <img src="${product.images[0]}" alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <div class="product-brand">${product.brand}</div>
+                    <h3 class="product-name">${product.name}</h3>
+                    <div class="product-price">
+                        <span class="current-price">${formatPrice(product.price)}đ</span>
+                        <span class="original-price">${formatPrice(product.originalPrice)}đ</span>
+                        <span class="discount">-${product.discount}%</span>
+                    </div>
+                    <button class="add-to-cart">Thêm vào giỏ</button>
+                </div>
+            `;
+
+            productsContainer.appendChild(productCard);
+        });
+    });
+
+    // Mở modal chi tiết sản phẩm
+    function openProductModal(productId) {
+        const product = products.find(p => p.id == productId);
+        if (!product) return;
+
+        // Hiển thị thông tin sản phẩm
+        document.getElementById('productTitle').innerText = product.name;
+        document.getElementById('productBrand').innerText = product.brand;
+        document.getElementById('currentPrice').innerText = formatPrice(product.price) + 'đ';
+        document.getElementById('originalPrice').innerText = formatPrice(product.originalPrice) + 'đ';
+        document.getElementById('productDiscount').innerText = '-' + product.discount + '%';
+
+        // Hiển thị ảnh chính và thumbnail
+        const mainImage = document.getElementById('mainProductImage');
+        mainImage.src = product.images[0];
+        mainImage.alt = product.name;
+
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        product.images.forEach((img, index) => {
+            if (thumbnails[index]) {
+                thumbnails[index].src = img;
+                thumbnails[index].alt = product.name + ' ' + (index + 1);
+            }
+        });
+
+        // Hiển thị mô tả sản phẩm
+        const description = document.getElementById('productDescription');
+        description.innerHTML = `
+            <p>${product.description}</p>
+            <ul style="margin-top: 10px; padding-left: 20px;">
+                ${product.details.map(detail => `<li>${detail}</li>`).join('')}
+            </ul>
+        `;
+
+        // Hiển thị modal
+        document.getElementById('productModal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Đóng modal
+    function closeModal() {
+        document.getElementById('productModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Chuyển đổi ảnh chính khi click vào thumbnail
+    function changeMainImage(thumbnail) {
+        document.getElementById('mainProductImage').src = thumbnail.src;
+
+        // Xóa class active của tất cả thumbnail
+        document.querySelectorAll('.thumbnail').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Thêm class active cho thumbnail được click
+        thumbnail.classList.add('active');
+    }
+
+    // Chọn size
+    document.querySelectorAll('.size-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.size-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            this.classList.add('selected');
+        });
+    });
+
+    // Đóng modal khi click bên ngoài nội dung modal
+    window.onclick = function(event) {
+        const modal = document.getElementById('productModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+    // Định dạng giá (1,000,000)
+    function formatPrice(price) {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+</script>
+</body>
+</html>

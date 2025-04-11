@@ -1,62 +1,39 @@
 package com.nahuannghia.shopnhn.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cart")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartId;
+    @Column(name = "cartId")
+    private Integer cartId;
+
     @ManyToOne
-    @JoinColumn(name = "customer_id",nullable = false)
+    @JoinColumn(name = "customerId", nullable = false)
     private Customer customer;
-    @Column(name = "created_date",nullable = false)
-    private LocalDateTime createdDate;
-    @Column(name = "status",nullable = false)
-    private String status;
-    public Cart() {
-    }
-    public Cart(Long cartId, Customer customer, LocalDateTime createdDate, String status) {
-        this.cartId = cartId;
-        this.customer = customer;
-        this.createdDate = createdDate;
-        this.status = status;
-    }
-    //getters
-    public Long getCartId() {
-        return cartId;
-    }
-    public Customer getCustomer() {
-        return customer;
-    }
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-    public String getStatus() {
-        return status;
-    }
-    //setters
-    public void setCartId(Long cartId) {
-        this.cartId = cartId;
-    }
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
+    @Column(name = "created_at", columnDefinition = "DATETIME DEFAULT GETDATE()")
+    private LocalDateTime createdAt;
 
+    @Column(name = "cart_status", nullable = false, length = 20)
+    private String cartStatus = "Đang mua"; // Default value
+
+//    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<CartItem> cartItems = new ArrayList<>();
+
+    // You can add any methods or logic you need for this entity
 }
+

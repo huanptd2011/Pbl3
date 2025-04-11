@@ -1,6 +1,7 @@
 package com.nahuannghia.shopnhn.controller;
 
-import com.nahuannghia.shopnhn.model.PaymentMethod;
+import com.nahuannghia.shopnhn.request.PaymentMethodRequest;
+import com.nahuannghia.shopnhn.Response.PaymentMethodResponse;
 import com.nahuannghia.shopnhn.service.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,28 +9,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/payment-method")
+@RequestMapping("/api/payment-methods")
 public class PaymentMethodController {
+
     @Autowired
     private PaymentMethodService paymentMethodService;
+
     @PostMapping
-    public PaymentMethod addPaymentMethod(@RequestBody PaymentMethod paymentMethod){
-        return paymentMethodService.addPaymentMethod(paymentMethod);
+    public PaymentMethodResponse create(@RequestBody PaymentMethodRequest request) {
+        return paymentMethodService.createPaymentMethod(request);
     }
+
     @GetMapping
-    public List<PaymentMethod> getAllPaymentMethods(){
+    public List<PaymentMethodResponse> getAll() {
         return paymentMethodService.getAllPaymentMethods();
     }
-    @GetMapping("/{paymentId}")
-    public PaymentMethod getPaymentMethod(@PathVariable Long paymentId){
-        return paymentMethodService.getPaymentMethod(paymentId);
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id) {
+        paymentMethodService.safeDelete(id);
     }
-    @PutMapping("/{paymentId}")
-    public PaymentMethod updatePaymentMethod(@PathVariable Long paymentId, @RequestBody PaymentMethod paymentMethod){
-        return paymentMethodService.updatePaymentMethod(paymentId, paymentMethod);
+    @PutMapping("/{id}")
+    public PaymentMethodResponse update(@PathVariable Integer id, @RequestBody PaymentMethodRequest request) {
+        return paymentMethodService.updatePaymentMethod(id, request);
     }
-    @DeleteMapping("/{paymentId}")
-    public void deletePaymentMethod(@PathVariable Long paymentId){
-        paymentMethodService.deletePaymentMethod(paymentId);
+    @GetMapping("/search")
+    public List<PaymentMethodResponse> search(@RequestParam String name) {
+        return paymentMethodService.searchByName(name);
     }
 }

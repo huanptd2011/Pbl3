@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShopNHNApplication {
+public class ShopnhnApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ShopNHNApplication.class, args);
+		SpringApplication.run(ShopnhnApplication.class, args);
 	}
 }

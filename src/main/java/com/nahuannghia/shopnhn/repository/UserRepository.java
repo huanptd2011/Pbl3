@@ -1,12 +1,16 @@
 package com.nahuannghia.shopnhn.repository;
 
-import com.nahuannghia.shopnhn.model.User;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.nahuannghia.shopnhn.model.User;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    // Có thể thêm các phương thức tùy chỉnh nếu cần
+    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
 }
 
 

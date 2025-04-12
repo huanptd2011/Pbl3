@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetail.OrderDetailId> {
+public interface OrderDetailRepository extends JpaRepository<OrderDetail, Integer> {
     // Có thể thêm các phương thức tùy chỉnh nếu cần
 }
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductImageRequest {
-    private Integer productId;
+     private Integer productId;
     private String imageUrl;
 }
 

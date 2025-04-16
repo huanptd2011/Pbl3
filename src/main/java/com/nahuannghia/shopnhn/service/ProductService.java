@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +48,8 @@ public class ProductService {
         product.setProductDescription(productRequest.getProductDescription());
         product.setBrand(productRequest.getBrand());
         product.setPrice(productRequest.getPrice());
-
+        product.setCreatedAt(LocalDateTime.now());
+        product.setUpdatedAt(LocalDateTime.now());
         product = productRepository.save(product);
         Product product1 = product;
 
@@ -71,17 +73,18 @@ public class ProductService {
                 productImageRepository.save(productImage);
             });
         }
-
+        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
+        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
         return new ProductResponse(
-                product.getProductId(),
-                product.getProductName(),
-                product.getProductDescription(),
-                product.getBrand(),
-                product.getPrice(),
-                product.getCreatedAt(),
-                product.getUpdatedAt(),
-                productRequest.getSizeColorList(),
-                productRequest.getImageList()
+                product1.getProductId(),
+                product1.getProductName(),
+                product1.getProductDescription(),
+                product1.getBrand(),
+                product1.getPrice(),
+                product1.getCreatedAt(),
+                product1.getUpdatedAt(),
+                inventoryList,
+                imageList
         );
     }
 
@@ -170,16 +173,19 @@ public class ProductService {
             });
         }
 
+        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
+        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
+
         return new ProductResponse(
-                product.getProductId(),
-                product.getProductName(),
-                product.getProductDescription(),
-                product.getBrand(),
-                product.getPrice(),
-                product.getCreatedAt(),
-                product.getUpdatedAt(),
-                productRequest.getSizeColorList(),
-                productRequest.getImageList()
+                product1.getProductId(),
+                product1.getProductName(),
+                product1.getProductDescription(),
+                product1.getBrand(),
+                product1.getPrice(),
+                product1.getCreatedAt(),
+                product1.getUpdatedAt(),
+                inventoryList,
+                imageList
         );
     }
     @Transactional

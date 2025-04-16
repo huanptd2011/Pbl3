@@ -17,7 +17,7 @@ public class ProductRequest {
     private String productDescription;
     private String brand;
     private BigDecimal price;
-    private List<ProductInventoryResponse> sizeColorList;
-    private List<ProductImageResponse> imageList;
+    private List<ProductInventoryRequest> sizeColorList;
+    private List<ProductImageRequest> imageList;
 }
 

@@ -1,4 +1,4 @@
-package com.nahuannghia.shopnhn.dto.login;
+package com.nahuannghia.shopnhn.dto.create;
 
 import java.time.LocalDateTime;
 
@@ -9,14 +9,16 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LoginResponse {
-    private int status;
-    private String message;
-    private String token;
+public class RegisterResponse {
     private String username;
     private String email;
+    private String password;
+    private int status;
+    private String message;
+    private Long userId;
     private String role;
-    private Boolean isActive;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
+
+
 }

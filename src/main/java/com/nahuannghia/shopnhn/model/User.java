@@ -13,12 +13,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -51,13 +53,7 @@ public class User {
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
-    @Column(name = "status", nullable = false)
-    private Boolean status = true;
 
-    @Column(name = "created_date", columnDefinition = "DATETIME DEFAULT GETDATE()")
-    private LocalDateTime createdDate;
 
-    @Column(name = "updated_date", columnDefinition = "DATETIME DEFAULT GETDATE()")
-    private LocalDateTime updatedDate;
 }
 

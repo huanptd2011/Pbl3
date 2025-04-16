@@ -1,32 +1,45 @@
 package com.nahuannghia.shopnhn.controller;
 
+
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nahuannghia.shopnhn.dto.create.RegisterRequest;
+import com.nahuannghia.shopnhn.dto.create.RegisterResponse;
 import com.nahuannghia.shopnhn.dto.login.LoginRequest;
 import com.nahuannghia.shopnhn.dto.login.LoginResponse;
-import com.nahuannghia.shopnhn.service.interfaces.IUserService;
+import com.nahuannghia.shopnhn.dto.logout.LogoutResponse;
+import com.nahuannghia.shopnhn.service.user_service.UserService;
 
 import jakarta.validation.Valid;
 
-
-@Validated
 @RestController
-@RequestMapping("/api/v1/auth")
-
+@RequestMapping("/api/auth")
 public class AuthController {
-    private final IUserService userService;
-    public AuthController(IUserService userService) {
+
+    private final UserService userService;
+
+    public AuthController( @org.springframework.context.annotation.Lazy UserService userService) {
         this.userService = userService;
     }
-     @PostMapping("/login")
-  
-     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        LoginResponse response = userService.authenticate(request);
-        return ResponseEntity.ok(response);
-     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
+        return ResponseEntity.ok(userService.login(request));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(@RequestBody @Valid RegisterRequest request) {
+        return ResponseEntity.ok(userService.createUser(request));
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(@RequestHeader("Authorization") String token) {
+        return ResponseEntity.ok(userService.logout(token.replace("Bearer ", "")));
+    }
 }
+

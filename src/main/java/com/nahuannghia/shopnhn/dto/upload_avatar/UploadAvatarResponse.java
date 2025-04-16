@@ -1,4 +1,4 @@
-package com.nahuannghia.shopnhn.dto.login;
+package com.nahuannghia.shopnhn.dto.upload_avatar;
 
 import java.time.LocalDateTime;
 
@@ -9,14 +9,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LoginResponse {
+public class UploadAvatarResponse {
     private int status;
+   
     private String message;
-    private String token;
-    private String username;
-    private String email;
-    private String role;
-    private Boolean isActive;
+    private String newAvatarUrl;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
+
 }

@@ -4,3 +4,16 @@ body {
   font-family: 'Bebas Neue', sans-serif;
   margin: 0;
 }
+
+
+  .btn-theme {
+      background-color: #b32d3d;
+      color: #fff;
+      font-weight: 600 !important;
+  }
+
+  .btn-theme:hover {
+      color: #fff;
+      background-color: black;
+      font-weight: 600 !important;
+  }

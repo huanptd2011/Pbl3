@@ -29,9 +29,80 @@
     </div>
 
     <div class="nav-icons">
-        <a href="#" class="cart-icon"><img src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" alt="Giỏ hàng"></a>
-        <a href="#" class="user-icon"><img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Tài khoản"></a>
+        <div class="account-dropdown">
+            <a href="#" class="user-icon" onclick="toggleDropdown(event)">
+              <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Tài khoản">
+            </a>
+            <div class="dropdown-content" id="dropdownMenu">
+            <a href="../login.html"><i class="icon-user"></i> Đăng nhập</a>
+            <a href="../register.html"><i class="icon-returns"></i>Đăng ký</a>
     </div>
+</script>
+</div>
+</div>
+
+<style>
+.account-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border-radius: 4px;
+  z-index: 1000;
+  padding: 8px 0;
+}
+
+.dropdown-content a {
+  color: #333;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-content a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.user-icon img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+</style>
+
+<script>
+function toggleDropdown(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const menu = document.getElementById('dropdownMenu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Đóng menu khi click ra ngoài
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('dropdownMenu');
+  if (!event.target.closest('.account-dropdown') && menu.style.display === 'block') {
+    menu.style.display = 'none';
+  }
+});
+</script>
+</div>
 </header>
 
 <section class="banner-container">

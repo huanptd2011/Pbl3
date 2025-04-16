@@ -759,22 +759,26 @@
             <script>
               async function handleLogout(event) {
                 event.preventDefault();
-                
+                const token = localStorage.getItem("authToken");
                 try {
                   const response = await fetch('http://localhost:8080/api/auth/logout', {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
+                       "Authorization": `Bearer ${token}`
                       // 'X-CSRF-TOKEN': 'YOUR_CSRF_TOKEN_HERE' // Nếu cần
                     },
                    // credentials: 'include' // Cần thiết nếu sử dụng cookie/session
-                  });
-                  
-                  if (response.ok) {
-                    window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/test3.html";
-                  } else {
-                    console.error('Logout failed');
-                  }
+                  }).then(res => {
+                      if (res.ok) {
+                            alert("Logout thành công!");
+                              localStorage.removeItem("authToken"); // Xoá token sau khi logout
+                              window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/HTML/home.html";
+                                } else {
+                             alert("Lỗi khi logout");
+                                   }
+                                });
+              
                 } catch (error) {
                   console.error('Error during logout:', error);
                 }

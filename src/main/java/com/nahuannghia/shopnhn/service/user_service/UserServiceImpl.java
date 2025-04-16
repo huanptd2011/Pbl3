@@ -3,6 +3,8 @@ package com.nahuannghia.shopnhn.service.user_service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +29,10 @@ import com.nahuannghia.shopnhn.utils.JwtTokenUtil;
 
 import io.micrometer.common.util.StringUtils;
 
-
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
 
     private final UserRepository userRepository;
@@ -164,10 +167,13 @@ public class UserServiceImpl implements UserService {
     
 
             // Verify password
-            if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            log.debug("Raw password: {}", loginRequest.getPassword());
+            log.debug("Encoded password: {}", user.getPassword());
+
+            if (user.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                 return buildErrorResponse(401, "Invalid username or password");
             }
-    
+            
             // Generate token
             String token = jwtTokenUtil.generateToken(user);
             
@@ -183,6 +189,7 @@ public class UserServiceImpl implements UserService {
         } catch (UserNotFoundException e) {
             return buildErrorResponse(404, "Account not found");
         } catch (Exception e) {
+                log.error("Unexpected error during login", e); 
             return buildErrorResponse(500, "Internal server error");
         }
     }

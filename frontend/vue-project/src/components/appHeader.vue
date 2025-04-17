@@ -1,319 +1,175 @@
 <template>
-    <header>
-        <div class="d-flex align-items-center">
-            <div class="container">
-                <div class="d-flex align-items-center">
-                    <!-- Nút mở menu trên màn hình nhỏ -->
-                    <div class="d-flex d-lg-none toggle-menu-mobile align-items-center">
-                        <button type="button" class="icon-btn" data-bs-toggle="offcanvas"
-                            data-bs-target="#menu-collapse">
-                            <i class="fa-solid fa-sliders"></i>
+    <header class="sticky-top">
+        <div class="container">
+            <div class="d-flex align-items-center py-3">
+                <!-- Mobile menu toggle -->
+                <button class="btn btn-link d-lg-none me-2" @click="toggleMobileMenu">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- Logo -->
+                <router-link to="/" class="navbar-brand me-auto">
+                    <img src="@/assets/logo.jpeg" alt="ShoeStore" height="40">
+                </router-link>
+
+                <!-- Main Navigation -->
+                <nav class="d-none d-lg-block">
+                    <ul class="nav">
+                        <li class="nav-item" v-for="(item, index) in navItems" :key="index">
+                            <router-link :to="item.path" class="nav-link">{{ item.title }}</router-link>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Search and User Actions -->
+                <div class="d-flex ms-auto">
+                    <div class="input-group me-3 d-none d-lg-flex">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm giày..." v-model="searchQuery">
+                        <button class="btn btn-outline-secondary" @click="performSearch">
+                            <i class="fas fa-search"></i>
                         </button>
-
-                        <div class="search">
-                            <a href="product" class="icon-btn">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- Offcanvas Sidebar -->
-                    <div class="offcanvas offcanvas-start" id="menu-collapse">
-                        <div class="offcanvas-header">
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <ul class="navbar-nav mx-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">HOME</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">PRODUCT</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">COLLECTION</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">SALE</a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
 
-                    <!-- Logo -->
-                    <div class="d-flex align-items-center justify-content-center justify-content-lg-start col-logo">
-                        <a href="#">Weekend</a>
-                    </div>
+                    <router-link to="/wishlist" class="btn btn-link position-relative me-2">
+                        <i class="fas fa-heart"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+                            v-if="wishlistCount > 0">
+                            {{ wishlistCount }}
+                        </span>
+                    </router-link>
 
-                    <!-- Menu chính -->
-                    <div class="d-none d-lg-flex col-menu">
-                        <nav class="navbar-nav d-none d-lg-block">
-                            <ul class="nav mx-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/">HOME</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/product">PRODUCT</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/colection">COLLECTION</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/sale">SALE</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <!-- Các icon tài khoản, yêu thích, giỏ hàng -->
-                    <div class="d-flex align-items-center gap-3">
-                        <a href="product" class="icon-btn d-none d-lg-flex">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </a>
+                    <router-link to="/cart" class="btn btn-link position-relative me-2">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+                            v-if="cartCount > 0">
+                            {{ cartCount }}
+                        </span>
+                    </router-link>
 
-                        <button type="button" class="icon-btn" data-bs-toggle="modal" data-bs-target="#login">
-                            <i class="fa-regular fa-user"></i>
-                        </button>
-                        <!-- login -->
-                        <div class="modal fade" id="login" style="display: none" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog--login modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header p-3">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body p-5">
-                                        <div class="text-center py-2 px-2">
-                                            <!-- <div class="form-success hide" id="ResetSuccess">
-                        We've sent you an email with a link to update your password.
-                      </div> -->
-                                            <div id="CustomerLoginForm" class="form-vertical">
-                                                <form method="post" action="/account/login" id="customer_login"
-                                                    accept-charset="UTF-8" data-login-with-shop-sign-in="true">
-                                                    <input type="hidden" name="form_type"
-                                                        value="customer_login" /><input type="hidden" name="utf8"
-                                                        value="✓" />
-                                                    <h3 class="mb-3">Login</h3>
-                                                    <p class="mb-5">Please enter your e-mail and password:</p>
-
-                                                    <div class="form-group mb-33 text-start">
-                                                        <input type="email" name="customer[email]" id="CustomerEmail"
-                                                            class="form-control" placeholder="Email" autocorrect="off"
-                                                            autocapitalize="off" autofocus="true" />
-                                                        <label for="CustomerEmail" class="label--hidden">Email</label>
-                                                    </div>
-                                                    <div class="form-group mb-3 text-start">
-                                                        <input type="password" value="" name="customer[password]"
-                                                            id="CustomerPassword" class="form-control"
-                                                            placeholder="Password" />
-                                                        <label for="CustomerPassword"
-                                                            class="label--hidden">Password</label>
-                                                    </div>
-                                                    <p class="text-right mb-3 small">
-                                                        <a href="#recover" id="RecoverPassword">Forgot your
-                                                            password?</a>
-                                                    </p>
-                                                    <p>
-                                                        <button type="submit"
-                                                            class="btn btn-theme gradient-theme w-100">
-                                                            LOGIN
-                                                        </button>
-                                                    </p>
-                                                    <p class="pt-2">
-                                                        <span class="d-inline-block pr-2">New customer? </span><a
-                                                            href="https://shopify.com/71465173218/account?locale=en&amp;region_country=AU"
-                                                            id="customer_register_link" target="_blank">Register</a>
-                                                    </p>
-                                                </form>
-                                            </div>
-                                            <div id="RecoverPasswordForm" class="hide">
-                                                <h3>Reset your password</h3>
-                                                <p class="mb-4">We will send you an email to reset your password.</p>
-                                                <div class="form-vertical">
-                                                    <form method="post" action="/account/recover"
-                                                        accept-charset="UTF-8">
-                                                        <input type="hidden" name="form_type"
-                                                            value="recover_customer_password" /><input type="hidden"
-                                                            name="utf8" value="✓" />
-                                                        <div class="form-group mb-4">
-                                                            <input class="form-control" type="email" value=""
-                                                                name="email" id="RecoverEmail" placeholder="Email"
-                                                                autocorrect="off" autocapitalize="off" />
-                                                            <label for="RecoverEmail"
-                                                                class="label--hidden">Email</label>
-                                                        </div>
-                                                        <p>
-                                                            <button type="submit"
-                                                                class="btn btn-theme gradient-theme w-100">
-                                                                Submit
-                                                            </button>
-                                                        </p>
-                                                        <button type="button" id="HideRecoverPasswordLink"
-                                                            class="text-link link-accent-color">
-                                                            Back to login
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a href="#" class="icon-btn position-relative">
-                            <i class="fa-regular fa-heart"></i>
-                            <span class="badge">1</span>
-                        </a>
-                        <a href="#" class="icon-btn position-relative">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <span class="badge">3</span>
-                        </a>
-                    </div>
+                    <button class="btn btn-link" @click="toggleAuthModal">
+                        <i class="fas fa-user"></i>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" :class="{ 'show': mobileMenuOpen }">
+            <div class="mobile-menu-header">
+                <button class="btn btn-close" @click="toggleMobileMenu"></button>
+            </div>
+            <div class="mobile-menu-body">
+                <ul class="nav flex-column">
+                    <li class="nav-item" v-for="(item, index) in navItems" :key="index">
+                        <router-link :to="item.path" class="nav-link" @click="toggleMobileMenu">{{ item.title
+                            }}</router-link>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Auth Modal -->
+        <AuthModal v-if="showAuthModal" @close="toggleAuthModal" />
     </header>
 </template>
 
-<style>
-/* Bóng nhẹ cho header */
+<script setup>
+import { ref, computed } from 'vue';
+import { useCartStore } from '@/stores/cart';
+import { useWishlistStore } from '@/stores/wishlist';
+import AuthModal from '@/components/AuthModal.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
+
+const mobileMenuOpen = ref(false);
+const showAuthModal = ref(false);
+const searchQuery = ref('');
+
+const navItems = [
+    { title: 'Trang chủ', path: '/' },
+    { title: 'Sản phẩm', path: '/products' },
+    { title: 'Khuyến mãi', path: '/sale' },
+    { title: 'Bộ sưu tập', path: '/collections' },
+    { title: 'Về chúng tôi', path: '/about' },
+];
+
+const toggleMobileMenu = () => {
+    mobileMenuOpen.value = !mobileMenuOpen.value;
+};
+
+const toggleAuthModal = () => {
+    showAuthModal.value = !showAuthModal.value;
+};
+
+const performSearch = () => {
+    // Xử lý tìm kiếm
+    if (searchQuery.value.trim()) {
+        router.push({ path: '/search', query: { q: searchQuery.value } });
+    }
+};
+
+// Computed properties
+const cartCount = computed(() => cartStore.totalItems);
+const wishlistCount = computed(() => wishlistStore.items.length);
+</script>
+
+<style scoped>
 header {
-    position: sticky;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.nav-link {
+    font-weight: 500;
+    color: #333;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.router-link-active {
+    color: #d32f2f;
+}
+
+.mobile-menu {
+    position: fixed;
     top: 0;
-    z-index: 999;
+    left: 0;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
     background: white;
-
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px 0;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 600;
-    color: #333;
+    z-index: 1100;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Navbar */
-.navbar {
+.mobile-menu.show {
+    transform: translateX(0);
+}
+
+.mobile-menu-header {
+    padding: 1rem;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
-/* Logo */
-.navbar-brand {
-    font-size: 26px;
-    font-weight: bold;
+.mobile-menu-body {
+    padding: 1rem;
 }
 
-/* Menu link */
-.navbar-nav .nav-link {
-    font-size: 18px;
-    margin: 0 12px;
-    transition: 0.3s;
-    color: #333;
-}
-
-.navbar-nav .nav-link:hover {
-    color: #b32d3d;
-    text-decoration: underline;
-}
-
-/* Icon buttons */
-.icon-btn {
-    font-size: 20px;
-    color: #333;
-    text-decoration: none;
-    position: relative;
-    padding: 5px 10px;
-    border: 0px;
-    background: none;
-}
-
-.icon-btn:hover {
-    color: #b32d3d;
-}
-
-/* Badge (số lượng sản phẩm) */
 .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #b32d3d;
-    color: white;
-    font-size: 10px !important;
-    font-weight: bold;
-    padding: 3px 7px;
-    border-radius: 50%;
+    font-size: 0.7rem;
 }
 
-.col-logo {
-    flex: 1;
-    /* Cho phép logo chiếm phần không gian hợp lý */
-    text-align: center;
+.input-group {
+    max-width: 300px;
 }
-
-.col-menu {
-    flex: 2;
-    /* Menu chiếm không gian lớn hơn */
-}
-
-.label--hidden {
-    visibility: hidden;
-}
-
-label {
-    display: inline-block;
-    position: relative;
-    top: -1.9rem;
-    left: 0.5rem;
-
-    padding: 0 5px;
-    /* transform: translateY(-30px) translateX(-185px); */
-    clip: auto;
-    background: none;
-    transition: all 0.2s;
-}
-
-.form-vertical .form-control {
-    border-radius: 0%;
-}
-
-.form-vertical .form-control:focus {
-    border-color: var(--bs-body-color);
-    border-radius: 0px;
-    box-shadow: none;
-}
-
-.form-control:focus~label {
-    top: -3.2rem;
-    font-size: 0.8rem;
-    left: 0.5rem;
-    background: #fff;
-    visibility: inherit;
-}
-
-.form-control:focus::placeholder {
-    visibility: hidden;
-}
-
-.text-right {
-    left: 120px;
-    top: -25px;
-    color: var(--bs-body-color);
-    position: relative;
-
-    a {
-        color: var(--bs-body-color);
-    }
-}
-
-/* .form-vertical {
-    .btn-theme {
-        background-color: #b32d3d;
-        color: #fff;
-        font-weight: 600 !important;
-    }
-
-    .btn-theme:hover {
-        color: #fff;
-        background-color: black;
-        font-weight: 600 !important;
-    }
-} */
 </style>

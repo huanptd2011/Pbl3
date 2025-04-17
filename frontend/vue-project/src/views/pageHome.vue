@@ -78,7 +78,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import productCard from "@/components/productCard.vue";
+import productCard from "@/components/ProductCard.vue";
 
 const collections = ref([]);
 const bestSellers = ref([]);

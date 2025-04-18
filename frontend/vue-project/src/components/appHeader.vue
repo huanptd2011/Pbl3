@@ -75,7 +75,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useCartStore } from '@/stores/cart';
+import { useCartStore } from '@/stores/cartStore';
 import { useWishlistStore } from '@/stores/wishlist';
 import AuthModal from '@/components/AuthModal.vue';
 import { useRouter } from 'vue-router';
@@ -114,7 +114,7 @@ const performSearch = () => {
 };
 
 // Computed properties
-const cartCount = computed(() => cartStore.totalItems);
+const cartCount = computed(() => cartStore.totalItemsCount);
 const wishlistCount = computed(() => wishlistStore.items.length);
 </script>
 

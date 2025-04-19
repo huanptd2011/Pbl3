@@ -6,9 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-@Data
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +31,35 @@ public class UpdateUserRequest {
     private String gender;
     private String avatarUrl; // URL of the avatar image
     private String isActive; // Account status (e.g., "ACTIVE", "INACTIVE")
+    public String getEmail() {
+        return email;
+    }
+    public String getFullName() {
+        return fullName;
+    }
+    public String getPhone() {
+        return phone;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public String getDob() {
+        return dob;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+    public String getIsActive() {
+        return isActive;
+    }
 
+    //
 
     
 }

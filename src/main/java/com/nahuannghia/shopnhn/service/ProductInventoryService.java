@@ -5,7 +5,6 @@ import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
 import com.nahuannghia.shopnhn.model.Product;
 import com.nahuannghia.shopnhn.model.ProductInventory;
 import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
-import com.nahuannghia.shopnhn.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +18,6 @@ public class ProductInventoryService {
 
     @Autowired
     private ProductInventoryRepository productInventoryRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     // CREATE: Thêm mới thông tin tồn kho
     public ProductInventoryResponse addProductInventory(ProductInventoryRequest request) {

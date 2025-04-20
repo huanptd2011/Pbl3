@@ -1,7 +1,6 @@
 package com.nahuannghia.shopnhn.request;
 
-import com.nahuannghia.shopnhn.Response.ProductImageResponse;
-import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -35,12 +35,9 @@
                     <ul class="submenu">
                         <li><a href="#" id="list-product-link"><i class="fas fa-list"></i> Danh sách sản phẩm</a></li>
                         <li><a href="#" id="add-product-link"><i class="fas fa-plus-circle"></i> Thêm sản phẩm</a></li>
-                        <!-- <li><a href="#" id="edit-product-link"><i class="fas fa-edit"></i> Chỉnh sửa sản phẩm</a></li> -->
                         <li><a href="#" id="category-product-link"><i class="fas fa-tags"></i> Danh mục sản phẩm</a></li>
-                        <!-- <li><a href="#" id="delete-product-link"><i class="fas fa-trash-alt"></i> Xóa sản phẩm</a></li> -->
                     </ul>
                 </li>
-
 
                 <li class="has-dropdown">
                     <a href="#"><i class="fas fa-users"></i> <span>Quản lý khách hàng</span> <i class="fas fa-chevron-right dropdown-icon"></i></a>
@@ -66,34 +63,6 @@
                     <ul class="submenu">
                         <li><a href="#"><i class="fas fa-edit"></i> Chỉnh sửa hồ sơ</a></li>
                         <li><a href="../HTML/home.html" onclick="handleLogout(event)"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-                          <script>
-                            async function handleLogout(event) {
-                              event.preventDefault();
-                              const token = localStorage.getItem("authToken");
-                              try {
-                                const response = await fetch('http://localhost:8080/api/auth/logout', {
-                                  method: 'POST',
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                     "Authorization": `Bearer ${token}`
-                                    // 'X-CSRF-TOKEN': 'YOUR_CSRF_TOKEN_HERE' // Nếu cần
-                                  },
-                                 // credentials: 'include' // Cần thiết nếu sử dụng cookie/session
-                                }).then(res => {
-                                    if (res.ok) {
-                                          alert("Logout thành công!");
-                                            localStorage.removeItem("authToken"); // Xoá token sau khi logout
-                                            window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/HTML/home.html";
-                                              } else {
-                                           alert("Lỗi khi logout");
-                                                 }
-                                              });
-                            
-                              } catch (error) {
-                                console.error('Error during logout:', error);
-                              }
-                            }
-                          </script>
                     </ul>
                 </li>
             </ul>
@@ -107,22 +76,10 @@
             <div class="header-left">
                 <h2>Dashboard</h2>
             </div>
-            <!-- <div class="header-right">
-                <div class="user-info">
-                    <img src="https://png.pngtree.com/template/20200809/ourmid/pngtree-modern-sneaker-shoe-logo-image_401564.jpg" alt="User">
-                    <span class="user-name">Admin</span>
-                    <i class="fas fa-chevron-down"></i>
-
-                    <div class="user-dropdown">
-                        <a href="#"><i class="fas fa-user"></i> Hồ sơ</a>
-                        <a href="#" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
-                    </div>
-                </div>
-            </div> -->
         </div>
 
         <!-- Main Content Area -->
-        <div>
+        <div id="dashboard-content">
             <!-- Cards -->
             <div class="cards">
                 <div class="card">
@@ -143,7 +100,7 @@
                         <i class="fas fa-box-open"></i>
                     </div>
                     <div class="card-body">
-                        <div class="card-value">568</div>
+                        <div class="card-value" id="total-products">0</div>
                         <div class="card-icon">
                             <i class="fas fa-warehouse"></i>
                         </div>
@@ -189,78 +146,21 @@
                             <th>Ngày đặt</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
-<!--                            <th>Hành động</th>-->
                         </tr>
                     </thead>
                     <tbody>
-<!--                        <tr>-->
-<!--                            <td>#ORD-2023-001</td>-->
-<!--                            <td>Nguyễn Văn A</td>-->
-<!--                            <td>15/10/2023</td>-->
-<!--                            <td>1,250,000đ</td>-->
-<!--                            <td><span class="status status-completed">Hoàn thành</span></td>-->
-<!--                            <td><a href="#" class="btn">Chi tiết</a></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>#ORD-2023-002</td>-->
-<!--                            <td>Trần Thị B</td>-->
-<!--                            <td>16/10/2023</td>-->
-<!--                            <td>2,450,000đ</td>-->
-<!--                            <td><span class="status status-pending">Đang xử lý</span></td>-->
-<!--                            <td><a href="#" class="btn">Chi tiết</a></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>#ORD-2023-003</td>-->
-<!--                            <td>Lê Văn C</td>-->
-<!--                            <td>17/10/2023</td>-->
-<!--                            <td>3,750,000đ</td>-->
-<!--                            <td><span class="status status-pending">Đang xử lý</span></td>-->
-<!--                            <td><a href="#" class="btn">Chi tiết</a></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>#ORD-2023-004</td>-->
-<!--                            <td>Phạm Thị D</td>-->
-<!--                            <td>18/10/2023</td>-->
-<!--                            <td>1,980,000đ</td>-->
-<!--                            <td><span class="status status-cancelled">Đã hủy</span></td>-->
-<!--                            <td><a href="#" class="btn">Chi tiết</a></td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>#ORD-2023-005</td>-->
-<!--                            <td>Hoàng Văn E</td>-->
-<!--                            <td>19/10/2023</td>-->
-<!--                            <td>5,200,000đ</td>-->
-<!--                            <td><span class="status status-completed">Hoàn thành</span></td>-->
-<!--                            <td><a href="#" class="btn">Chi tiết</a></td>-->
-<!--                        </tr>-->
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Revenue Chart -->
-            <!-- <div class="content-section"> -->
-                <!-- <div class="section-header">
-                    <h3>Doanh thu theo tháng</h3>
-                    <div>
-                        <button class="btn">Năm 2023</button>
-                        <button class="btn">Xuất báo cáo</button>
-                    </div>
-                </div> -->
-                <!-- <div class="chart-container"> -->
-                    <!-- Placeholder for chart -->
-                    <!-- <img src="https://via.placeholder.com/1000x300?text=Revenue+Chart+Placeholder" alt="Revenue Chart" style="width: 100%; height: 100%; object-fit: cover;"> -->
-                <!-- </div> -->
-            <!-- </div> -->
         </div>
         
         <!-- Add Product Form -->
-        <div>
+        <div id="add-product-content" style="display: none;">
             <div class="product-form-container">
                 <form id="productForm">
                     <!-- Thông tin cơ bản -->
                     <div class="form-section">
                         <h3><i class="fas fa-info-circle"></i> Thông tin cơ bản</h3>
-                        
 
                         <div class="form-row">
                             <div class="form-group">
@@ -293,8 +193,6 @@
                             <label for="productDescription">Mô tả sản phẩm</label>
                             <textarea id="productDescription" name="productDescription" placeholder="Nhập mô tả chi tiết về sản phẩm"></textarea>
                         </div>
-                        
-                        
                     </div>
 
                     <!-- Hình ảnh sản phẩm -->
@@ -363,28 +261,25 @@
         </div>
 
         <!-- Danh sách sản phẩm -->
-        <div class="product-list-container" style="display: none;">
-            <!-- <div class="section-header">
+        <div class="product-list-container" id="list-product-content" style="display: none;">
+            <div class="section-header">
                 <h3><i class="fas fa-list"></i> Danh sách sản phẩm</h3>
                 <div class="action-buttons">
                     <button class="btn btn-add" id="refreshProductList">
                         <i class="fas fa-sync-alt"></i> Làm mới
                     </button>
-                    <button class="btn btn-export">
-                        <i class="fas fa-file-export"></i> Xuất Excel
-                    </button>
                 </div>
-            </div> -->
+            </div>
             
             <div class="search-filter">
-                <input type="text" placeholder="Tìm kiếm sản phẩm..." class="search-input">
-                <select class="category-filter">
+                <input type="text" id="searchKeyword" placeholder="Tìm kiếm sản phẩm..." class="search-input">
+                <select class="category-filter" id="searchCategory">
                     <option value="">Tất cả danh mục</option>
                     <option value="1">Giày nam</option>
                     <option value="2">Giày nữ</option>
                     <option value="3">Giày thể thao</option>
                 </select>
-                <button class="btn btn-filter">
+                <button class="btn btn-filter" id="searchButton">
                     <i class="fas fa-filter"></i> Lọc
                 </button>
             </div>
@@ -396,174 +291,370 @@
                             <th>ID</th>
                             <th>Hình ảnh</th>
                             <th>Tên sản phẩm</th>
-                            <th>Danh mục</th>
+                            <th>Thương hiệu</th>
                             <th>Giá</th>
                             <th>Tồn kho</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="productTableBody">
                         <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td><img src="https://res.cloudinary.com/dtrl6tyyp/image/upload/v1744007152/sp1-2_qkwar5.webp" alt="Product 1" class="product-thumbnail"></td>
-                            <td>Giày thể thao X1</td>
-                            <td>Giày nam</td>
-                            <td>1,200,000đ</td>
-                            <td>25</td>
-                            <td><span class="status status-active">Đang bán</span></td>
-                            <td>
-                                <button class="btn btn-edit"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-delete"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <!-- Thêm các hàng khác tương tự -->
                     </tbody>
                 </table>
             </div>
             
             <div class="pagination">
-                <button class="btn btn-prev"><i class="fas fa-chevron-left"></i></button>
-                <span class="page-numbers">1/5</span>
-                <button class="btn btn-next"><i class="fas fa-chevron-right"></i></button>
+                <button class="btn btn-prev" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+                <span class="page-numbers" id="pageInfo">1/1</span>
+                <button class="btn btn-next" id="nextPage"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </div>
 
+    <script>
+        // Global variables
+        let currentPage = 0;
+        const pageSize = 8;
+        let totalPages = 1;
+        
+        // DOM elements
+        const listProductLink = document.getElementById('list-product-link');
+        const addProductLink = document.getElementById('add-product-link');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const addProductContent = document.getElementById('add-product-content');
+        const listProductContent = document.getElementById('list-product-content');
+        const productForm = document.getElementById('productForm');
+        const searchButton = document.getElementById('searchButton');
+        const refreshProductList = document.getElementById('refreshProductList');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const searchKeyword = document.getElementById('searchKeyword');
+        const searchCategory = document.getElementById('searchCategory');
+        const productTableBody = document.getElementById('productTableBody');
+        const totalProductsElement = document.getElementById('total-products');
+    
+        // Navigation handlers
+        document.getElementById('list-product-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showProductList();
+            loadProducts();
+        });
+    
+        document.getElementById('add-product-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showAddProductForm();
+        });
+    
+        // Show/hide sections
+        function showDashboard() {
+            dashboardContent.style.display = 'block';
+            addProductContent.style.display = 'none';
+            listProductContent.style.display = 'none';
+        }
+    
+        function showAddProductForm() {
+            dashboardContent.style.display = 'none';
+            addProductContent.style.display = 'block';
+            listProductContent.style.display = 'none';
+        }
+    
+        function showProductList() {
+            dashboardContent.style.display = 'none';
+            addProductContent.style.display = 'none';
+            listProductContent.style.display = 'block';
+        }
+    
+        // Product form submission
+        productForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const productData = {
+                name: document.getElementById('productName').value,
+                brand: document.getElementById('brand').value,
+                categoryId: document.getElementById('category').value,
+                price: document.getElementById('price').value,
+                description: document.getElementById('productDescription').value,
+                // Add variants and images here
+            };
+            
+            const token = localStorage.getItem("authToken");
+            
+            fetch('http://localhost:8080/products/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(productData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('Sản phẩm đã được thêm thành công!');
+                productForm.reset();
+                showProductList();
+                loadProducts();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi thêm sản phẩm');
+            });
+        });
+    
+        // Load products with pagination
+        function loadProducts() {
+            const keyword = searchKeyword.value;
+            const category = searchCategory.value;
+            const token = localStorage.getItem("authToken");
+            
+            // Build query parameters
+            let params = new URLSearchParams();
+            params.append('page', currentPage);
+            console.log(currentPage);
+            params.append('size', pageSize);
+            console.log(pageSize);
 
-    <script src="admin.js"></script>
-    <script src="add_product.js"></script>
-    <!-- <script src="list_product.js"></script> -->
+            if (keyword) params.append('keyword', keyword);
+            if (category) params.append('category', category);
+            const url =`http://localhost:8080/products/search?${params.toString()}`;
+            fetch(`http://localhost:8080/products/search?${params.toString()}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Update total products count
+                totalProductsElement.textContent = data.totalElements || 0;
+                const ccc = data.content;
+
+                // Update pagination info
+                totalPages = data.totalPages || 1;
+                document.getElementById('pageInfo').textContent = `${currentPage + 1}/${totalPages}`;
+                
+                // Clear table
+                productTableBody.innerHTML = '';
+                
+                // Add products to table
+                if (data.content && data.content.length > 0) {
+    data.content.forEach(product => {
+        const stockQuantity = product.sizeColorList?.reduce((total, item) => total + (item.quantity || 0), 0) || 0;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${product.productId}</td>
+            <td><img src="${product.imageUrl || 'https://via.placeholder.com/50'}" alt="${product.productName}" class="product-thumbnail"></td>
+            <td>${product.productName}</td>
+            <td>${product.brand || 'N/A'}</td>
+            <td>${product.price ? product.price.toLocaleString() + 'đ' : 'N/A'}</td>
+            <td>${stockQuantity}</td>
+            <td><span class="status ${product.status === 'ACTIVE' ? 'status-active' : 'status-inactive'}">
+                ${product.status === 'ACTIVE' ? 'Đang bán' : 'Ngừng bán'}</span>
+            </td>
+            <td>
+                <button class="btn btn-edit" onclick="editProduct(${product.productId})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-delete" onclick="deleteProduct(${product.productId})"><i class="fas fa-trash-alt"></i></button>
+            </td>
+        `;
+        productTableBody.appendChild(row);
+    });
+
+
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="8" class="text-center">Không có sản phẩm nào</td>';
+                    productTableBody.appendChild(row);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                productTableBody.innerHTML = '<tr><td colspan="8" class="text-center">Lỗi khi tải dữ liệu</td></tr>';
+            });
+        }
+    
+        // Get all products (without pagination)
+        function getAllProducts() {
+            const token = localStorage.getItem("authToken");
+            
+            fetch('http://localhost:8080/products', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(products => {
+                // Process the list of all products here
+                console.log('All products:', products);
+                // You can use this for exports or other operations that need all products
+            })
+            .catch(error => {
+                console.error('Error fetching all products:', error);
+            });
+        }
+    
+        // Edit product
+        function editProduct(productId) {
+            // First fetch the product details
+            const token = localStorage.getItem("authToken");
+            
+            fetch(`http://localhost:8080/products/${productId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(product => {
+                // Populate the form with product data
+                document.getElementById('productName').value = product.name;
+                document.getElementById('brand').value = product.brand;
+                document.getElementById('category').value = product.categoryId;
+                document.getElementById('price').value = product.price;
+                document.getElementById('productDescription').value = product.description;
+                
+                // Show the edit form
+                showAddProductForm();
+                
+                // Change form to update mode
+                productForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    const updatedProduct = {
+                        name: document.getElementById('productName').value,
+                        brand: document.getElementById('brand').value,
+                        categoryId: document.getElementById('category').value,
+                        price: document.getElementById('price').value,
+                        description: document.getElementById('productDescription').value
+                    };
+                    
+                    fetch(`http://localhost:8080/products/edit/${productId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(updatedProduct)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        alert('Sản phẩm đã được cập nhật thành công!');
+                        showProductList();
+                        loadProducts();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra khi cập nhật sản phẩm');
+                    });
+                };
+            })
+            .catch(error => {
+                console.error('Error fetching product details:', error);
+                alert('Không thể tải thông tin sản phẩm');
+            });
+        }
+    
+        // Delete product
+        function deleteProduct(productId) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+                const token = localStorage.getItem("authToken");
+                
+                fetch(`http://localhost:8080/products/delete/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Sản phẩm đã được xóa thành công!');
+                        loadProducts();
+                    } else {
+                        alert('Có lỗi xảy ra khi xóa sản phẩm');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi xóa sản phẩm');
+                });
+            }
+        }
+    
+        // Pagination handlers
+        prevPage.addEventListener('click', function() {
+            if (currentPage > 0) {
+                currentPage--;
+                loadProducts();
+            }
+        });
+    
+        nextPage.addEventListener('click', function() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                loadProducts();
+            }
+        });
+    
+        // Search handler
+        searchButton.addEventListener('click', function() {
+            currentPage = 0;
+            loadProducts();
+        });
+    
+        // Refresh handler
+        refreshProductList.addEventListener('click', function() {
+            currentPage = 0;
+            searchKeyword.value = '';
+            searchCategory.value = '';
+            loadProducts();
+        });
+    
+        // Logout handler
+        async function handleLogout(event) {
+            event.preventDefault();
+            const token = localStorage.getItem("authToken");
+            try {
+                const response = await fetch('http://localhost:8080/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": `Bearer ${token}`
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        alert("Logout thành công!");
+                        localStorage.removeItem("authToken");
+                        window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/HTML/home.html";
+                    } else {
+                        alert("Lỗi khi logout");
+                    }
+                });
+            } catch (error) {
+                console.error('Error during logout:', error);
+            }
+        }
+    
+        // Initialize
+        showDashboard();
+        loadProducts();
+    </script>
 </body>
 </html>

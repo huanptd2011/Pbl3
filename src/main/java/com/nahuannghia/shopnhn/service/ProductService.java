@@ -1,5 +1,7 @@
 package com.nahuannghia.shopnhn.service;
 
+import org.springframework.data.domain.Pageable;
+
 import com.nahuannghia.shopnhn.Response.ProductImageResponse;
 import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
 import com.nahuannghia.shopnhn.Response.ProductResponse;
@@ -10,7 +12,11 @@ import com.nahuannghia.shopnhn.repository.ProductImageRepository;
 import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
 import com.nahuannghia.shopnhn.request.ProductRequest;
+
+import org.springframework.data.domain.Page;
+
 import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +24,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+// Removed unused import to resolve ambiguity
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @Service
 public class ProductService {
@@ -217,18 +227,22 @@ public class ProductService {
             );
         }).collect(Collectors.toList());
     }
-    public List<ProductResponse> searchProductsWithPagination(String keyword, int page, int size) {
-        List<ProductResponse> products = searchProducts(keyword);
-        return paginateList(products, page, size);
-    }
-    public List<ProductResponse> paginateList(List<ProductResponse> list, int page, int size) {
-        int fromIndex = page * size;
-        int toIndex = Math.min(fromIndex + size, list.size());
+  public Page<ProductResponse> searchProductsWithPagination(String keyword, int page, int size) {
+    List<ProductResponse> allProducts = searchProducts(keyword); // Danh sách tất cả sản phẩm đã lọc theo từ khóa
 
-        if (fromIndex >= list.size()) {
-            return new ArrayList<>();
-        }
+    int total = allProducts.size();
+    int fromIndex = page * size;
+    int toIndex = Math.min(fromIndex + size, total);
 
-        return list.subList(fromIndex, toIndex);
+    List<ProductResponse> paginatedList;
+
+    if (fromIndex >= total) {
+        paginatedList = new ArrayList<>();
+    } else {
+        paginatedList = allProducts.subList(fromIndex, toIndex);
     }
+
+    Pageable pageable = PageRequest.of(page, size); // ✅ Sửa chỗ này
+    return new PageImpl<>(paginatedList, pageable, total);
+}
 }

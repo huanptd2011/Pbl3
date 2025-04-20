@@ -3,9 +3,8 @@ package com.nahuannghia.shopnhn.dto.change_password;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChangePasswordRequest {
@@ -18,6 +17,21 @@ public class ChangePasswordRequest {
 
     @NotBlank(message = "Confirm new password is required")
     private String confirmNewPassword;
+
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public String getConfirmNewPassword() {
+        return confirmNewPassword;
+    }
+
+
+    //
     
     
 }

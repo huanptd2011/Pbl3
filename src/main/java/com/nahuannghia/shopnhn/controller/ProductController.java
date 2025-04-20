@@ -4,9 +4,15 @@ package com.nahuannghia.shopnhn.controller;
 import com.nahuannghia.shopnhn.Response.ProductResponse;
 import com.nahuannghia.shopnhn.request.ProductRequest;
 import com.nahuannghia.shopnhn.service.ProductService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+
+import io.micrometer.common.lang.Nullable;
 
 @RestController
 @CrossOrigin(origins =  {"http://localhost:63342", "http://127.0.0.1:5501", "http://127.0.0.1:5500"})
@@ -32,8 +38,8 @@ public class ProductController {
 
     //phan trang san pham
     @GetMapping("/search")
-    public List<ProductResponse> searchProducts(
-            @RequestParam("keyword") String keyword,
+    public Page<ProductResponse> searchProducts(
+            @RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

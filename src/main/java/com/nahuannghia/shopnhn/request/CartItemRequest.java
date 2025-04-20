@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Data
+
 public class CartItemRequest {
     private Integer cartId;
     private Integer productId;
@@ -12,4 +12,24 @@ public class CartItemRequest {
     private BigDecimal price;
     private String color;
     private String size;
+    public Integer getCartId() {
+        return cartId;
+    }
+    public Integer getProductId() {
+        return productId;
+    }
+    public Integer getQuantity() {
+        return quantity;
+    }
+    public BigDecimal getPrice() {
+        return price;
+    }
+    public String getColor() {
+        return color;
+    }
+    public String getSize() {
+        return size;
+    }
+
+    
 }

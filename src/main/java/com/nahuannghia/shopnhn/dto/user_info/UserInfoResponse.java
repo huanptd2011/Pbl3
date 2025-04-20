@@ -5,9 +5,8 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
-import lombok.Data;
 
-@Data
+
 @Builder
 public class UserInfoResponse {
 
@@ -26,6 +25,47 @@ public class UserInfoResponse {
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
+    public Long getId() {
+        return id;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public String getFullName() {
+        return fullName;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public String getPhone() {
+        return phone;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public LocalDateTime getDob() {
+        return dob;
+    }
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+    public String getRole() {
+        return role;
+    }
+    public Boolean getIsActive() {
+        return isActive;
+    }
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    //
     
 
 }

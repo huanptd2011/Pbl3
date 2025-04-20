@@ -82,9 +82,21 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
         
-        User updateduser = user.builder()
-                .password(passwordEncoder.encode(request.getNewPassword()))
-                .build();
+//        User updateduser = user.builder()
+//                .password(passwordEncoder.encode(request.getNewPassword()))
+//                .build();
+
+                 User updateduser = new User(
+                         user.getUserId(),
+                         user.getUsername(),
+                         passwordEncoder.encode(request.getNewPassword()),
+                         user.getEmail(),
+                         user.getPhone(),
+                         user.getAddress(),
+                         user.getRole(),
+                         user.getLastLogin()
+                 );
+
         
         userRepository.save(updateduser);
         

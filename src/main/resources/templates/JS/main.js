@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:8080/ShopNHN/products';
+const apiUrl = 'http://localhost:8080/ShopNHN/products/new';
 
 const productsContainer = document.getElementById('products-container');
 

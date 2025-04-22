@@ -44,6 +44,11 @@ public class ProductController {
         return productService.getProductById(productId);
     }
 
+    @GetMapping("/new")
+    public List<ProductResponse> getNewProduct(){
+        return productService.getNewProduct();
+    }
+
     @GetMapping
     public List<ProductResponse> getAllProducts() {
                 return productService.getAllProducts();

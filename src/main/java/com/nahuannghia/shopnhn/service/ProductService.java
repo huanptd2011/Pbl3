@@ -150,42 +150,65 @@ public class ProductService {
     public ProductResponse updateProduct(Integer productId, ProductRequest productRequest) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-
+    
         product.setProductName(productRequest.getProductName());
         product.setProductDescription(productRequest.getProductDescription());
         product.setBrand(productRequest.getBrand());
         product.setPrice(productRequest.getPrice());
-
+    
         product = productRepository.save(product);
         Product product1 = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        productInventoryRepository.deleteByProductProductId(productId);
+    
+        // Update or create product inventory
         if (productRequest.getSizeColorList() != null) {
             productRequest.getSizeColorList().forEach(inventory -> {
-                ProductInventory productInventory = new ProductInventory(
-                        product1,
-                        inventory.getColor(),
-                        inventory.getSize(),
-                        inventory.getQuantity());
-                productInventoryRepository.save(productInventory);
+                // Check if inventory exists for this product, size, and color
+                ProductInventory existingInventory = productInventoryRepository
+                        .findByProductProductIdAndProductInventoryId_SizeAndProductInventoryId_Color(
+                                product1.getProductId(), inventory.getSize(), inventory.getColor())
+                        .orElse(null);
+    
+                if (existingInventory != null) {
+                    // Update existing inventory
+                    existingInventory.setQuantity(inventory.getQuantity());
+                    productInventoryRepository.save(existingInventory);
+                } else {
+                    // Create new inventory
+                    ProductInventory productInventory = new ProductInventory(
+                            product1,
+                            inventory.getColor(),
+                            inventory.getSize(),
+                            inventory.getQuantity());
+                    productInventoryRepository.save(productInventory);
+                }
             });
         }
-
-        productImageRepository.deleteByProductProductId(productId);
+    
+        // Update or create product images
         if (productRequest.getImageList() != null) {
             productRequest.getImageList().forEach(image -> {
-                ProductImage productImage = new ProductImage(
-                        product1,
-                        image.getImageUrl()
-                );
-                productImageRepository.save(productImage);
+                // Check if image exists for this product and URL
+                ProductImage existingImage = productImageRepository
+                        .findByProductProductIdAndImageUrl(
+                                product1.getProductId(), image.getImageUrl())
+                        .orElse(null);
+    
+                if (existingImage == null) {
+                    // Create new image if it doesn't exist
+                    ProductImage productImage = new ProductImage(
+                            product1,
+                            image.getImageUrl()
+                    );
+                    productImageRepository.save(productImage);
+                }
+                // If image exists, no update needed unless additional fields are involved
             });
         }
-
+    
         List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
-
+    
         return new ProductResponse(
                 product1.getProductId(),
                 product1.getProductName(),
@@ -228,7 +251,7 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
   public Page<ProductResponse> searchProductsWithPagination(String keyword, int page, int size) {
-    List<ProductResponse> allProducts = searchProducts(keyword); // Danh sách tất cả sản phẩm đã lọc theo từ khóa
+    List<ProductResponse> allProducts = searchProducts(keyword); 
 
     int total = allProducts.size();
     int fromIndex = page * size;
@@ -242,7 +265,7 @@ public class ProductService {
         paginatedList = allProducts.subList(fromIndex, toIndex);
     }
 
-    Pageable pageable = PageRequest.of(page, size); // ✅ Sửa chỗ này
+    Pageable pageable = PageRequest.of(page, size); 
     return new PageImpl<>(paginatedList, pageable, total);
 }
 }

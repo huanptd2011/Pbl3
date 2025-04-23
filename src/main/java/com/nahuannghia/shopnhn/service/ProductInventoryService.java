@@ -25,7 +25,12 @@ public class ProductInventoryService {
 
     // CREATE: Thêm mới thông tin tồn kho
     public ProductInventoryResponse addProductInventory(ProductInventoryRequest request) {
+        if (request.getColor() == null || request.getSize() == null || request.getQuantity() == null) {
+            throw new IllegalArgumentException("Color, size, and quantity must not be null");
+        }
         Optional<ProductInventory> productInventory = productInventoryRepository.findByProductInventoryId_ProductId(request.getProductId());
+     
+        
         if(productInventory.isEmpty()){
             throw new RuntimeException("");
         }

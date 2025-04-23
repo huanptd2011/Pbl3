@@ -1,15 +1,15 @@
 package com.nahuannghia.shopnhn.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
+import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "productCategory")
-@Data
+
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductCategory {
@@ -22,6 +22,23 @@ public class ProductCategory {
     @Column(name = "categoryName", nullable = false, length = 100)
     private String categoryName;
 
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
 //    @ManyToMany(mappedBy = "categories")
 //    private Set<Product> products;
+
 }

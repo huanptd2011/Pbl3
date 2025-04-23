@@ -2,6 +2,7 @@ package com.nahuannghia.shopnhn.model;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 @Entity
 @Table(name = "productInventory")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductInventory {
@@ -35,5 +37,7 @@ public class ProductInventory {
     public String getColor(){
         return productInventoryId.getColor();
     }
+    
+
 }
 

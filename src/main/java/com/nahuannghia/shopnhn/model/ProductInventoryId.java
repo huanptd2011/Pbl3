@@ -3,13 +3,14 @@ package com.nahuannghia.shopnhn.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Embeddable
-@Data
+
+@Builder
 public class ProductInventoryId implements Serializable {
 
     @Column(name = "productId")
@@ -45,4 +46,30 @@ public class ProductInventoryId implements Serializable {
     public int hashCode() {
         return 31 * productId.hashCode() + 31 * color.hashCode() + 31 * size.hashCode();
     }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+   //
+
 }

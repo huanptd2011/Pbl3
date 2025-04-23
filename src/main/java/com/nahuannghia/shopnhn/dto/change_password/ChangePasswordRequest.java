@@ -3,8 +3,9 @@ package com.nahuannghia.shopnhn.dto.change_password;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
-
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChangePasswordRequest {

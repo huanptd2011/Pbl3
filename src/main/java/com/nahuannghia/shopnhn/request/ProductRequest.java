@@ -4,6 +4,7 @@ import com.nahuannghia.shopnhn.Response.ProductImageResponse;
 import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
 import lombok.AllArgsConstructor;
 
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductRequest {
     private String productName;
     private String productDescription;

@@ -1,6 +1,7 @@
 package com.nahuannghia.shopnhn.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "customer")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Customer{

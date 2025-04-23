@@ -7,11 +7,12 @@ import java.util.List;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "product")
-
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {

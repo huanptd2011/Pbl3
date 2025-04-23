@@ -2,12 +2,7 @@ package com.nahuannghia.shopnhn.dto.login;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class LoginRequest {
     @NotBlank(message = "Username or email is required")
     @Size(min = 8, max = 255, message = "Username/email must be between 3 and 100 characters")
@@ -25,5 +20,20 @@ public class LoginRequest {
     public String getPassword() {
         return password;
     }
+    //setter
+    public void setUsernameOrEmail(String usernameOrEmail) {
+        this.usernameOrEmail = usernameOrEmail;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    //constructor
+    public LoginRequest(String usernameOrEmail, String password) {
+        this.usernameOrEmail = usernameOrEmail;
+        this.password = password;
+    }
+    public LoginRequest() {
+    }
+    
  
 }

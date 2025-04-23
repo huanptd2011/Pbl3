@@ -15,7 +15,6 @@ import com.nahuannghia.shopnhn.dto.login.LoginRequest;
 import com.nahuannghia.shopnhn.dto.login.LoginResponse;
 import com.nahuannghia.shopnhn.dto.logout.LogoutResponse;
 import com.nahuannghia.shopnhn.service.user_service.UserService;
-import org.springframework.context.annotation.Lazy;
 
 import jakarta.validation.Valid;
 
@@ -25,7 +24,7 @@ public class AuthController {
 
     private final UserService userService;
 
-    public AuthController( @Lazy UserService userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
     }
 

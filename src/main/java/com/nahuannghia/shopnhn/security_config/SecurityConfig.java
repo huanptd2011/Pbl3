@@ -30,7 +30,11 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/accounts/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/products/**").permitAll()
+                .requestMatchers("/api/orders/**").permitAll()
+                .requestMatchers("/api/product-inventory/**").permitAll()
+
+                .requestMatchers("/products/**").permitAll()  
+                .requestMatchers("/api/product-categories/**").permitAll() 
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .anyRequest().authenticated()
             )

@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // console.log('Dữ liệu sản phẩm:', collectProductData());
         const data = collectProductData();
 
-        fetch('http://localhost:8080/ShopNHN/products/add', {
+        fetch('http://localhost:8080/products/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

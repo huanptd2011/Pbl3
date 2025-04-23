@@ -37,4 +37,5 @@ public class PaymentMethodController {
     public List<PaymentMethodResponse> search(@RequestParam String name) {
         return paymentMethodService.searchByName(name);
     }
+    
 }

@@ -1,13 +1,12 @@
 package com.nahuannghia.shopnhn.controller;
 
 import com.nahuannghia.shopnhn.Response.CartResponse;
-import com.nahuannghia.shopnhn.model.Cart;
 import com.nahuannghia.shopnhn.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/carts")

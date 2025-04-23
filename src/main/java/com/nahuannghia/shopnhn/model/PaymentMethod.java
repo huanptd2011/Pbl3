@@ -1,14 +1,15 @@
 package com.nahuannghia.shopnhn.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paymentMethod")
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentMethod {
@@ -20,5 +21,23 @@ public class PaymentMethod {
 
     @Column(name = "paymentMethod_name", nullable = false, length = 50)
     private String paymentMethodName;
+
+    public Integer getPaymentMethodId() {
+        return paymentMethodId;
+    }
+
+    public void setPaymentMethodId(Integer paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
+    }
+
+    public String getPaymentMethodName() {
+        return paymentMethodName;
+    }
+
+    public void setPaymentMethodName(String paymentMethodName) {
+        this.paymentMethodName = paymentMethodName;
+    }
+
+    //
 
 }

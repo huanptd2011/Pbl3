@@ -1,32 +1,47 @@
 package com.nahuannghia.shopnhn.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.*;
-import java.io.Serializable;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "productImage")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductImage implements Serializable {
-
-    @EmbeddedId
-    private ProductImageId productImageId;
+public class ProductImage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "productId", insertable = false, updatable = false)
+    @JoinColumn(name = "productId")
     private Product product;
+
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
+    public ProductImage() {}
 
     public ProductImage(Product product, String imageUrl) {
         this.product = product;
-        this.productImageId = new ProductImageId(product.getProductId(), imageUrl);
+        this.imageUrl = imageUrl;
     }
-    public String getImageUrl(){
-        return productImageId.getImageUrl();
+    // Getters and Setters
+    public Long getId() {
+        return id;
     }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public Product getProduct() {
+        return product;
+    }
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    public String getImageUrl() {
+        return imageUrl;
+    }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+    
 }
-

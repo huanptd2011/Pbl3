@@ -2,7 +2,7 @@
 package com.nahuannghia.shopnhn.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
@@ -10,16 +10,16 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order")
-@Data
+@Table(name = "[order]")
+
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderId")
-    private Integer orderId;
+    private String orderId;
 
     @ManyToOne
     @JoinColumn(name = "customerId", nullable = false)
@@ -40,5 +40,63 @@ public class Order {
 
     @Column(name = "note", length = 2000)
     private String note;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    //Get
 
 }

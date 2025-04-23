@@ -44,8 +44,9 @@ public class ProductImageService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteProductImage(String imageUrl) {
-        ProductImage productImage = productImageRepository.findByProductImageId_ImageUrl(imageUrl)
+    public void deleteProductImage(Integer productId, String imageUrl) {
+        ProductImage productImage = productImageRepository
+                .findByProductProductIdAndImageUrl(productId, imageUrl)
                 .orElseThrow(() -> new RuntimeException("Product image not found"));
         productImageRepository.delete(productImage);
     }

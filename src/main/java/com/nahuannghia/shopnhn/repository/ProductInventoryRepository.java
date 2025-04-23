@@ -15,6 +15,6 @@ public interface ProductInventoryRepository extends JpaRepository<ProductInvento
     Optional<ProductInventory> findByProductInventoryId_ProductId(Integer productId);
     Optional<ProductInventory> findByProductInventoryId_ProductIdAndProductInventoryId_ColorAndProductInventoryId_Size(
             Integer productId, String color, String size);
-
+    Optional<ProductInventory> findByProductProductIdAndProductInventoryId_SizeAndProductInventoryId_Color(
+            Integer productId, String size, String color);
 }
-

@@ -1,7 +1,10 @@
 package com.nahuannghia.shopnhn.request;
 
+import lombok.Builder;
+
 
 import java.math.BigDecimal;
+@Builder
 public class OrderRequest {
     private Integer customerId;
     private Integer paymentMethodId;

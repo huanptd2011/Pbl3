@@ -1,7 +1,6 @@
 package com.nahuannghia.shopnhn.request;
 
-import com.nahuannghia.shopnhn.Response.ProductImageResponse;
-import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
+
 import lombok.AllArgsConstructor;
 
 import lombok.Builder;
@@ -20,6 +19,7 @@ public class ProductRequest {
     private BigDecimal price;
     private List<ProductInventoryRequest> sizeColorList;
     private List<ProductImageRequest> imageList;
+<<<<<<< HEAD
     public String getProductName() {
         return productName;
     }
@@ -40,5 +40,7 @@ public class ProductRequest {
     }
 
     
+=======
+>>>>>>> a72de685ed457ecb97c852db83f5d59ebfecb8e8
 }
 

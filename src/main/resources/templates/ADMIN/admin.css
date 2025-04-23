@@ -1,4 +1,5 @@
 /* CSS Reset */
+<<<<<<< HEAD
 
 :root {
     --header-height: 60px;
@@ -8,6 +9,8 @@
     --danger-color: #e74c3c;
     --transition: all 0.3s ease;
 }
+=======
+>>>>>>> a72de685ed457ecb97c852db83f5d59ebfecb8e8
 * {
     margin: 0;
     padding: 0;

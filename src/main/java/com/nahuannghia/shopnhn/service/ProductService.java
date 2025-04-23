@@ -205,10 +205,17 @@ public class ProductService {
                 // If image exists, no update needed unless additional fields are involved
             });
         }
+<<<<<<< HEAD
     
         List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
     
+=======
+
+        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
+        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
+
+>>>>>>> a72de685ed457ecb97c852db83f5d59ebfecb8e8
         return new ProductResponse(
                 product1.getProductId(),
                 product1.getProductName(),
@@ -265,7 +272,28 @@ public class ProductService {
         paginatedList = allProducts.subList(fromIndex, toIndex);
     }
 
+<<<<<<< HEAD
     Pageable pageable = PageRequest.of(page, size); 
     return new PageImpl<>(paginatedList, pageable, total);
+=======
+    public List<ProductResponse> getNewProduct(){
+        List<Product> products = productRepository.findTop4ByOrderByCreatedDateDesc();
+        return products.stream().map(product -> {
+            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+            List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+            return new ProductResponse(
+                    product.getProductId(),
+                    product.getProductName(),
+                    product.getProductDescription(),
+                    product.getBrand(),
+                    product.getPrice(),
+                    product.getCreatedAt(),
+                    product.getUpdatedAt(),
+                    inventoryList,
+                    imageList
+            );
+        }).collect(Collectors.toList());
+    }
+>>>>>>> a72de685ed457ecb97c852db83f5d59ebfecb8e8
 }
 }

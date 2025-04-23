@@ -1,0 +1,117 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "productName": "Nike Air Force 1 '07",
+            "productDescription": "The Nike Air Force 1 '07 is the b-ball icon with a fresh look.",
+            "brand": "Nike",
+            "price": 2500000,
+            "createdAt": "2024-01-01T10:00:00Z",
+            "updatedAt": "2024-03-01T15:30:00Z",
+            "sizeColorList": [
+                {
+                    "size": "38",
+                    "color": "white",
+                    "quantity": 5
+                },
+                {
+                    "size": "39",
+                    "color": "black",
+                    "quantity": 3
+                }
+            ],
+            "imageList": [
+                {
+                    "imageUrl": "https://image.made-in-china.com/2f0j00MClqkKvPkRcZ/Children-s-Sports-Shoes-Girls-Shoes-New-Breathable-Forrest-Gump-Shoes-Boys-Board-Shoes.webp"
+                },
+                {
+                    "imageUrl": "https://image.made-in-china.com/2f0j00MClqkKvPkRcZ/Children-s-Sports-Shoes-Girls-Shoes-New-Breathable-Forrest-Gump-Shoes-Boys-Board-Shoes.webp"
+                }
+            ],
+            "isBestSeller": true,
+            "isNewArrival": false,
+            "collection": "summer2024"
+        },
+        {
+            "id": 2,
+            "productName": "Adidas Ultraboost Light",
+            "productDescription": "Experience lightness and performance with the Ultraboost Light.",
+            "brand": "Adidas",
+            "price": 2900000,
+            "createdAt": "2024-02-15T08:45:00Z",
+            "updatedAt": "2024-03-22T17:10:00Z",
+            "sizeColorList": [
+                {
+                    "size": "40",
+                    "color": "blue",
+                    "quantity": 6
+                },
+                {
+                    "size": "41",
+                    "color": "white",
+                    "quantity": 2
+                }
+            ],
+            "imageList": [
+                {
+                    "imageUrl": "https://image.made-in-china.com/2f0j00MClqkKvPkRcZ/Children-s-Sports-Shoes-Girls-Shoes-New-Breathable-Forrest-Gump-Shoes-Boys-Board-Shoes.webp"
+                },
+                {
+                    "imageUrl": "https://image.made-in-china.com/2f0j00MClqkKvPkRcZ/Children-s-Sports-Shoes-Girls-Shoes-New-Breathable-Forrest-Gump-Shoes-Boys-Board-Shoes.webp"
+                }
+            ],
+            "isBestSeller": false,
+            "isNewArrival": true,
+            "collection": "spring2024"
+        },
+        {
+            "id": 3,
+            "productName": "Puma RS-X Efekt",
+            "productDescription": "Retro-inspired style with a futuristic edge.",
+            "brand": "Puma",
+            "price": 2200000,
+            "createdAt": "2024-03-05T12:00:00Z",
+            "updatedAt": "2024-03-20T12:30:00Z",
+            "sizeColorList": [
+                {
+                    "size": "42",
+                    "color": "red",
+                    "quantity": 4
+                },
+                {
+                    "size": "43",
+                    "color": "grey",
+                    "quantity": 5
+                }
+            ],
+            "imageList": [
+                {
+                    "imageUrl": "https://image.made-in-china.com/2f0j00MClqkKvPkRcZ/Children-s-Sports-Shoes-Girls-Shoes-New-Breathable-Forrest-Gump-Shoes-Boys-Board-Shoes.webp"
+                },
+                {
+                    "imageUrl": "https://image.made-in-china.com/2f0j00MClqkKvPkRcZ/Children-s-Sports-Shoes-Girls-Shoes-New-Breathable-Forrest-Gump-Shoes-Boys-Board-Shoes.webp"
+                }
+            ],
+            "isBestSeller": true,
+            "isNewArrival": true,
+            "collection": "streetwear2024"
+        }
+    ],
+    "collections": [
+        {
+            "id": 1,
+            "name": "summer2024",
+            "displayName": "Summer 2024"
+        },
+        {
+            "id": 2,
+            "name": "spring2024",
+            "displayName": "Spring 2024"
+        },
+        {
+            "id": 3,
+            "name": "streetwear2024",
+            "displayName": "Streetwear 2024"
+        }
+    ]
+}

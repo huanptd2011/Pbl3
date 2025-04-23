@@ -2,9 +2,13 @@ package com.nahuannghia.shopnhn.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+=======
+import lombok.Data;
+>>>>>>> a72de685ed457ecb97c852db83f5d59ebfecb8e8
 
 import java.io.Serializable;
 

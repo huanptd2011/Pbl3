@@ -25,7 +25,7 @@ function init() {
   setupEventListeners();
 }
 
-const apiUrl = 'http://localhost:8080/ShopNHN/products';
+const apiUrl = 'http://localhost:8080/ShopNHN/products;'
 // Hàm fetch sản phẩm từ API
 async function fetchProducts() {
     try {

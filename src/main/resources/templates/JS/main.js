@@ -134,3 +134,29 @@ document.querySelector('.banner-container').addEventListener('mouseenter', () =>
 document.querySelector('.banner-container').addEventListener('mouseleave', () => {
     slideInterval = setInterval(nextSlide, 5000);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+
+    function checkAuth() {
+        // Kiểm tra token trong localStorage (thường dùng với JWT)
+        const token = localStorage.getItem('authToken');
+
+        // Hoặc kiểm tra session (tùy thuộc vào cách bạn triển khai backend)
+        // Trong thực tế, bạn có thể cần gọi API để kiểm tra token/session
+
+        return !!token; // Trả về true nếu có token, false nếu không
+    }
+
+    userIcon.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        if (!checkAuth()) {
+            // Lưu URL hiện tại để redirect lại sau khi đăng nhập
+            sessionStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = '../HTML/login.html';
+        } else {
+            window.location.href = 'account.html';
+        }
+    });
+});

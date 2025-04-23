@@ -5,6 +5,10 @@ package com.nahuannghia.shopnhn.controller;
 
 import java.security.Principal;
 
+import com.nahuannghia.shopnhn.dto.create.RegisterRequest;
+import com.nahuannghia.shopnhn.dto.create.RegisterResponse;
+import com.nahuannghia.shopnhn.dto.login.LoginRequest;
+import com.nahuannghia.shopnhn.dto.login.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -45,16 +49,25 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserInfo(accountId));
     }
 
-    @PostMapping("/{userId}/change-password")
+    @PostMapping("/log-in")
+    public ResponseEntity<LoginResponse> loginSystem(@RequestBody LoginRequest loginRequest){
+        return ResponseEntity.ok(userService.login(loginRequest));
+    }
+
+    @PutMapping("/{userId}/change-password")
     public ResponseEntity<ChangePasswordResponse> changePassword(
-            @PathVariable Long accountId,
+            @PathVariable("userId") Long accountId,
             @RequestBody @Valid ChangePasswordRequest request) throws UserNotFoundException {
         return ResponseEntity.ok(userService.changePassword(accountId, request));
     }
 
-    @DeleteMapping("/{userId}")
+    @PostMapping("/create")
+    public RegisterResponse createAccount(@RequestBody RegisterRequest request){
+        return userService.createUser(request);
+    }
+    @DeleteMapping("/delete/{userId}")
     public ResponseEntity<DeleteUserResponse> deleteUser(
-            @PathVariable Long accountId) throws UserNotFoundException {
+            @PathVariable("userId") Long accountId) throws UserNotFoundException {
         return ResponseEntity.ok(userService.deleteUser(accountId));
     }
 

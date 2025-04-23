@@ -30,11 +30,15 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/accounts/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+<<<<<<< HEAD
                 .requestMatchers("/api/orders/**").permitAll()
                 .requestMatchers("/api/product-inventory/**").permitAll()
 
                 .requestMatchers("/products/**").permitAll()  
                 .requestMatchers("/api/product-categories/**").permitAll() 
+=======
+                    .requestMatchers("/api/users/**").permitAll()
+>>>>>>> 88b2b9f61b320ae2e9d90e2c3f7ccbdc3745c272
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .anyRequest().authenticated()
             )

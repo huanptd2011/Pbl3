@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,23 +22,22 @@ public class Order {
     private Integer orderId;
 
     @ManyToOne
-    @JoinColumn(name = "customerId", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "paymentMethod_id", nullable = false)
     private PaymentMethod paymentMethod;
 
-    @Column(name = "order_date", nullable = false, columnDefinition = "DATETIME DEFAULT GETDATE()")
+    @Column(name = "order_date", nullable = false, columnDefinition = "DATETIME DEFAULT GET DATE()")
     private LocalDateTime orderDate;
 
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
     @Column(name = "order_state", nullable = false, length = 20)
-    private String orderState = "Chờ xác nhận"; // Default value
+    private String orderState = "Chờ xác nhận";
 
     @Column(name = "note", length = 2000)
     private String note;
-
 }

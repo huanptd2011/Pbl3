@@ -1,12 +1,16 @@
 package com.nahuannghia.shopnhn.service;
 
+import com.nahuannghia.shopnhn.Response.OrderDetailResponse;
 import com.nahuannghia.shopnhn.Response.OrderResponse;
-import com.nahuannghia.shopnhn.model.Customer;
+import com.nahuannghia.shopnhn.Response.PaymentMethodResponse;
 import com.nahuannghia.shopnhn.model.Order;
+import com.nahuannghia.shopnhn.model.OrderDetail;
 import com.nahuannghia.shopnhn.model.PaymentMethod;
-import com.nahuannghia.shopnhn.repository.CustomerRepository;
+import com.nahuannghia.shopnhn.model.User;
+import com.nahuannghia.shopnhn.repository.OrderDetailRepository;
 import com.nahuannghia.shopnhn.repository.OrderRepository;
 import com.nahuannghia.shopnhn.repository.PaymentMethodRepository;
+import com.nahuannghia.shopnhn.repository.UserRepository;
 import com.nahuannghia.shopnhn.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,20 +26,21 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
-
+    private UserRepository userRepository;
+    @Autowired
+    private OrderDetailService orderDetailService;
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
 
     public OrderResponse createOrder(OrderRequest request) {
-        Customer customer = customerRepository.findById(request.getCustomerId())
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
         PaymentMethod paymentMethod = paymentMethodRepository.findById(request.getPaymentMethodId())
                 .orElseThrow(() -> new RuntimeException("Payment method not found"));
 
         Order order = new Order();
-        order.setCustomer(customer);
+        order.setUser(user);
         order.setPaymentMethod(paymentMethod);
         order.setOrderDate(LocalDateTime.now());
         order.setTotalPrice(request.getTotalPrice());
@@ -70,14 +75,20 @@ public class OrderService {
     }
 
     private OrderResponse mapToResponse(Order order) {
+        PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(
+                order.getPaymentMethod().getPaymentMethodId(),
+                order.getPaymentMethod().getPaymentMethodName()
+        );
+        List<OrderDetailResponse> list = orderDetailService.getOrderDetailByOrderId(order.getOrderId());
         return new OrderResponse(
                 order.getOrderId(),
-                order.getCustomer().getCustomerId(),
-                order.getPaymentMethod().getPaymentMethodId(),
+                order.getUser().getUserId(),
+                paymentMethodResponse,
                 order.getOrderDate(),
                 order.getTotalPrice(),
                 order.getOrderState(),
-                order.getNote()
+                order.getNote(),
+                list
         );
     }
 }

@@ -1,12 +1,693 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="vi">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Tài khoản khách hàng</title>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->
+<!--    <style>-->
+<!--        /* Reset và font chữ */-->
+<!--* {-->
+<!--    margin: 0;-->
+<!--    padding: 0;-->
+<!--    box-sizing: border-box;-->
+<!--    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
+<!--}-->
+
+<!--body {-->
+<!--    background-color: #f5f5f5;-->
+<!--    color: #333;-->
+<!--    line-height: 1.6;-->
+<!--}-->
+
+<!--.container {-->
+<!--    max-width: 1200px;-->
+<!--    margin: 0 auto;-->
+<!--    padding: 20px;-->
+<!--}-->
+
+<!--/* Header */-->
+<!--.header {-->
+<!--    background-color: #2c3e50;-->
+<!--    color: white;-->
+<!--    padding: 20px;-->
+<!--    border-radius: 8px;-->
+<!--    margin-bottom: 20px;-->
+<!--    display: flex;-->
+<!--    justify-content: space-between;-->
+<!--    align-items: center;-->
+<!--    flex-wrap: wrap;-->
+<!--}-->
+
+<!--.header h1 {-->
+<!--    font-size: 24px;-->
+<!--}-->
+
+<!--.user-nav {-->
+<!--    display: flex;-->
+<!--    gap: 15px;-->
+<!--}-->
+
+<!--.user-nav-link {-->
+<!--    color: white;-->
+<!--    text-decoration: none;-->
+<!--    display: flex;-->
+<!--    align-items: center;-->
+<!--    gap: 5px;-->
+<!--    padding: 8px 12px;-->
+<!--    border-radius: 4px;-->
+<!--    transition: background-color 0.3s;-->
+<!--}-->
+
+<!--.user-nav-link:hover {-->
+<!--    background-color: #34495e;-->
+<!--}-->
+
+<!--.user-nav-link i {-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--/* Main content */-->
+<!--.main-content {-->
+<!--    background-color: white;-->
+<!--    border-radius: 8px;-->
+<!--    padding: 20px;-->
+<!--    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);-->
+<!--}-->
+
+<!--.content-section {-->
+<!--    display: none;-->
+<!--}-->
+
+<!--.content-section.active {-->
+<!--    display: block;-->
+<!--}-->
+
+<!--/* Profile form */-->
+<!--.profile-form {-->
+<!--    max-width: 600px;-->
+<!--    margin-top: 20px;-->
+<!--}-->
+
+<!--.form-group {-->
+<!--    margin-bottom: 15px;-->
+<!--}-->
+
+<!--.form-group label {-->
+<!--    display: block;-->
+<!--    margin-bottom: 5px;-->
+<!--    font-weight: 600;-->
+<!--}-->
+
+<!--.form-group input,-->
+<!--.form-group textarea,-->
+<!--.form-group select {-->
+<!--    width: 100%;-->
+<!--    padding: 10px;-->
+<!--    border: 1px solid #ddd;-->
+<!--    border-radius: 4px;-->
+<!--    font-size: 16px;-->
+<!--}-->
+
+<!--.form-group textarea {-->
+<!--    resize: vertical;-->
+<!--    min-height: 80px;-->
+<!--}-->
+
+<!--.form-actions {-->
+<!--    display: flex;-->
+<!--    gap: 10px;-->
+<!--    margin-top: 20px;-->
+<!--}-->
+
+<!--.btn {-->
+<!--    padding: 10px 20px;-->
+<!--    border: none;-->
+<!--    border-radius: 4px;-->
+<!--    cursor: pointer;-->
+<!--    font-size: 16px;-->
+<!--    transition: background-color 0.3s;-->
+<!--}-->
+
+<!--.btn-primary {-->
+<!--    background-color: #3498db;-->
+<!--    color: white;-->
+<!--}-->
+
+<!--.btn-primary:hover {-->
+<!--    background-color: #2980b9;-->
+<!--}-->
+
+<!--.btn:disabled {-->
+<!--    background-color: #95a5a6;-->
+<!--    cursor: not-allowed;-->
+<!--}-->
+
+<!--/* Orders section */-->
+<!--.order-filter {-->
+<!--    margin: 20px 0;-->
+<!--}-->
+
+<!--.order-filter select {-->
+<!--    padding: 8px;-->
+<!--    border-radius: 4px;-->
+<!--    border: 1px solid #ddd;-->
+<!--}-->
+
+<!--.orders-list {-->
+<!--    display: flex;-->
+<!--    flex-direction: column;-->
+<!--    gap: 15px;-->
+<!--}-->
+
+<!--.order-card {-->
+<!--    border: 1px solid #ddd;-->
+<!--    border-radius: 8px;-->
+<!--    padding: 15px;-->
+<!--    transition: box-shadow 0.3s;-->
+<!--}-->
+
+<!--.order-card:hover {-->
+<!--    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);-->
+<!--}-->
+
+<!--.order-header {-->
+<!--    display: flex;-->
+<!--    justify-content: space-between;-->
+<!--    margin-bottom: 10px;-->
+<!--    padding-bottom: 10px;-->
+<!--    border-bottom: 1px solid #eee;-->
+<!--}-->
+
+<!--.order-id {-->
+<!--    font-weight: bold;-->
+<!--}-->
+
+<!--.order-date {-->
+<!--    color: #7f8c8d;-->
+<!--}-->
+
+<!--.order-status {-->
+<!--    padding: 4px 8px;-->
+<!--    border-radius: 4px;-->
+<!--    font-size: 14px;-->
+<!--    font-weight: bold;-->
+<!--}-->
+
+<!--.status-pending {-->
+<!--    background-color: #f39c12;-->
+<!--    color: white;-->
+<!--}-->
+
+<!--.status-processing {-->
+<!--    background-color: #3498db;-->
+<!--    color: white;-->
+<!--}-->
+
+<!--.status-shipped {-->
+<!--    background-color: #9b59b6;-->
+<!--    color: white;-->
+<!--}-->
+
+<!--.status-delivered {-->
+<!--    background-color: #2ecc71;-->
+<!--    color: white;-->
+<!--}-->
+
+<!--.status-cancelled {-->
+<!--    background-color: #e74c3c;-->
+<!--    color: white;-->
+<!--}-->
+
+<!--.order-details {-->
+<!--    display: flex;-->
+<!--    gap: 15px;-->
+<!--    margin-bottom: 10px;-->
+<!--}-->
+
+<!--.order-items {-->
+<!--    flex: 2;-->
+<!--}-->
+
+<!--.order-item {-->
+<!--    display: flex;-->
+<!--    gap: 10px;-->
+<!--    margin-bottom: 10px;-->
+<!--    padding-bottom: 10px;-->
+<!--    border-bottom: 1px solid #eee;-->
+<!--}-->
+
+<!--.order-item:last-child {-->
+<!--    border-bottom: none;-->
+<!--    margin-bottom: 0;-->
+<!--    padding-bottom: 0;-->
+<!--}-->
+
+<!--.item-image {-->
+<!--    width: 60px;-->
+<!--    height: 60px;-->
+<!--    object-fit: cover;-->
+<!--    border-radius: 4px;-->
+<!--}-->
+
+<!--.item-info {-->
+<!--    flex: 1;-->
+<!--}-->
+
+<!--.item-name {-->
+<!--    font-weight: bold;-->
+<!--    margin-bottom: 5px;-->
+<!--}-->
+
+<!--.item-price {-->
+<!--    color: #e74c3c;-->
+<!--    font-weight: bold;-->
+<!--}-->
+
+<!--.order-summary {-->
+<!--    flex: 1;-->
+<!--    background-color: #f9f9f9;-->
+<!--    padding: 15px;-->
+<!--    border-radius: 8px;-->
+<!--}-->
+
+<!--.summary-row {-->
+<!--    display: flex;-->
+<!--    justify-content: space-between;-->
+<!--    margin-bottom: 8px;-->
+<!--}-->
+
+<!--.summary-total {-->
+<!--    font-weight: bold;-->
+<!--    font-size: 18px;-->
+<!--    margin-top: 10px;-->
+<!--    padding-top: 10px;-->
+<!--    border-top: 1px solid #ddd;-->
+<!--}-->
+
+<!--.order-actions {-->
+<!--    display: flex;-->
+<!--    gap: 10px;-->
+<!--    justify-content: flex-end;-->
+<!--}-->
+
+<!--.action-btn {-->
+<!--    padding: 6px 12px;-->
+<!--    border: 1px solid #ddd;-->
+<!--    border-radius: 4px;-->
+<!--    background-color: white;-->
+<!--    cursor: pointer;-->
+<!--    transition: background-color 0.3s;-->
+<!--}-->
+
+<!--.action-btn:hover {-->
+<!--    background-color: #f5f5f5;-->
+<!--}-->
+
+<!--.action-btn.cancel {-->
+<!--    border-color: #e74c3c;-->
+<!--    color: #e74c3c;-->
+<!--}-->
+
+<!--.action-btn.view {-->
+<!--    border-color: #3498db;-->
+<!--    color: #3498db;-->
+<!--}-->
+
+<!--/* Footer */-->
+<!--.footer {-->
+<!--    text-align: center;-->
+<!--    margin-top: 20px;-->
+<!--    padding: 20px;-->
+<!--    color: #7f8c8d;-->
+<!--    font-size: 14px;-->
+<!--}-->
+
+<!--/* Responsive */-->
+<!--@media (max-width: 768px) {-->
+<!--    .header {-->
+<!--        flex-direction: column;-->
+<!--        align-items: flex-start;-->
+<!--        gap: 15px;-->
+<!--    }-->
+
+<!--    .user-nav {-->
+<!--        width: 100%;-->
+<!--        flex-direction: column;-->
+<!--        gap: 5px;-->
+<!--    }-->
+
+<!--    .order-details {-->
+<!--        flex-direction: column;-->
+<!--    }-->
+
+<!--    .form-actions {-->
+<!--        flex-direction: column;-->
+<!--    }-->
+
+<!--    .btn {-->
+<!--        width: 100%;-->
+<!--    }-->
+<!--}-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <header class="header">-->
+<!--        <h1>Tài khoản của tôi</h1>-->
+<!--        <nav class="user-nav">-->
+<!--            <a href="#" class="user-nav-link" onclick="showSection('profile')">-->
+<!--                <i class="fas fa-user"></i> Thông tin cá nhân-->
+<!--            </a>-->
+<!--            <a href="#" class="user-nav-link" onclick="showSection('orders')">-->
+<!--                <i class="fas fa-shopping-bag"></i> Đơn hàng của tôi-->
+<!--            </a>-->
+<!--            <a href="#" class="user-nav-link" onclick="logout()">-->
+<!--                <i class="fas fa-sign-out-alt"></i> Đăng xuất-->
+<!--            </a>-->
+<!--        </nav>-->
+<!--    </header>-->
+
+<!--    <main class="main-content">-->
+<!--        &lt;!&ndash; Phần thông tin cá nhân &ndash;&gt;-->
+<!--        <section id="profile-section" class="content-section active">-->
+<!--            <h2>Thông tin cá nhân</h2>-->
+<!--            <form id="profile-form" class="profile-form">-->
+<!--                <div class="form-group">-->
+<!--                    <label for="fullname">Họ và tên</label>-->
+<!--                    <input type="text" id="fullname" name="fullname" required>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="email">Email</label>-->
+<!--                    <input type="email" id="email" name="email" required readonly>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="phone">Số điện thoại</label>-->
+<!--                    <input type="tel" id="phone" name="phone" required>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="address">Địa chỉ</label>-->
+<!--                    <textarea id="address" name="address" rows="3" required></textarea>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="birthday">Ngày sinh</label>-->
+<!--                    <input type="date" id="birthday" name="birthday">-->
+<!--                </div>-->
+<!--                <div class="form-actions">-->
+<!--                    <button type="button" class="btn" onclick="enableEdit()">Chỉnh sửa</button>-->
+<!--                    <button type="submit" class="btn btn-primary" disabled>Lưu thay đổi</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </section>-->
+
+<!--        &lt;!&ndash; Phần đơn hàng &ndash;&gt;-->
+<!--        <section id="orders-section" class="content-section">-->
+<!--            <h2>Đơn hàng của tôi</h2>-->
+<!--            <div class="order-filter">-->
+<!--                <select id="order-status" onchange="filterOrders()">-->
+<!--                    <option value="all">Tất cả đơn hàng</option>-->
+<!--                    <option value="pending">Chờ xử lý</option>-->
+<!--                    <option value="processing">Đang xử lý</option>-->
+<!--                    <option value="shipped">Đang giao</option>-->
+<!--                    <option value="delivered">Đã giao</option>-->
+<!--                    <option value="cancelled">Đã hủy</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="orders-list" id="orders-list">-->
+<!--                &lt;!&ndash; Danh sách đơn hàng sẽ được thêm bằng JavaScript &ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
+<!--    </main>-->
+
+<!--    <footer class="footer">-->
+<!--        <p>© 2023 Cửa hàng của chúng tôi. Tất cả quyền được bảo lưu.</p>-->
+<!--    </footer>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // Dữ liệu mẫu - trong thực tế sẽ lấy từ API-->
+<!--let userData = {-->
+<!--    fullname: "Nguyễn Văn A",-->
+<!--    email: "nguyenvana@example.com",-->
+<!--    phone: "0987654321",-->
+<!--    address: "123 Đường ABC, Quận 1, TP.HCM",-->
+<!--    birthday: "1990-01-01"-->
+<!--};-->
+
+<!--let ordersData = [-->
+<!--    {-->
+<!--        id: "DH20230001",-->
+<!--        date: "2023-05-15",-->
+<!--        status: "delivered",-->
+<!--        items: [-->
+<!--            { id: 1, name: "Áo thun nam trắng", price: 150000, quantity: 2, image: "https://via.placeholder.com/60" },-->
+<!--            { id: 2, name: "Quần jean nam đen", price: 350000, quantity: 1, image: "https://via.placeholder.com/60" }-->
+<!--        ],-->
+<!--        shippingFee: 30000-->
+<!--    },-->
+<!--    {-->
+<!--        id: "DH20230002",-->
+<!--        date: "2023-06-20",-->
+<!--        status: "shipped",-->
+<!--        items: [-->
+<!--            { id: 3, name: "Giày thể thao đen", price: 500000, quantity: 1, image: "https://via.placeholder.com/60" }-->
+<!--        ],-->
+<!--        shippingFee: 25000-->
+<!--    },-->
+<!--    {-->
+<!--        id: "DH20230003",-->
+<!--        date: "2023-07-01",-->
+<!--        status: "processing",-->
+<!--        items: [-->
+<!--            { id: 4, name: "Túi xách da", price: 450000, quantity: 1, image: "https://via.placeholder.com/60" },-->
+<!--            { id: 5, name: "Ví da nam", price: 200000, quantity: 1, image: "https://via.placeholder.com/60" }-->
+<!--        ],-->
+<!--        shippingFee: 20000-->
+<!--    },-->
+<!--    {-->
+<!--        id: "DH20230004",-->
+<!--        date: "2023-07-10",-->
+<!--        status: "pending",-->
+<!--        items: [-->
+<!--            { id: 6, name: "Mũ lưỡi trai", price: 120000, quantity: 3, image: "https://via.placeholder.com/60" }-->
+<!--        ],-->
+<!--        shippingFee: 15000-->
+<!--    },-->
+<!--    {-->
+<!--        id: "DH20230005",-->
+<!--        date: "2023-06-05",-->
+<!--        status: "cancelled",-->
+<!--        items: [-->
+<!--            { id: 7, name: "Áo khoác gió", price: 280000, quantity: 1, image: "https://via.placeholder.com/60" }-->
+<!--        ],-->
+<!--        shippingFee: 25000-->
+<!--    }-->
+<!--];-->
+
+<!--// Khởi tạo trang-->
+<!--document.addEventListener('DOMContentLoaded', function() {-->
+<!--    loadProfileData();-->
+<!--    loadOrders('all');-->
+<!--});-->
+
+<!--// Hiển thị section được chọn-->
+<!--function showSection(sectionId) {-->
+<!--    document.querySelectorAll('.content-section').forEach(section => {-->
+<!--        section.classList.remove('active');-->
+<!--    });-->
+
+<!--    document.getElementById(`${sectionId}-section`).classList.add('active');-->
+<!--}-->
+
+<!--// Đăng xuất-->
+<!--function logout() {-->
+<!--    alert('Bạn đã đăng xuất thành công!');-->
+<!--    // Trong thực tế sẽ chuyển hướng đến trang đăng nhập-->
+<!--    // window.location.href = '/login';-->
+<!--}-->
+
+<!--// ========== PHẦN THÔNG TIN CÁ NHÂN ==========-->
+
+<!--// Tải dữ liệu hồ sơ-->
+<!--function loadProfileData() {-->
+<!--    document.getElementById('fullname').value = userData.fullname;-->
+<!--    document.getElementById('email').value = userData.email;-->
+<!--    document.getElementById('phone').value = userData.phone;-->
+<!--    document.getElementById('address').value = userData.address;-->
+<!--    document.getElementById('birthday').value = userData.birthday;-->
+<!--}-->
+
+<!--// Bật chế độ chỉnh sửa-->
+<!--function enableEdit() {-->
+<!--    const inputs = document.querySelectorAll('#profile-form input:not([readonly]), #profile-form textarea');-->
+<!--    inputs.forEach(input => {-->
+<!--        input.removeAttribute('readonly');-->
+<!--        input.disabled = false;-->
+<!--    });-->
+
+<!--    document.querySelector('#profile-form button[type="submit"]').disabled = false;-->
+<!--}-->
+
+<!--// Xử lý submit form-->
+<!--document.getElementById('profile-form').addEventListener('submit', function(e) {-->
+<!--    e.preventDefault();-->
+
+<!--    // Lưu dữ liệu (trong thực tế sẽ gọi API)-->
+<!--    userData = {-->
+<!--        fullname: document.getElementById('fullname').value,-->
+<!--        email: document.getElementById('email').value,-->
+<!--        phone: document.getElementById('phone').value,-->
+<!--        address: document.getElementById('address').value,-->
+<!--        birthday: document.getElementById('birthday').value-->
+<!--    };-->
+
+<!--    alert('Thông tin đã được cập nhật thành công!');-->
+
+<!--    // Vô hiệu hóa các trường sau khi lưu-->
+<!--    const inputs = document.querySelectorAll('#profile-form input:not([readonly]), #profile-form textarea');-->
+<!--    inputs.forEach(input => {-->
+<!--        input.setAttribute('readonly', true);-->
+<!--        input.disabled = true;-->
+<!--    });-->
+
+<!--    document.querySelector('#profile-form button[type="submit"]').disabled = true;-->
+<!--});-->
+
+<!--// ========== PHẦN ĐƠN HÀNG ==========-->
+
+<!--// Tải danh sách đơn hàng-->
+<!--function loadOrders(status) {-->
+<!--    const ordersList = document.getElementById('orders-list');-->
+<!--    ordersList.innerHTML = '';-->
+
+<!--    let filteredOrders = ordersData;-->
+<!--    if (status !== 'all') {-->
+<!--        filteredOrders = ordersData.filter(order => order.status === status);-->
+<!--    }-->
+
+<!--    if (filteredOrders.length === 0) {-->
+<!--        ordersList.innerHTML = '<p>Không có đơn hàng nào.</p>';-->
+<!--        return;-->
+<!--    }-->
+
+<!--    filteredOrders.forEach(order => {-->
+<!--        const orderCard = document.createElement('div');-->
+<!--        orderCard.className = 'order-card';-->
+
+<!--        // Tính tổng tiền-->
+<!--        const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);-->
+<!--        const total = subtotal + order.shippingFee;-->
+
+<!--        // Tạo HTML cho đơn hàng-->
+<!--        orderCard.innerHTML = `-->
+<!--            <div class="order-header">-->
+<!--                <div>-->
+<!--                    <span class="order-id">Mã đơn hàng: ${order.id}</span>-->
+<!--                    <span class="order-date"> - ${formatDate(order.date)}</span>-->
+<!--                </div>-->
+<!--                <span class="order-status status-${order.status}">${getStatusText(order.status)}</span>-->
+<!--            </div>-->
+<!--            <div class="order-details">-->
+<!--                <div class="order-items">-->
+<!--                    ${order.items.map(item => `-->
+<!--                        <div class="order-item">-->
+<!--                            <img src="${item.image}" alt="${item.name}" class="item-image">-->
+<!--                            <div class="item-info">-->
+<!--                                <div class="item-name">${item.name}</div>-->
+<!--                                <div>${formatCurrency(item.price)} x ${item.quantity}</div>-->
+<!--                            </div>-->
+<!--                            <div class="item-price">${formatCurrency(item.price * item.quantity)}</div>-->
+<!--                        </div>-->
+<!--                    `).join('')}-->
+<!--                </div>-->
+<!--                <div class="order-summary">-->
+<!--                    <div class="summary-row">-->
+<!--                        <span>Tạm tính:</span>-->
+<!--                        <span>${formatCurrency(subtotal)}</span>-->
+<!--                    </div>-->
+<!--                    <div class="summary-row">-->
+<!--                        <span>Phí vận chuyển:</span>-->
+<!--                        <span>${formatCurrency(order.shippingFee)}</span>-->
+<!--                    </div>-->
+<!--                    <div class="summary-row summary-total">-->
+<!--                        <span>Tổng cộng:</span>-->
+<!--                        <span>${formatCurrency(total)}</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="order-actions">-->
+<!--                ${order.status === 'pending' ? '<button class="action-btn cancel" onclick="cancelOrder(\'${order.id}\')">Hủy đơn</button>' : ''}-->
+<!--                <button class="action-btn view" onclick="viewOrderDetail(\'${order.id}\')">Xem chi tiết</button>-->
+<!--            </div>-->
+<!--        `;-->
+
+<!--        ordersList.appendChild(orderCard);-->
+<!--    });-->
+<!--}-->
+
+<!--// Lọc đơn hàng theo trạng thái-->
+<!--function filterOrders() {-->
+<!--    const status = document.getElementById('order-status').value;-->
+<!--    loadOrders(status);-->
+<!--}-->
+
+<!--// Hủy đơn hàng-->
+<!--function cancelOrder(orderId) {-->
+<!--    if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {-->
+<!--        // Trong thực tế sẽ gọi API để hủy đơn hàng-->
+<!--        const orderIndex = ordersData.findIndex(order => order.id === orderId);-->
+<!--        if (orderIndex !== -1) {-->
+<!--            ordersData[orderIndex].status = 'cancelled';-->
+<!--            loadOrders(document.getElementById('order-status').value);-->
+<!--            alert('Đã hủy đơn hàng thành công!');-->
+<!--        }-->
+<!--    }-->
+<!--}-->
+
+<!--// Xem chi tiết đơn hàng-->
+<!--function viewOrderDetail(orderId) {-->
+<!--    alert(`Xem chi tiết đơn hàng ${orderId}`);-->
+<!--    // Trong thực tế sẽ mở modal hoặc chuyển đến trang chi tiết-->
+<!--}-->
+
+<!--// ========== TIỆN ÍCH ==========-->
+
+<!--// Định dạng tiền tệ-->
+<!--function formatCurrency(amount) {-->
+<!--    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);-->
+<!--}-->
+
+<!--// Định dạng ngày-->
+<!--function formatDate(dateString) {-->
+<!--    const date = new Date(dateString);-->
+<!--    return date.toLocaleDateString('vi-VN');-->
+<!--}-->
+
+<!--// Lấy văn bản trạng thái-->
+<!--function getStatusText(status) {-->
+<!--    const statusMap = {-->
+<!--        'pending': 'Chờ xử lý',-->
+<!--        'processing': 'Đang xử lý',-->
+<!--        'shipped': 'Đang giao',-->
+<!--        'delivered': 'Đã giao',-->
+<!--        'cancelled': 'Đã hủy'-->
+<!--    };-->
+<!--    return statusMap[status] || status;-->
+<!--}-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập | Đăng ký</title>
+    <title>Tài khoản khách hàng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * {
+        /* Reset và font chữ */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -15,597 +696,664 @@
 
 body {
     background-color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     color: #333;
+    line-height: 1.6;
 }
 
-.auth-container {
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
     display: flex;
-    width: 900px;
-    max-width: 90%;
-    min-height: 600px;
-    background-color: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.forms-container {
-    flex: 1;
-    padding: 50px;
-    position: relative;
-    overflow: hidden;
+.header h1 {
+    font-size: 24px;
 }
 
-.form-control {
-    position: absolute;
-    width: calc(100% - 100px);
-    transition: all 0.3s ease;
-}
-
-.form-control.register-form {
-    transform: translateX(100%);
-    opacity: 0;
-    visibility: hidden;
-}
-
-.form-control.register-form.show {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
-}
-
-.form-control.login-form.hide {
-    transform: translateX(-100%);
-    opacity: 0;
-    visibility: hidden;
-}
-
-.form-title {
-    font-size: 28px;
-    margin-bottom: 10px;
-    color: #2c3e50;
-}
-
-.form-subtitle {
-    color: #7f8c8d;
-    margin-bottom: 30px;
-    font-size: 14px;
-}
-
-.auth-form {
+.user-nav {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.input-group label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #2c3e50;
-}
-
-.input-field {
-    position: relative;
+.user-nav-link {
+    color: white;
+    text-decoration: none;
     display: flex;
     align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
-.input-field i {
-    position: absolute;
-    left: 15px;
-    color: #7f8c8d;
+.user-nav-link:hover {
+    background-color: #34495e;
+}
+
+.user-nav-link i {
     font-size: 16px;
 }
 
-.input-field .toggle-password {
-    left: auto;
-    right: 15px;
-    cursor: pointer;
-}
-
-.input-field input {
-    width: 100%;
-    padding: 12px 15px 12px 40px;
-    border: 1px solid #ddd;
+/* Main content */
+.main-content {
+    background-color: white;
     border-radius: 8px;
-    font-size: 14px;
-    transition: border 0.3s;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.input-field input:focus {
-    outline: none;
-    border-color: #3498db;
+.content-section {
+    display: none;
 }
 
-.forgot-password {
-    align-self: flex-end;
-    font-size: 12px;
-    color: #3498db;
-    text-decoration: none;
+.content-section.active {
+    display: block;
 }
 
-.forgot-password:hover {
-    text-decoration: underline;
+/* Profile form */
+.profile-form {
+    max-width: 600px;
+    margin-top: 20px;
 }
 
-.auth-btn {
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
     background-color: #3498db;
     color: white;
-    border: none;
-    padding: 12px;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+/* Orders section */
+.order-filter {
+    margin: 20px 0;
+}
+
+.order-filter select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-card {
+    border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
+    padding: 15px;
+    transition: box-shadow 0.3s;
+}
+
+.order-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-id {
+    font-weight: bold;
+}
+
+.order-date {
+    color: #7f8c8d;
+}
+
+.order-status {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-pending {
+    background-color: #f39c12;
+    color: white;
+}
+
+.status-processing {
+    background-color: #3498db;
+    color: white;
+}
+
+.status-shipped {
+    background-color: #9b59b6;
+    color: white;
+}
+
+.status-delivered {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.status-cancelled {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.order-details {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.order-items {
+    flex: 2;
+}
+
+.order-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.order-summary {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.summary-total {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.order-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.auth-btn:hover {
-    background-color: #2980b9;
-}
-
-.social-login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.social-login p {
-    font-size: 12px;
-    color: #7f8c8d;
-    position: relative;
-}
-
-.social-login p::before,
-.social-login p::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 30%;
-    height: 1px;
-    background-color: #ddd;
-}
-
-.social-login p::before {
-    left: 0;
-}
-
-.social-login p::after {
-    right: 0;
-}
-
-.social-icons {
-    display: flex;
-    gap: 15px;
-}
-
-.social-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.action-btn:hover {
     background-color: #f5f5f5;
-    color: #7f8c8d;
-    text-decoration: none;
-    transition: all 0.3s;
 }
 
-.social-icon:hover {
-    background-color: #3498db;
-    color: white;
+.action-btn.cancel {
+    border-color: #e74c3c;
+    color: #e74c3c;
 }
 
-.switch-form {
+.action-btn.view {
+    border-color: #3498db;
+    color: #3498db;
+}
+
+/* Footer */
+.footer {
     text-align: center;
-    font-size: 14px;
-    color: #7f8c8d;
     margin-top: 20px;
-}
-
-.switch-form a {
-    color: #3498db;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.switch-form a:hover {
-    text-decoration: underline;
-}
-
-.password-strength {
-    display: flex;
-    gap: 5px;
-    margin-top: 5px;
-}
-
-.strength-bar {
-    flex: 1;
-    height: 4px;
-    background-color: #ddd;
-    border-radius: 2px;
-}
-
-.strength-text {
-    font-size: 12px;
-    margin-left: 10px;
+    padding: 20px;
     color: #7f8c8d;
-}
-
-.strength-text span {
-    font-weight: 500;
-}
-
-.checkbox-group {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-}
-
-.checkbox-group input {
-    width: auto;
-}
-
-.checkbox-group label {
-    font-weight: normal;
-}
-
-.checkbox-group a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-.checkbox-group a:hover {
-    text-decoration: underline;
-}
-
-.welcome-panel {
-    flex: 1;
-    background: linear-gradient(135deg, #3498db, #2c3e50);
-    color: white;
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.welcome-content {
-    max-width: 80%;
-}
-
-.welcome-content h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-}
-
-.welcome-content p {
-    margin-bottom: 30px;
-    line-height: 1.6;
-}
-
-.welcome-btn {
-    background-color: white;
-    color: #3498db;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
     font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin: 5px;
-    min-width: 150px;
 }
 
-.welcome-btn.outline {
-    background-color: transparent;
-    color: white;
-    border: 1px solid white;
-}
-
-.welcome-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.hidden {
-    display: none;
-}
-
-/* Responsive styles */
+/* Responsive */
 @media (max-width: 768px) {
-    .auth-container {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .user-nav {
+        width: 100%;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .order-details {
         flex-direction: column;
     }
 
-    .welcome-panel {
-        display: none;
+    .form-actions {
+        flex-direction: column;
     }
 
-    .forms-container {
-        padding: 30px;
-    }
-
-    .form-control {
-        width: calc(100% - 60px);
+    .btn {
+        width: 100%;
     }
 }
     </style>
 </head>
 <body>
-<div class="auth-container">
-    <div class="forms-container">
-        <div class="form-control">
-            <h1 class="form-title">Chào mừng trở lại</h1>
-            <p class="form-subtitle">Đăng nhập để tiếp tục</p>
+<div class="container">
+    <header class="header">
+        <h1>Tài khoản của tôi</h1>
+        <nav class="user-nav">
+            <a href="#" class="user-nav-link" onclick="showSection('profile')">
+                <i class="fas fa-user"></i> Thông tin cá nhân
+            </a>
+            <a href="#" class="user-nav-link" onclick="showSection('orders')">
+                <i class="fas fa-shopping-bag"></i> Đơn hàng của tôi
+            </a>
+            <a href="#" class="user-nav-link" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </a>
+        </nav>
+    </header>
 
-            <form class="auth-form" id="login-form">
-                <div class="input-group">
-                    <label for="login-email">Email</label>
-                    <div class="input-field">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="login-email" placeholder="Nhập email của bạn" required>
-                    </div>
+    <main class="main-content">
+        <!-- Phần thông tin cá nhân -->
+        <section id="profile-section" class="content-section active">
+            <h2>Thông tin cá nhân</h2>
+            <form id="profile-form" class="profile-form">
+                <div class="form-group">
+                    <label for="fullname">Họ và tên</label>
+                    <input type="text" id="fullname" name="fullname" required>
                 </div>
-
-                <div class="input-group">
-                    <label for="login-password">Mật khẩu</label>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="login-password" placeholder="Nhập mật khẩu" required>
-                        <i class="fas fa-eye toggle-password"></i>
-                    </div>
-                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required readonly>
                 </div>
-
-                <button type="submit" class="auth-btn">Đăng nhập</button>
-
-                <div class="social-login">
-                    <p>Hoặc đăng nhập bằng</p>
-                    <div class="social-icons">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-apple"></i></a>
-                    </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Địa chỉ</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="birthday">Ngày sinh</label>
+                    <input type="date" id="birthday" name="birthday">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" onclick="enableEdit()">Chỉnh sửa</button>
+                    <button type="submit" class="btn btn-primary" disabled>Lưu thay đổi</button>
                 </div>
             </form>
+        </section>
 
-            <p class="switch-form">Chưa có tài khoản? <a href="#" id="show-register">Đăng ký ngay</a></p>
-        </div>
+        <!-- Phần đơn hàng -->
+        <section id="orders-section" class="content-section">
+            <h2>Đơn hàng của tôi</h2>
+            <div class="order-filter">
+                <select id="order-status" onchange="filterOrders()">
+                    <option value="all">Tất cả đơn hàng</option>
+                    <option value="pending">Chờ xử lý</option>
+                    <option value="processing">Đang xử lý</option>
+                    <option value="shipped">Đang giao</option>
+                    <option value="delivered">Đã giao</option>
+                    <option value="cancelled">Đã hủy</option>
+                </select>
+            </div>
+            <div class="orders-list" id="orders-list">
+                <!-- Danh sách đơn hàng sẽ được thêm bằng JavaScript -->
+            </div>
+        </section>
+    </main>
 
-        <div class="form-control register-form hidden">
-            <h1 class="form-title">Tạo tài khoản mới</h1>
-            <p class="form-subtitle">Điền thông tin để đăng ký</p>
-
-            <form class="auth-form" id="register-form">
-                <div class="input-group">
-                    <label for="register-name">Họ và tên</label>
-                    <div class="input-field">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="register-name" placeholder="Nhập họ tên của bạn" required>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="register-email">Email</label>
-                    <div class="input-field">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="register-email" placeholder="Nhập email của bạn" required>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="register-password">Mật khẩu</label>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-password" placeholder="Tạo mật khẩu" required>
-                        <i class="fas fa-eye toggle-password"></i>
-                    </div>
-                    <div class="password-strength">
-                        <span class="strength-bar"></span>
-                        <span class="strength-bar"></span>
-                        <span class="strength-bar"></span>
-                        <span class="strength-text">Độ mạnh mật khẩu: <span>Yếu</span></span>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="register-confirm-password">Xác nhận mật khẩu</label>
-                    <div class="input-field">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="register-confirm-password" placeholder="Nhập lại mật khẩu" required>
-                        <i class="fas fa-eye toggle-password"></i>
-                    </div>
-                </div>
-
-                <div class="input-group checkbox-group">
-                    <input type="checkbox" id="agree-terms" required>
-                    <label for="agree-terms">Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a></label>
-                </div>
-
-                <button type="submit" class="auth-btn">Đăng ký</button>
-
-                <p class="switch-form">Đã có tài khoản? <a href="#" id="show-login">Đăng nhập ngay</a></p>
-            </form>
-        </div>
-    </div>
-
-    <div class="welcome-panel">
-        <div class="welcome-content">
-            <h1>Xin chào!</h1>
-            <p>Nhập thông tin cá nhân của bạn và bắt đầu hành trình với chúng tôi</p>
-            <button class="welcome-btn" id="welcome-login">Đăng nhập</button>
-            <button class="welcome-btn outline" id="welcome-register">Đăng ký</button>
-        </div>
-    </div>
+    <footer class="footer">
+        <p>© 2023 Cửa hàng của chúng tôi. Tất cả quyền được bảo lưu.</p>
+    </footer>
 </div>
 
 <script>
-    const testAccounts = [
-  {
-    email: "user1@example.com",
-    password: "Password123!",
-    name: "Nguyễn Văn A"
-  },
-  {
-    email: "user2@example.com",
-    password: "Abcdef@456",
-    name: "Trần Thị B"
-  },
-  {
-    email: "admin@example.com",
-    password: "Admin@789",
-    name: "Quản trị viên"
-  }
+    // Dữ liệu mẫu - trong thực tế sẽ lấy từ API
+let userData = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@example.com",
+    phone: "0987654321",
+    address: "123 Đường ABC, Quận 1, TP.HCM",
+    birthday: "1990-01-01"
+};
+
+let ordersData = [
+    {
+        id: "DH20230001",
+        date: "2023-05-15",
+        status: "delivered",
+        items: [
+            { id: 1, name: "Áo thun nam trắng", price: 150000, quantity: 2, image: "https://via.placeholder.com/60" },
+            { id: 2, name: "Quần jean nam đen", price: 350000, quantity: 1, image: "https://via.placeholder.com/60" }
+        ],
+        shippingFee: 30000
+    },
+    {
+        id: "DH20230002",
+        date: "2023-06-20",
+        status: "shipped",
+        items: [
+            { id: 3, name: "Giày thể thao đen", price: 500000, quantity: 1, image: "https://via.placeholder.com/60" }
+        ],
+        shippingFee: 25000
+    },
+    {
+        id: "DH20230003",
+        date: "2023-07-01",
+        status: "processing",
+        items: [
+            { id: 4, name: "Túi xách da", price: 450000, quantity: 1, image: "https://via.placeholder.com/60" },
+            { id: 5, name: "Ví da nam", price: 200000, quantity: 1, image: "https://via.placeholder.com/60" }
+        ],
+        shippingFee: 20000
+    },
+    {
+        id: "DH20230004",
+        date: "2023-07-10",
+        status: "pending",
+        items: [
+            { id: 6, name: "Mũ lưỡi trai", price: 120000, quantity: 3, image: "https://via.placeholder.com/60" }
+        ],
+        shippingFee: 15000
+    },
+    {
+        id: "DH20230005",
+        date: "2023-06-05",
+        status: "cancelled",
+        items: [
+            { id: 7, name: "Áo khoác gió", price: 280000, quantity: 1, image: "https://via.placeholder.com/60" }
+        ],
+        shippingFee: 25000
+    }
 ];
 
-    document.addEventListener('DOMContentLoaded', function() {
-    // Toggle between login and register forms
-    const showRegisterBtn = document.getElementById('show-register');
-    const showLoginBtn = document.getElementById('show-login');
-    const welcomeLoginBtn = document.getElementById('welcome-login');
-    const welcomeRegisterBtn = document.getElementById('welcome-register');
-    const loginForm = document.querySelector('.form-control:not(.register-form)');
-    const registerForm = document.querySelector('.register-form');
-
-    function showRegister() {
-        loginForm.classList.add('hide');
-        registerForm.classList.add('show');
-    }
-
-    function showLogin() {
-        registerForm.classList.remove('show');
-        loginForm.classList.remove('hide');
-    }
-
-    showRegisterBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showRegister();
-    });
-
-    showLoginBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showLogin();
-    });
-
-    welcomeRegisterBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        showRegister();
-    });
-
-    // Toggle password visibility
-    const togglePasswordBtns = document.querySelectorAll('.toggle-password');
-    togglePasswordBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const input = this.parentElement.querySelector('input');
-            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-            input.setAttribute('type', type);
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
-    });
-
-    // Password strength indicator
-    const passwordInput = document.getElementById('register-password');
-    const strengthBars = document.querySelectorAll('.strength-bar');
-    const strengthText = document.querySelector('.strength-text span');
-
-    passwordInput.addEventListener('input', function() {
-        const password = this.value;
-        const strength = calculatePasswordStrength(password);
-
-        // Update strength bars
-        strengthBars.forEach((bar, index) => {
-            bar.style.backgroundColor = index < strength ? getStrengthColor(strength) : '#ddd';
-        });
-
-        // Update strength text
-        const strengthLabels = ['Yếu', 'Trung bình', 'Mạnh', 'Rất mạnh'];
-        strengthText.textContent = strengthLabels[strength - 1];
-        strengthText.style.color = getStrengthColor(strength);
-    });
-
-    function calculatePasswordStrength(password) {
-        let strength = 0;
-
-        // Length at least 8 characters
-        if (password.length >= 8) strength++;
-
-        // Contains lowercase letter
-        if (/[a-z]/.test(password)) strength++;
-
-        // Contains uppercase letter
-        if (/[A-Z]/.test(password)) strength++;
-
-        // Contains number
-        if (/\d/.test(password)) strength++;
-
-        // Contains special character
-        if (/[^a-zA-Z0-9]/.test(password)) strength++;
-
-        // Cap at 4 for our UI
-        return Math.min(4, Math.floor(strength / 2));
-    }
-
-    function getStrengthColor(strength) {
-        const colors = ['#e74c3c', '#f39c12', '#3498db', '#2ecc71'];
-        return colors[strength - 1];
-    }
-
-    // Form submission
-    const loginFormEl = document.getElementById('login-form');
-    const registerFormEl = document.getElementById('register-form');
-
-    loginFormEl.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Add your login logic here
-        alert('Đăng nhập thành công!');
-    });
-
-    registerFormEl.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Add your registration logic here
-        alert('Đăng ký thành công!');
-    });
+// Khởi tạo trang
+document.addEventListener('DOMContentLoaded', function() {
+    loadProfileData();
+    loadOrders('all');
 });
 
-    //login
-<!--    function validateLogin(email, password) {-->
-<!--  // Kiểm tra email hợp lệ-->
-<!--  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;-->
-<!--  if (!emailRegex.test(email)) {-->
-<!--    return { success: false, message: "Email không hợp lệ" };-->
-<!--  }-->
+// Hiển thị section được chọn
+function showSection(sectionId) {
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+    });
 
-<!--  // Kiểm tra mật khẩu không trống-->
-<!--  if (!password) {-->
-<!--    return { success: false, message: "Vui lòng nhập mật khẩu" };-->
-<!--  }-->
+    document.getElementById(`${sectionId}-section`).classList.add('active');
+}
 
-<!--  // Kiểm tra tài khoản tồn tại-->
-<!--  const user = testAccounts.find(acc => acc.email === email && acc.password === password);-->
+// Đăng xuất
+function logout() {
+    alert('Bạn đã đăng xuất thành công!');
+    // Trong thực tế sẽ chuyển hướng đến trang đăng nhập
+    // window.location.href = '/login';
+}
 
-<!--  if (user) {-->
-<!--    return { success: true, message: "Đăng nhập thành công", user };-->
-<!--  } else {-->
-<!--    return { success: false, message: "Email hoặc mật khẩu không chính xác" };-->
-<!--  }-->
-<!--}-->
+// ========== PHẦN THÔNG TIN CÁ NHÂN ==========
+
+// Tải dữ liệu hồ sơ
+function loadProfileData() {
+    document.getElementById('fullname').value = userData.fullname;
+    document.getElementById('email').value = userData.email;
+    document.getElementById('phone').value = userData.phone;
+    document.getElementById('address').value = userData.address;
+    document.getElementById('birthday').value = userData.birthday;
+}
+
+// Bật chế độ chỉnh sửa
+function enableEdit() {
+    const inputs = document.querySelectorAll('#profile-form input:not([readonly]), #profile-form textarea');
+    inputs.forEach(input => {
+        input.removeAttribute('readonly');
+        input.disabled = false;
+    });
+
+    document.querySelector('#profile-form button[type="submit"]').disabled = false;
+}
+
+// Xử lý submit form
+document.getElementById('profile-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Lưu dữ liệu (trong thực tế sẽ gọi API)
+    userData = {
+        fullname: document.getElementById('fullname').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        birthday: document.getElementById('birthday').value
+    };
+
+    alert('Thông tin đã được cập nhật thành công!');
+
+    // Vô hiệu hóa các trường sau khi lưu
+    const inputs = document.querySelectorAll('#profile-form input:not([readonly]), #profile-form textarea');
+    inputs.forEach(input => {
+        input.setAttribute('readonly', true);
+        input.disabled = true;
+    });
+
+    document.querySelector('#profile-form button[type="submit"]').disabled = true;
+});
+
+// ========== PHẦN ĐƠN HÀNG ==========
+
+// Tải danh sách đơn hàng
+function loadOrders(status) {
+    const ordersList = document.getElementById('orders-list');
+    ordersList.innerHTML = '';
+
+    let filteredOrders = ordersData;
+    if (status !== 'all') {
+        filteredOrders = ordersData.filter(order => order.status === status);
+    }
+
+    if (filteredOrders.length === 0) {
+        ordersList.innerHTML = '<p>Không có đơn hàng nào.</p>';
+        return;
+    }
+
+    filteredOrders.forEach(order => {
+        const orderCard = document.createElement('div');
+        orderCard.className = 'order-card';
+
+        // Tính tổng tiền
+        const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const total = subtotal + order.shippingFee;
+
+        // Tạo HTML cho đơn hàng
+        orderCard.innerHTML = `
+            <div class="order-header">
+                <div>
+                    <span class="order-id">Mã đơn hàng: ${order.id}</span>
+                    <span class="order-date"> - ${formatDate(order.date)}</span>
+                </div>
+                <span class="order-status status-${order.status}">${getStatusText(order.status)}</span>
+            </div>
+            <div class="order-details">
+                <div class="order-items">
+                    ${order.items.map(item => `
+                        <div class="order-item">
+                            <img src="${item.image}" alt="${item.name}" class="item-image">
+                            <div class="item-info">
+                                <div class="item-name">${item.name}</div>
+                                <div>${formatCurrency(item.price)} x ${item.quantity}</div>
+                            </div>
+                            <div class="item-price">${formatCurrency(item.price * item.quantity)}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Tạm tính:</span>
+                        <span>${formatCurrency(subtotal)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Phí vận chuyển:</span>
+                        <span>${formatCurrency(order.shippingFee)}</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Tổng cộng:</span>
+                        <span>${formatCurrency(total)}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="order-actions">
+                ${order.status === 'pending' ? '<button class="action-btn cancel" onclick="cancelOrder(\'${order.id}\')">Hủy đơn</button>' : ''}
+                <button class="action-btn view" onclick="viewOrderDetail(\'${order.id}\')">Xem chi tiết</button>
+            </div>
+        `;
+
+        ordersList.appendChild(orderCard);
+    });
+}
+
+// Lọc đơn hàng theo trạng thái
+function filterOrders() {
+    const status = document.getElementById('order-status').value;
+    loadOrders(status);
+}
+
+// Hủy đơn hàng
+function cancelOrder(orderId) {
+    if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
+        // Trong thực tế sẽ gọi API để hủy đơn hàng
+        const orderIndex = ordersData.findIndex(order => order.id === orderId);
+        if (orderIndex !== -1) {
+            ordersData[orderIndex].status = 'cancelled';
+            loadOrders(document.getElementById('order-status').value);
+            alert('Đã hủy đơn hàng thành công!');
+        }
+    }
+}
+
+// Xem chi tiết đơn hàng
+function viewOrderDetail(orderId) {
+    alert(`Xem chi tiết đơn hàng ${orderId}`);
+    // Trong thực tế sẽ mở modal hoặc chuyển đến trang chi tiết
+}
+
+// ========== TIỆN ÍCH ==========
+
+// Định dạng tiền tệ
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+}
+
+// Định dạng ngày
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN');
+}
+
+// Lấy văn bản trạng thái
+function getStatusText(status) {
+    const statusMap = {
+        'pending': 'Chờ xử lý',
+        'processing': 'Đang xử lý',
+        'shipped': 'Đang giao',
+        'delivered': 'Đã giao',
+        'cancelled': 'Đã hủy'
+    };
+    return statusMap[status] || status;
+}
 </script>
 </body>
 </html>

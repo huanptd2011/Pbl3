@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập</title>
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Đăng nhập</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="username">Tên đăng nhập:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">Đăng nhập</button>
+        <div id="errorMessage" class="error-message"></div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Hiển thị loading (tuỳ chọn)
+        const submitButton = loginForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Đang đăng nhập...';
+        submitButton.disabled = true;
+        errorMessage.textContent = '';
+
+        try {
+            const response = await fetch('http://localhost:8080/ShopNHN/api/users/log-in', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    usernameOrEmail: username,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Đăng nhập thất bại');
+            }
+
+            // Lưu token vào localStorage
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+
+                // Chuyển hướng về trang trước đó hoặc trang chủ
+                const redirectUrl = sessionStorage.getItem('redirectAfterLogin') || '/';
+                sessionStorage.removeItem('redirectAfterLogin');
+                window.location.href = redirectUrl;
+            } else {
+                throw new Error('Không nhận được token từ server');
+            }
+        } catch (error) {
+            console.error('Lỗi đăng nhập:', error);
+            errorMessage.textContent = error.message || 'Có lỗi xảy ra khi đăng nhập';
+        } finally {
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+        }
+    });
+});
+</script>
+</body>
+</html>

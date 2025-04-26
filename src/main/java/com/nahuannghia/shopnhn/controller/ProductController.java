@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins =  {"http://localhost:63342", "http://127.0.0.1:5501", "http://127.0.0.1:5500"})
-@RequestMapping("/products")
+@CrossOrigin(origins =  {"http://localhost:5174", "http://localhost:63342", "http://127.0.0.1:5501", "http://127.0.0.1:5500"})
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -47,6 +47,11 @@ public class ProductController {
     @GetMapping
     public List<ProductResponse> getAllProducts() {
                 return productService.getAllProducts();
+    }
+
+    @GetMapping("/new")
+    public List<ProductResponse> getNewProduct(){
+        return productService.getNewProduct();
     }
 
     @PutMapping("/edit/{productId}")

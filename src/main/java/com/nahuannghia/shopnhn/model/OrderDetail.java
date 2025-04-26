@@ -27,11 +27,11 @@ public class OrderDetail {
     @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
-    @Column(nullable = false)
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
-    private BigDecimal price;
+    @Column(name = "price", nullable = false)
+    private BigDecimal total_price;
 
     @Column(name = "color", insertable = false, updatable = false)
     private String color;

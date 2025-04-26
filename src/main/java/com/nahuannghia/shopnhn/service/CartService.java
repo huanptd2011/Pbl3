@@ -1,10 +1,12 @@
 package com.nahuannghia.shopnhn.service;
 
+import com.nahuannghia.shopnhn.Response.CartItemResponse;
 import com.nahuannghia.shopnhn.Response.CartResponse;
 import com.nahuannghia.shopnhn.model.Cart;
-import com.nahuannghia.shopnhn.model.Customer;
+import com.nahuannghia.shopnhn.model.User;
 import com.nahuannghia.shopnhn.repository.CartRepository;
-import com.nahuannghia.shopnhn.repository.CustomerRepository;
+import com.nahuannghia.shopnhn.repository.UserRepository;
+import com.nahuannghia.shopnhn.request.CartRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,22 +19,32 @@ public class CartService {
 
     @Autowired
     private CartRepository cartRepository;
-
     @Autowired
-    private CustomerRepository customerRepository;
+    private CartItemService cartItemService;
+    @Autowired
+    private UserRepository userRepository;
 
-    public CartResponse createCart(Integer customerId) {
-        Customer customer = customerRepository.findById(customerId)
+    public CartResponse createCart(CartRequest cartRequest) {
+        User user = userRepository.findById(cartRequest.getUserId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng"));
 
         Cart cart = new Cart();
-        cart.setCustomer(customer);
+        cart.setUser(user);
         cart.setCreatedAt(LocalDateTime.now());
-        cart.setCartStatus("Đang mua");
+        try {
+            cart.setCartStatus("Đang mua");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
-        Cart savedCart = cartRepository.save(cart);
+        try{
+            cartRepository.save(cart);
+        } catch (Exception e){
+            System.out.println("LOg" + e.getMessage());
+        }
 
-        return toResponse(savedCart);
+
+        return toResponse(cart);
     }
 
     public CartResponse getCartById(Integer cartId) {
@@ -41,8 +53,8 @@ public class CartService {
         return toResponse(cart);
     }
 
-    public List<CartResponse> getCartsByCustomerId(Integer customerId) {
-        List<Cart> carts = cartRepository.findByCustomerCustomerId(customerId);
+    public List<CartResponse> getCartsByCustomerId(Integer userId) {
+        List<Cart> carts = cartRepository.findByUser_UserId(userId);
         return carts.stream().map(this::toResponse).collect(Collectors.toList());
     }
 
@@ -63,11 +75,13 @@ public class CartService {
     }
 
     private CartResponse toResponse(Cart cart) {
+        List<CartItemResponse> list = cartItemService.getItemsByCartId(cart.getCartId());
         return new CartResponse(
                 cart.getCartId(),
-                cart.getCustomer().getCustomerId(),
+                cart.getUser().getUserId(),
                 cart.getCreatedAt(),
-                cart.getCartStatus()
+                cart.getCartStatus(),
+                list
         );
     }
 }

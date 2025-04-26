@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartResponse {
     private Integer cartId;
-    private Integer customerId;
+    private Integer userId;
     private LocalDateTime createdAt;
     private String cartStatus;
+    List<CartItemResponse> listCartItem;
 }

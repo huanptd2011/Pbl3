@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:8080/ShopNHN/products';
+const apiUrl = 'http://localhost:8080/ShopNHN/products/new';
 
 const productsContainer = document.getElementById('products-container');
 
@@ -23,36 +23,32 @@ async function fetchProducts() {
     }
 }
 
-// Hàm để hiển thị sản phẩm trên trang
 function displayProducts(products) {
-    // Xóa các sản phẩm cũ nếu có
-    productsContainer.innerHTML = '';
+  productsContainer.innerHTML = '';
 
-    // Duyệt qua các sản phẩm và tạo các phần tử HTML cho chúng
-    products.forEach(product => {
-        const productElement = document.createElement('div');
-        productElement.classList.add('product');
+  products.forEach(product => {
+    const productCard = document.createElement('div');
+    productCard.classList.add('product-card');
+    productCard.innerHTML = `
+      <img src="${product.imageList[0].imageUrl}" alt="${product.productName}" class="product-image">
+      <div class="product-info">
+        <div class="product-brand">${product.brand}</div>
+        <div class="product-name">${product.productName}</div>
+        <div class="product-price">
+          <span class="current-price">${formatPrice(product.price)}</span>
+        </div>
+      </div>
+    `;
 
-        productElement.innerHTML = `
-            <a href="productModal?id=${product.productId}" style="text-decoration: none;">
-                    <div  class="product-card">
-                        <img src="${product.imageUrlId}" alt="${product.productName}" class="product-image">
-                        <div class="product-info">
-                            <div class="product-brand">Nike</div>
-                            <h3 class="product-name">${product.productName}</h3>
-                            <div class="product-price">
-                                <span class="current-price">${product.price} VND</span>
-                            </div>
-                            <button class="add-to-cart">Thêm vào giỏ</button>
-                        </div>
-                    </div>
-            </a>
-        `;
-
-        // Thêm sản phẩm vào container
-        productsContainer.appendChild(productElement);
-    });
+    productsContainer.appendChild(productCard);
+  });
 }
+
+// Format price with VND
+function formatPrice(price) {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+}
+
 
 window.onclick = function(event) {
     const modal = document.getElementById('productModal');
@@ -137,4 +133,30 @@ document.querySelector('.banner-container').addEventListener('mouseenter', () =>
 
 document.querySelector('.banner-container').addEventListener('mouseleave', () => {
     slideInterval = setInterval(nextSlide, 5000);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const userIcon = document.getElementById('userIcon');
+
+    function checkAuth() {
+        // Kiểm tra token trong localStorage (thường dùng với JWT)
+        const token = localStorage.getItem('authToken');
+
+        // Hoặc kiểm tra session (tùy thuộc vào cách bạn triển khai backend)
+        // Trong thực tế, bạn có thể cần gọi API để kiểm tra token/session
+
+        return !!token; // Trả về true nếu có token, false nếu không
+    }
+
+    userIcon.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        if (!checkAuth()) {
+            // Lưu URL hiện tại để redirect lại sau khi đăng nhập
+            sessionStorage.setItem('redirectAfterLogin', window.location.href);
+            window.location.href = '../HTML/login1.html';
+        } else {
+            window.location.href = '../HTML/profile.html';
+        }
+    });
 });

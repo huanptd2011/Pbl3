@@ -1,6 +1,7 @@
 package com.nahuannghia.shopnhn.service;
 
 
+import com.nahuannghia.shopnhn.Response.OrderDetailResponse;
 import com.nahuannghia.shopnhn.model.Order;
 import com.nahuannghia.shopnhn.model.OrderDetail;
 import com.nahuannghia.shopnhn.model.OrderDetailId;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderDetailService {
@@ -48,5 +50,18 @@ public class OrderDetailService {
 
     public void delete(OrderDetailId id) {
         orderDetailRepository.deleteById(id);
+    }
+
+    public List<OrderDetailResponse> getOrderDetailByOrderId(Integer orderId){
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderDetailIdOrderId(orderId);
+        return orderDetails.stream().map(orderDetail -> {
+            return new OrderDetailResponse(
+                    orderDetail.getProduct().getProductId(),
+                    orderDetail.getQuantity(),
+                    orderDetail.getTotal_price(),
+                    orderDetail.getColor(),
+                    orderDetail.getSize()
+            );
+        }).collect(Collectors.toList());
     }
 }

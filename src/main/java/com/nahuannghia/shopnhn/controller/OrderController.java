@@ -15,7 +15,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping
+    @PostMapping("/add")
     public OrderResponse createOrder(@RequestBody OrderRequest request) {
         return orderService.createOrder(request);
     }
@@ -30,13 +30,17 @@ public class OrderController {
         return orderService.getOrderById(orderId);
     }
 
-    @PutMapping("/{orderId}/status")
-    public OrderResponse updateOrderStatus(@PathVariable Integer orderId, @RequestParam String status) {
-        return orderService.updateOrderStatus(orderId, status);
-    }
-
     @DeleteMapping("/{orderId}")
     public void deleteOrder(@PathVariable Integer orderId) {
         orderService.deleteOrder(orderId);
+    }
+
+
+
+    //chưa xu li duoc tren api
+    @PutMapping("/{orderId}/status")
+    public OrderResponse updateOrderStatus(@PathVariable("orderId") Integer orderId,
+                                           @RequestParam String status) {
+        return orderService.updateOrderStatus(orderId, status);
     }
 }

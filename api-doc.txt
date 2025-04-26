@@ -1,0 +1,8 @@
+Sản phẩm:
+    add: http://localhost:8080/api/products/add
+    getall: http://localhost:8080/api/products
+    getid: http://localhost:8080/api/producs/{id}
+    search: http://localhost:8080/api/products/search?keywork=...&page=...
+    del: http://localhost:8080/api/products/delete/{id}
+    edit: http://localhost:8080/api/products/edit/{id}
+    new: http://localhost:8080/api/products/new

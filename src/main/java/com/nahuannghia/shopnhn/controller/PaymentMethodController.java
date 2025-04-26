@@ -15,7 +15,7 @@ public class PaymentMethodController {
     @Autowired
     private PaymentMethodService paymentMethodService;
 
-    @PostMapping
+    @PostMapping("/add")
     public PaymentMethodResponse create(@RequestBody PaymentMethodRequest request) {
         return paymentMethodService.createPaymentMethod(request);
     }

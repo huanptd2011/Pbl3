@@ -2,6 +2,7 @@ package com.nahuannghia.shopnhn.controller;
 
 import com.nahuannghia.shopnhn.Response.CartResponse;
 import com.nahuannghia.shopnhn.model.Cart;
+import com.nahuannghia.shopnhn.request.CartRequest;
 import com.nahuannghia.shopnhn.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/carts")
+@RequestMapping("/api/carts")
 @CrossOrigin
 public class CartController {
 
@@ -19,8 +20,8 @@ public class CartController {
 
     // POST /carts/create?customerId=1
     @PostMapping("/create")
-    public CartResponse createCart(@RequestParam Integer customerId) {
-        return cartService.createCart(customerId);
+    public CartResponse createCart(@RequestBody CartRequest cartRequest) {
+        return cartService.createCart(cartRequest);
     }
 
     // GET /carts/{cartId}

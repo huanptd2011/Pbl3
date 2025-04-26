@@ -1,30 +1,4 @@
-// import { createRouter, createWebHistory } from 'vue-router'
 
-
-// import pageHome from '@/views/pageHome.vue'
-// import pageProducts from '@/views/pageProducts.vue'
-
-
-// const router = createRouter({
-//   history: createWebHistory(import.meta.env.BASE_URL),
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'home',
-//       component: pageHome
-//     },
-//     {
-//       path: '/products',
-//       name: 'products',
-//       component: pageProducts
-//     },
-    
-//   ],
-// })
-
-// export default router
-
-// router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
@@ -39,7 +13,7 @@ const routes = [
     component: () => import('@/views/ProductsView.vue')
   },
   {
-    path: '/products/:id',
+    path: '/products/:productId',
     name: 'ProductDetail',
     component: () => import('@/views/ProductDetailView.vue'),
     props: true
@@ -54,13 +28,13 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: () => import('@/views/CartView.vue'),
-    meta: { requiresAuth: true }
+    // meta: { requiresAuth: true }
   },
   {
     path: '/checkout',
     name: 'Checkout',
     component: () => import('@/views/CheckoutView.vue'),
-    meta: { requiresAuth: true }
+    // meta: { requiresAuth: true }
   },
   {
     path: '/account',
@@ -72,7 +46,7 @@ const routes = [
     path: '/wishlist',
     name: 'Wishlist',
     component: () => import('@/views/WishlistView.vue'),
-    meta: { requiresAuth: true }
+    // meta: { requiresAuth: true }
   },
   {
     path: '/about',
@@ -113,7 +87,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = /* logic to check auth */ false;
   
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'Home' });
+    next({ name: 'Home' });/// quay veef ddawng moup đăng nhập 
   } else {
     next();
   }

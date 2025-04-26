@@ -1,30 +1,31 @@
 <template>
-    <div class="card mb-4 shadow-sm product-card">
-        <img :src="product.image" class="card-img-top" :alt="product.name" />
-        <div class="card-body text-center">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p v-if="product.price" class="card-text text-danger fw-bold">{{ product.price }}₫</p>
-            <router-link :to="'/product/' + product.id" class="shopnow btn-theme mt-2 w-100">
-                View Product
-            </router-link>
-        </div>
+    <div class="card h-100 product-card">
+      <img :src="product.imageList[0].imageUrl" class="card-img-top" :alt="product.productName">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ product.productName }}</h5>
+        <p class="card-text text-muted mb-2">{{ product.category }}</p>
+        <p class="card-text fw-bold text-danger mb-3">{{ formatPrice(product.price) }}₫</p>
+        <router-link :to="`/products/${product.productId}`" class="btn btn-outline-primary mt-auto">Xem chi tiết</router-link>
+        
+
+      </div>
     </div>
-</template>
-
-<script setup>
-defineProps({
+  </template>
+  
+  <script setup>
+  defineProps({
     product: Object
-});
-</script>
-
-<style scoped>
-.product-card {
-    overflow: hidden;
-    transition: all 0.5s ease-in-out;
-}
-
-.product-card:hover img {
-    transform: scale(1.1);
-    transition: all 0.5s ease-in-out;
-}
-</style>
+  })
+  
+  const formatPrice = (price) => {
+    return price.toLocaleString('vi-VN')
+  }
+  </script>
+  
+  <style scoped>
+  .product-card img {
+    height: 200px;
+    object-fit: cover;
+  }
+  </style>
+  

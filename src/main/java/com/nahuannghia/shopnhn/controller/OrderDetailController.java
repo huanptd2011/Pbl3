@@ -29,7 +29,7 @@ public class OrderDetailController {
     }
 
 
-    @PostMapping
+    @PostMapping("/add")
     public OrderDetail create(@RequestBody OrderDetail orderDetail) {
         return orderDetailService.create(orderDetail);
     }

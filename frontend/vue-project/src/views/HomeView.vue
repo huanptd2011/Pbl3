@@ -2,48 +2,43 @@
   <div class="home-page">
 
     <!-- Hero Banner -->
-    <section class="hero-banner mb-5">
-      <div class="container">
+    <section class="hero-banner ">
+     
         <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
-              <img src="../assets/img/001_002-su24-air-group-1200x630.jpeg" class="d-block w-100" alt="Khuyến mãi tại Los Angeles" />
-              <div class="carousel-caption d-none d-md-block">
-                <h3>Los Angeles</h3>
-                <p>We had such a great time in LA!</p>
-              </div>
+              <img src="../assets/web/slide.jpg" class="d-block w-100 " alt="Khuyến mãi tại Los Angeles" />
+        
             </div>
             <div class="carousel-item">
-              <img src="../assets/img/footlocker-sale-dames-sneakers-2.webp" class="d-block w-100" alt="Khuyến mãi tại Chicago" />
-              <div class="carousel-caption d-none d-md-block">
-                <h3>Chicago</h3>
-                <p>Thank you, Chicago!</p>
-              </div>
+              <img src="../assets/web/slide.jpg" class="d-block w-100" alt="Khuyến mãi tại Chicago" />
+            
             </div>
             <div class="carousel-item">
-              <img src="../assets/img/sallyssneakers-am1-1-tsw.webp" class="d-block w-100" alt="Khuyến mãi tại New York" />
-              <div class="carousel-caption d-none d-md-block">
-                <h3>New York</h3>
-                <p>We love the Big Apple!</p>
-              </div>
+              <img src="../assets/web/slide.jpg" class="d-block w-100" alt="Khuyến mãi tại New York" />
+             
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
+            
+            <i class="fa-solid fa-caret-left rounded-pill color_d9 px-1" style="color: #000;"></i>
+          
           </button>
           <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
+            <i class="fa-solid fa-caret-right rounded-pill color_d9 px-1" style="color: #000;"></i>
           </button>
         </div>
-      </div>
     </section>
 
     <!-- New Arrivals -->
-    <section class="new-arrivals mb-5">
+    <section class="new-arrivals pb-5 bg_main">
       <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2 class="section-title">Sản phẩm mới</h2>
-          <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link>
+        <div class="text-center py-5">
+          <h2 class=" vollkorn-title " >Sản phẩm nổi bật</h2>
+          <span class=" roboto-thin">Sự kết hợp hoàn hảo giữa công nghệ và thẩm mỹ. 
+            <br> 
+            Không chỉ đẹp mắt, mà còn vượt trội trong hiệu năng.</span>
+          <!-- <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link> -->
         </div>
         <div v-if="isLoading" class="text-center text-muted">Đang tải sản phẩm...</div>
         <div v-else class="row g-4">
@@ -87,7 +82,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import ProductCard from '../components/ProductCard.vue'
+import ProductCard from '../components/productCard.vue'
 
 const newArrivals = ref([])
 const recentlyUpdated = ref([])
@@ -99,11 +94,11 @@ const fetchData = async () => {
     const allProducts = response.data
 
     newArrivals.value = [...allProducts]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       .slice(0, 4)
 
     recentlyUpdated.value = [...allProducts]
-      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      // .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       .slice(0, 4)
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)
@@ -118,9 +113,12 @@ onMounted(fetchData)
 <style scoped>
 .hero-banner {
   background-color: #f8f9fa;
-  padding: 4rem 0;
+  
 }
-
+.carousel-inner{
+  height: 500px;
+  overflow: hidden;
+}
 .section-title {
   font-size: 2rem;
   font-weight: bold;

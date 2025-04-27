@@ -1,5 +1,16 @@
 package com.nahuannghia.shopnhn.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.nahuannghia.shopnhn.Response.ProductImageResponse;
 import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
 import com.nahuannghia.shopnhn.Response.ProductResponse;
@@ -10,14 +21,8 @@ import com.nahuannghia.shopnhn.repository.ProductImageRepository;
 import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
 import com.nahuannghia.shopnhn.request.ProductRequest;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProductService {
@@ -28,12 +33,11 @@ public class ProductService {
     private final ProductImageService productImageService;
     private final ProductInventoryService productInventoryService;
 
-    @Autowired
     public ProductService(ProductRepository productRepository,
-                          ProductInventoryRepository productInventoryRepository,
-                          ProductImageRepository productImageRepository,
-                          ProductImageService productImageService,
-                          ProductInventoryService productInventoryService) {
+            ProductInventoryRepository productInventoryRepository,
+            ProductImageRepository productImageRepository,
+            ProductImageService productImageService,
+            ProductInventoryService productInventoryService) {
         this.productRepository = productRepository;
         this.productInventoryRepository = productInventoryRepository;
         this.productImageRepository = productImageRepository;
@@ -50,13 +54,12 @@ public class ProductService {
         product.setPrice(productRequest.getPrice());
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
-        product = productRepository.save(product);
-        Product product1 = product;
+        Product savedProduct = productRepository.save(product);
 
         if (productRequest.getSizeColorList() != null) {
             productRequest.getSizeColorList().forEach(inventory -> {
                 ProductInventory productInventory = new ProductInventory(
-                        product1,
+                        savedProduct,
                         inventory.getColor(),
                         inventory.getSize(),
                         inventory.getQuantity());
@@ -67,22 +70,24 @@ public class ProductService {
         if (productRequest.getImageList() != null) {
             productRequest.getImageList().forEach(image -> {
                 ProductImage productImage = new ProductImage(
-                        product1,
+                        savedProduct,
                         image.getImageUrl()
-                        );
+                );
                 productImageRepository.save(productImage);
             });
         }
-        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
-        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
+
+        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(savedProduct.getProductId());
+        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(savedProduct.getProductId());
+
         return new ProductResponse(
-                product1.getProductId(),
-                product1.getProductName(),
-                product1.getProductDescription(),
-                product1.getBrand(),
-                product1.getPrice(),
-                product1.getCreatedAt(),
-                product1.getUpdatedAt(),
+                savedProduct.getProductId(),
+                savedProduct.getProductName(),
+                savedProduct.getProductDescription(),
+                savedProduct.getBrand(),
+                savedProduct.getPrice(),
+                savedProduct.getCreatedAt(),
+                savedProduct.getUpdatedAt(),
                 inventoryList,
                 imageList
         );
@@ -145,31 +150,53 @@ public class ProductService {
         product.setProductDescription(productRequest.getProductDescription());
         product.setBrand(productRequest.getBrand());
         product.setPrice(productRequest.getPrice());
-
-        product = productRepository.save(product);
+        productRepository.save(product);
         Product product1 = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        productInventoryRepository.deleteByProductProductId(productId);
+        // Update or create product inventory
         if (productRequest.getSizeColorList() != null) {
             productRequest.getSizeColorList().forEach(inventory -> {
-                ProductInventory productInventory = new ProductInventory(
-                        product1,
-                        inventory.getColor(),
-                        inventory.getSize(),
-                        inventory.getQuantity());
-                productInventoryRepository.save(productInventory);
+                // Check if inventory exists for this product, size, and color
+                ProductInventory existingInventory = productInventoryRepository
+                        .findByProductProductIdAndProductInventoryId_SizeAndProductInventoryId_Color(
+                                product1.getProductId(), inventory.getSize(), inventory.getColor())
+                        .orElse(null);
+
+                if (existingInventory != null) {
+                    // Update existing inventory
+                    existingInventory.setQuantity(inventory.getQuantity());
+                    productInventoryRepository.save(existingInventory);
+                } else {
+                    // Create new inventory
+                    ProductInventory productInventory = new ProductInventory(
+                            product1,
+                            inventory.getColor(),
+                            inventory.getSize(),
+                            inventory.getQuantity());
+                    productInventoryRepository.save(productInventory);
+                }
             });
         }
 
-        productImageRepository.deleteByProductProductId(productId);
+        // Update or create product images
         if (productRequest.getImageList() != null) {
             productRequest.getImageList().forEach(image -> {
-                ProductImage productImage = new ProductImage(
-                        product1,
-                        image.getImageUrl()
-                );
-                productImageRepository.save(productImage);
+                // Check if image exists for this product and URL
+                ProductImage existingImage = productImageRepository
+                        .findByProductProductIdAndImageUrl(
+                                product1.getProductId(), image.getImageUrl())
+                        .orElse(null);
+
+                if (existingImage == null) {
+                    // Create new image if it doesn't exist
+                    ProductImage productImage = new ProductImage(
+                            product1,
+                            image.getImageUrl()
+                    );
+                    productImageRepository.save(productImage);
+                }
+                // If image exists, no update needed unless additional fields are involved
             });
         }
 
@@ -188,6 +215,7 @@ public class ProductService {
                 imageList
         );
     }
+
     @Transactional
     public void deleteProduct(Integer productId) {
         Product product = productRepository.findById(productId)
@@ -198,6 +226,7 @@ public class ProductService {
 
         productRepository.delete(product);
     }
+
     public List<ProductResponse> searchProducts(String keyword) {
         List<Product> products = productRepository.searchByNameOrBrand(keyword);
 
@@ -217,37 +246,23 @@ public class ProductService {
             );
         }).collect(Collectors.toList());
     }
-    public List<ProductResponse> searchProductsWithPagination(String keyword, int page, int size) {
-        List<ProductResponse> products = searchProducts(keyword);
-        return paginateList(products, page, size);
-    }
-    public List<ProductResponse> paginateList(List<ProductResponse> list, int page, int size) {
-        int fromIndex = page * size;
-        int toIndex = Math.min(fromIndex + size, list.size());
 
-        if (fromIndex >= list.size()) {
-            return new ArrayList<>();
+    public Page<ProductResponse> searchProductsWithPagination(String keyword, int page, int size) {
+        List<ProductResponse> allProducts = searchProducts(keyword);
+
+        int total = allProducts.size();
+        int fromIndex = page * size;
+        int toIndex = Math.min(fromIndex + size, total);
+
+        List<ProductResponse> paginatedList;
+
+        if (fromIndex >= total) {
+            paginatedList = new ArrayList<>();
+        } else {
+            paginatedList = allProducts.subList(fromIndex, toIndex);
         }
 
-        return list.subList(fromIndex, toIndex);
-    }
-
-    public List<ProductResponse> getNewProduct(){
-        List<Product> products = productRepository.findTop4ByOrderByCreatedDateDesc();
-        return products.stream().map(product -> {
-            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
-            List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
-            return new ProductResponse(
-                    product.getProductId(),
-                    product.getProductName(),
-                    product.getProductDescription(),
-                    product.getBrand(),
-                    product.getPrice(),
-                    product.getCreatedAt(),
-                    product.getUpdatedAt(),
-                    inventoryList,
-                    imageList
-            );
-        }).collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(page, size);
+        return new PageImpl<>(paginatedList, pageable, total);
     }
 }

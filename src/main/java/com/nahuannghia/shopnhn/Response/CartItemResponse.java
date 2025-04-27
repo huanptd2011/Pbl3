@@ -1,14 +1,9 @@
 package com.nahuannghia.shopnhn.Response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class CartItemResponse {
     private Integer cartItemId;
     private Integer productId;
@@ -32,4 +27,79 @@ public class CartItemResponse {
         this.size = size;
         this.total = price.multiply(BigDecimal.valueOf(quantity));
     }
+    public CartItemResponse() {
+    }
+
+    public Integer getCartItemId() {
+        return cartItemId;
+    }
+
+    public void setCartItemId(Integer cartItemId) {
+        this.cartItemId = cartItemId;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+    //
 }

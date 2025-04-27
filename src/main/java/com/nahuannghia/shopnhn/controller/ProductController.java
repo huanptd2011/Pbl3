@@ -1,20 +1,30 @@
 package com.nahuannghia.shopnhn.controller;
 
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.nahuannghia.shopnhn.Response.ProductResponse;
 import com.nahuannghia.shopnhn.request.ProductRequest;
 import com.nahuannghia.shopnhn.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
-@CrossOrigin(origins =  {"http://localhost:5174", "http://localhost:63342", "http://127.0.0.1:5501", "http://127.0.0.1:5500"})
+@CrossOrigin(origins = {"http://localhost:63342", "http://127.0.0.1:5501", "http://127.0.0.1:5500","http://localhost:5173/"})
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
-    @Autowired
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -32,8 +42,8 @@ public class ProductController {
 
     //phan trang san pham
     @GetMapping("/search")
-    public List<ProductResponse> searchProducts(
-            @RequestParam("keyword") String keyword,
+    public Page<ProductResponse> searchProducts(
+            @RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -49,10 +59,10 @@ public class ProductController {
                 return productService.getAllProducts();
     }
 
-    @GetMapping("/new")
-    public List<ProductResponse> getNewProduct(){
-        return productService.getNewProduct();
-    }
+    // @GetMapping("/new")
+    // public List<ProductResponse> getNewProduct(){
+    //     return productService.getNewProduct();
+    // }
 
     @PutMapping("/edit/{productId}")
     public ProductResponse updateProduct(@PathVariable Integer productId, @RequestBody ProductRequest productRequest) {

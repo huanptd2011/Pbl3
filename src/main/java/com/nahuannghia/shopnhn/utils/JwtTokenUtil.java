@@ -1,5 +1,6 @@
  package com.nahuannghia.shopnhn.utils;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,6 @@ import com.nahuannghia.shopnhn.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
 @Component
 public class JwtTokenUtil {
     
@@ -40,7 +40,7 @@ public class JwtTokenUtil {
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(new javax.crypto.spec.SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS512.getJcaName()), SignatureAlgorithm.HS512)
                 .compact();
     }
     
@@ -62,16 +62,17 @@ public class JwtTokenUtil {
     
     // Lấy tất cả claims từ token
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
+        Key signingKey = new javax.crypto.spec.SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS512.getJcaName());
+        return Jwts.parserBuilder()
+                .setSigningKey(signingKey)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
     
     // Kiểm tra token hết hạn chưa
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
+        return new Date(System.currentTimeMillis()).after(getExpirationDateFromToken(token));
     }
     
     // Validate token

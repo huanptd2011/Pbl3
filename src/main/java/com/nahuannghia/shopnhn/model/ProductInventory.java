@@ -1,16 +1,18 @@
 package com.nahuannghia.shopnhn.model;
 
 
-import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "productInventory")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
+
 public class ProductInventory {
 
     @EmbeddedId
@@ -28,6 +30,8 @@ public class ProductInventory {
         this.quantity = quantity;
         this.productInventoryId = new ProductInventoryId(product.getProductId() , color, size);
     }
+    public ProductInventory() {
+    }
 
     public String getSize(){
         return productInventoryId.getSize();
@@ -35,5 +39,30 @@ public class ProductInventory {
     public String getColor(){
         return productInventoryId.getColor();
     }
+
+    public ProductInventoryId getProductInventoryId() {
+        return productInventoryId;
+    }
+
+    public void setProductInventoryId(ProductInventoryId productInventoryId) {
+        this.productInventoryId = productInventoryId;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    //
 }
 

@@ -1,16 +1,18 @@
 package com.nahuannghia.shopnhn.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.Table;
 @Entity
 @Table(name = "productCategoryMapping")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class ProductCategoryMapping {
 
     @EmbeddedId
@@ -28,9 +30,7 @@ public class ProductCategoryMapping {
 
     // Composite primary key class, nested
     @Embeddable
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
+
     public static class ProductCategoryMappingId implements Serializable {
 
         @Column(name = "productId")
@@ -39,4 +39,35 @@ public class ProductCategoryMapping {
         @Column(name = "categoryId")
         private Integer categoryId;
     }
+    public ProductCategoryMappingId getId() {
+        return id;
+    }
+    public void setId(ProductCategoryMappingId id) {
+        this.id = id;
+    }
+    public Product getProduct() {
+        return product;
+    }
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    public ProductCategory getCategory() {
+        return category;
+    }
+    public void setCategory(ProductCategory category) {
+        this.category = category;
+    }
+    public ProductCategoryMapping() {
+    }
+    public ProductCategoryMapping(ProductCategoryMappingId id, Product product, ProductCategory category) {
+        this.id = id;
+        this.product = product;
+        this.category = category;
+    }
+    public Integer getProductId() {
+        return id.productId;
+    }
+    public Integer getCategoryId() {
+        return id.categoryId;
+    }  
 }

@@ -12,9 +12,11 @@ import java.util.Optional;
 public interface ProductInventoryRepository extends JpaRepository<ProductInventory, ProductInventoryId> {
     List<ProductInventory> findByProductProductId(Integer productId);
     void deleteByProductProductId(Integer productId);
-    Optional<ProductInventory> findByProductInventoryId_ProductId(Integer productId);
     Optional<ProductInventory> findByProductInventoryId_ProductIdAndProductInventoryId_ColorAndProductInventoryId_Size(
             Integer productId, String color, String size);
-
+    Optional<ProductInventory> findByProductProductIdAndProductInventoryId_SizeAndProductInventoryId_Color(
+            Integer productId, String size, String color);
+            List<ProductInventory> findByProductInventoryId_ProductId(Long productId);
 }
+
 

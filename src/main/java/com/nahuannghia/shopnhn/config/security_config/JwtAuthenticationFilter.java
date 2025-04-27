@@ -53,8 +53,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         Claims claims = null;
 
         try {
-            claims = Jwts.parser()
+            claims = Jwts.parserBuilder()
                     .setSigningKey(SECRET_KEY.getBytes())
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
             username = claims.getSubject();

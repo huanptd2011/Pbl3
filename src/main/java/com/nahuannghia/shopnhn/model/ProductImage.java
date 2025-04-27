@@ -1,32 +1,61 @@
+
 package com.nahuannghia.shopnhn.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-import java.io.Serializable;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 @Entity
 @Table(name = "productImage")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductImage implements Serializable {
+public class ProductImage {
 
-    @EmbeddedId
-    private ProductImageId productImageId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long Id;
 
-    @ManyToOne
-    @JoinColumn(name = "productId", insertable = false, updatable = false)
+    @ManyToOne() 
+    @JoinColumn(name = "productId", nullable = false) // Đảm bảo rằng productId không null
     private Product product;
+
+    @Column(name = "imageUrl", nullable = false, length = 255)
+    private String imageUrl;
 
     public ProductImage(Product product, String imageUrl) {
         this.product = product;
-        this.productImageId = new ProductImageId(product.getProductId(), imageUrl);
+        this.imageUrl = imageUrl;
     }
-    public String getImageUrl(){
-        return productImageId.getImageUrl();
+
+    public ProductImage() {
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
-

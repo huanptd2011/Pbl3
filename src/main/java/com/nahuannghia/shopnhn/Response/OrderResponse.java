@@ -1,15 +1,11 @@
 package com.nahuannghia.shopnhn.Response;
 
-import com.nahuannghia.shopnhn.model.OrderDetail;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+
 public class OrderResponse {
     private Integer orderId;
     private Integer userId;
@@ -19,4 +15,82 @@ public class OrderResponse {
     private String orderState;
     private String note;
     private List<OrderDetailResponse> orderDetails;
+    public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethodResponse, 
+                     LocalDateTime orderDate, BigDecimal totalPrice, String orderState, 
+                     String note, List<OrderDetailResponse> orderDetails) {
+    this.orderId = orderId;
+    this.userId = userId;
+    this.paymentMethod = paymentMethodResponse;
+    this.orderDate = orderDate;
+    this.totalPrice = totalPrice;
+    this.orderState = orderState;
+    this.note = note;
+    this.orderDetails = orderDetails;
+}
+    public OrderResponse() {
+    }
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public PaymentMethodResponse getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethodResponse paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public List<OrderDetailResponse> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetailResponse> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+    //
 }

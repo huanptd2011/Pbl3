@@ -1,17 +1,17 @@
 package com.nahuannghia.shopnhn.service;
 
-import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
-import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
-import com.nahuannghia.shopnhn.model.Product;
-import com.nahuannghia.shopnhn.model.ProductInventory;
-import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
+import com.nahuannghia.shopnhn.model.Product;
+import com.nahuannghia.shopnhn.model.ProductInventory;
+import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
+import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
 
 @Service
 public class ProductInventoryService {
@@ -21,11 +21,12 @@ public class ProductInventoryService {
 
     // CREATE: Thêm mới thông tin tồn kho
     public ProductInventoryResponse addProductInventory(ProductInventoryRequest request) {
-        Optional<ProductInventory> productInventory = productInventoryRepository.findByProductInventoryId_ProductId(request.getProductId());
+        List<ProductInventory> productInventory = productInventoryRepository.findByProductInventoryId_ProductId(request.getProductId().longValue());
+       
         if(productInventory.isEmpty()){
             throw new RuntimeException("");
         }
-        Product product = productInventory.get().getProduct();
+        Product product = productInventory.get(0).getProduct();
         ProductInventory productInventory1 = new ProductInventory(
                 product,
                 request.getColor(),

@@ -5,10 +5,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.nahuannghia.shopnhn.dto.change_password.ChangePasswordRequest;
 import com.nahuannghia.shopnhn.dto.change_password.ChangePasswordResponse;
@@ -20,7 +18,6 @@ import com.nahuannghia.shopnhn.dto.login.LoginResponse;
 import com.nahuannghia.shopnhn.dto.logout.LogoutResponse;
 import com.nahuannghia.shopnhn.dto.update_account_info.UpdateUserRequest;
 import com.nahuannghia.shopnhn.dto.update_account_info.UpdateUserResponse;
-import com.nahuannghia.shopnhn.dto.upload_avatar.UploadAvatarResponse;
 import com.nahuannghia.shopnhn.dto.user_info.UserInfoResponse;
 import com.nahuannghia.shopnhn.enums.UserRole;
 import com.nahuannghia.shopnhn.exeption.UserNotFoundException;
@@ -33,61 +30,46 @@ import io.micrometer.common.util.StringUtils;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
 
     public UserService(UserRepository userRepository,
-                                PasswordEncoder passwordEncoder,
-                                JwtTokenUtil jwtTokenUtil) {
+            PasswordEncoder passwordEncoder,
+            JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    public UserInfoResponse getUserInfo(Long UserId) throws UserNotFoundException {
-        return null;
-    }
-
-    public UserInfoResponse getUserInfo(Integer userId)  throws UserNotFoundException {
+    public UserInfoResponse getUserInfo(Integer userId) throws UserNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        return UserInfoResponse.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .build();
+        return new UserInfoResponse(
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getRole().toString()
+        );
     }
-    public ChangePasswordResponse changePassword(Integer userId, ChangePasswordRequest request)
-    {
+
+    public ChangePasswordResponse changePassword(Integer userId, ChangePasswordRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            return ChangePasswordResponse.builder()
-                    .status(400)
-                    .message("Current password is incorrect")
-                    .timestamp(LocalDateTime.now())
-                    .build();
+            return new ChangePasswordResponse(400, "Current password is incorrect", null, null, LocalDateTime.now());
         }
 
         if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
-            return ChangePasswordResponse.builder()
-                    .status(400)
-                    .message("New password and confirm password do not match")
-                    .timestamp(LocalDateTime.now())
-                    .build();
+            return new ChangePasswordResponse(400, "New password and confirm password do not match", null, null, LocalDateTime.now());
         }
 
-//        User updateduser = user.builder()
-//                .password(passwordEncoder.encode(request.getNewPassword()))
-//                .build();
-
-        User updateduser = new User(
+        User updatedUser = new User(
                 user.getUserId(),
                 user.getUsername(),
                 passwordEncoder.encode(request.getNewPassword()),
@@ -99,59 +81,52 @@ public class UserService {
                 user.getFullName()
         );
 
+        userRepository.save(updatedUser);
 
-        userRepository.save(updateduser);
-
-        return ChangePasswordResponse.builder()
-                .status(200)
-                .message("Password changed successfully")
-                .username(user.getUsername())
-                .newPassword(user.getPassword())
-                .timestamp(LocalDateTime.now())
-                .build();
+        return new ChangePasswordResponse(
+                200,
+                "Password changed successfully",
+                user.getUsername(),
+                updatedUser.getPassword(),
+                LocalDateTime.now()
+        );
     }
 
-    public RegisterResponse createUser(RegisterRequest registerRequest)  {
+    public RegisterResponse createUser(RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            return RegisterResponse.builder()
-                    .status(409)
-                    .message("Username already exists")
-                    .timestamp(LocalDateTime.now())
-                    .build();
-        }
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            return RegisterResponse.builder()
-                    .status(409)
-                    .message("Email already exists")
-                    .timestamp(LocalDateTime.now())
-                    .build();
-        }
-        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return RegisterResponse.builder()
-                    .status(400)
-                    .message("Password and confirm password do not match")
-                    .timestamp(LocalDateTime.now())
-                    .build();
+            return new RegisterResponse(409, null, "Username already exists", null, null, null, null, LocalDateTime.now());
         }
 
-        User newUser = User.builder()
-                .username(registerRequest.getUsername())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .email(registerRequest.getEmail())
-                .role(UserRole.CUSTOMER)
-                .createdDate(LocalDateTime.now())
-                .status(true)
-                .updatedDate(LocalDateTime.now())
-                .build();
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            return new RegisterResponse(409, null, "Email already exists", null, null, null, null, LocalDateTime.now());
+        }
+
+        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+            return new RegisterResponse(400, null, "Password and confirm password do not match", null, null, null, null, LocalDateTime.now());
+        }
+
+        User newUser = new User();
+        newUser.setUsername(registerRequest.getUsername());
+        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        newUser.setEmail(registerRequest.getEmail());
+        newUser.setRole(UserRole.CUSTOMER);
+        newUser.setCreatedDate(LocalDateTime.now());
+        newUser.setStatus(true);
+        newUser.setUpdatedDate(LocalDateTime.now());
 
         User savedUser = userRepository.save(newUser);
 
-        return RegisterResponse.builder()
-                .status(201)
-                .userId(savedUser.getUserId())
-                .message("user created successfully")
-                .timestamp(LocalDateTime.now())
-                .build();
+        return new RegisterResponse(
+                201,
+                "User created successfully",
+                savedUser.getUserId().toString(),
+                savedUser.getUsername(),
+                savedUser.getEmail(),
+                savedUser.getRole() != null ? savedUser.getRole().ordinal() : null,
+                savedUser.getAddress(),
+                LocalDateTime.now()
+        );
+
     }
 
     public DeleteUserResponse deleteUser(Integer userId) throws UserNotFoundException {
@@ -160,133 +135,91 @@ public class UserService {
 
         userRepository.delete(user);
 
-        return DeleteUserResponse.builder()
-                .status(200)
-                .message("user deleted successfully")
-                .timestamp(LocalDateTime.now())
-                .build();
+        return new DeleteUserResponse(200, "User deleted successfully", LocalDateTime.now());
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
         try {
-            // Validate input
-            if (StringUtils.isBlank(loginRequest.getUsernameOrEmail()) ||
-                    StringUtils.isBlank(loginRequest.getPassword())) {
-                return buildErrorResponse(400, "Username/Email and password are required");
+            if (StringUtils.isBlank(loginRequest.getUsernameOrEmail())
+                    || StringUtils.isBlank(loginRequest.getPassword())) {
+                return new LoginResponse(400, null, "Username/Email and password are required", null, false, LocalDateTime.now(), null, null);
             }
 
-            // Find user by email or username
             User user = findUserByUsernameOrEmail(loginRequest.getUsernameOrEmail())
                     .orElseThrow(() -> new UserNotFoundException("Account not found"));
 
-
             if (user.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                return buildErrorResponse(401, "Invalid username or password");
+                return new LoginResponse(401, null, "Invalid username or password", null, false, LocalDateTime.now(), null, null);
             }
 
-            // Generate token
             String token = jwtTokenUtil.generateToken(user);
-
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
 
-            return LoginResponse.builder()
-                    .status(200)
-                    .token(token)
-                    .message("Login successful")
-                    .username(user.getUsername())
-                    .isActive(user.getStatus())
-                    .timestamp(LocalDateTime.now())
-                    .role(user.getRole().toString())
-                    .email(user.getEmail())
-                    .build();
+            return new LoginResponse(
+                    200,
+                    token,
+                    "Login successful",
+                    user.getUsername(),
+                    user.getStatus(),
+                    LocalDateTime.now(),
+                    user.getRole().toString(),
+                    user.getEmail()
+            );
 
         } catch (UserNotFoundException e) {
-            return buildErrorResponse(404, "Account not found");
+            return new LoginResponse(404, null, "Account not found", null, false, LocalDateTime.now(), null, null);
         } catch (Exception e) {
-//            log.error("Unexpected error during login", e);
-            return buildErrorResponse(500, "Internal server error");
+            logger.error("Unexpected error during login", e);
+            return new LoginResponse(500, null, "Internal server error", null, false, LocalDateTime.now(), null, null);
         }
     }
 
-    private Optional<User> findUserByUsernameOrEmail(String usernameOrEmail) {
-        // Try both email and username
-        Optional<User> userByEmail = userRepository.findByEmail(usernameOrEmail);
-        if (userByEmail.isPresent()) {
-            return userByEmail;
-        }
-        return userRepository.findByUsername(usernameOrEmail);
-    }
-
-    private LoginResponse buildErrorResponse(int status, String message) {
-        return LoginResponse.builder()
-                .status(status)
-                .message(message)
-                .timestamp(LocalDateTime.now())
-                .build();
-    }
     public LogoutResponse logout(String token) {
-        // Invalidate the token (implementation depends on your token management strategy)
-        return LogoutResponse.builder()
-                .status(200)
-                .message("Logout successful")
-                .timestamp(LocalDateTime.now())
-                .build();
+        return new LogoutResponse(200, "Logout successful", LocalDateTime.now());
     }
 
     public UpdateUserResponse updateUserInfo(Integer userId, UpdateUserRequest userInfo)
             throws UserNotFoundException {
-
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        User.UserBuilder userBuilder = User.builder();
-
         if (userInfo.getPassword() != null && !userInfo.getPassword().isEmpty()) {
-            String hashedPassword = passwordEncoder.encode(userInfo.getPassword());
-            userBuilder.password(hashedPassword);
+            user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         }
         if (userInfo.getEmail() != null) {
-            userBuilder.email(userInfo.getEmail());
+            user.setEmail(userInfo.getEmail());
         }
 
+        userRepository.save(user);
 
-        User updatedUser = userBuilder.build();
-        userRepository.save(updatedUser);
+        UserInfoResponse userInfoResponse = new UserInfoResponse(
+                user.getUsername(),
+                user.getEmail(),
+                null,
+                null,
+                user.getRole().toString()
+        );
 
-        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
-                .username(updatedUser.getUsername())
-                .email(updatedUser.getEmail())
-                .role(updatedUser.getRole().toString())
-                .build();
-
-        return UpdateUserResponse.builder()
-                .status(200)
-                .updatedUser(userInfoResponse)
-                .message("user updated successfully")
-                .timestamp(LocalDateTime.now())
-                .build();
+        return new UpdateUserResponse(
+                200,
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getRole().toString(),
+                user.getFullName(),
+                user.getStatus() != null ? user.getStatus().toString() : null,
+                user.getCreatedDate() != null ? user.getCreatedDate().toString() : null,
+                user.getUpdatedDate() != null ? user.getUpdatedDate().toString() : null,
+                user.getLastLogin() != null ? user.getLastLogin().toString() : null,
+                userInfoResponse,
+                LocalDateTime.now()
+        );
     }
-    //    @Override
-//    public UploadAvatarResponse uploadAvatar(Integer UserId, MultipartFile file) throws UserNotFoundException {
-//        return null;
-//    }
-//
-//    //    @Override
-//    public UploadAvatarResponse uploadAvatar(Integer UserId, MultipartFile file) throws UserNotFoundException {
-//        return null;
-//    }
-//
-//    //    @Override
-//    public UploadAvatarResponse uploadAvatar(Integer userId, MultipartFile file)
-//            throws UserNotFoundException {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(UserNotFoundException::new);
-//
-//        return UploadAvatarResponse.builder()
-//                .status(200)
-//                .message("Avatar uploaded successfully")
-//                .timestamp(LocalDateTime.now())
-//                .build();
-//    }
+
+    private Optional<User> findUserByUsernameOrEmail(String usernameOrEmail) {
+        Optional<User> userByEmail = userRepository.findByEmail(usernameOrEmail);
+        return userByEmail.isPresent() ? userByEmail : userRepository.findByUsername(usernameOrEmail);
+    }
 }

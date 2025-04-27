@@ -1,19 +1,24 @@
 
 package com.nahuannghia.shopnhn.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 @Entity
 @Table(name = "orders")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
+
 public class Order {
 
     @Id
@@ -40,4 +45,70 @@ public class Order {
 
     @Column(name = "note", length = 2000)
     private String note;
+    public Order() {}
+    public Order(Integer orderId, User user, PaymentMethod paymentMethod, LocalDateTime orderDate, BigDecimal totalPrice, String orderState, String note) {
+        this.orderId = orderId;
+        this.user = user;
+        this.paymentMethod = paymentMethod;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.orderState = orderState;
+        this.note = note;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(String orderState) {
+        this.orderState = orderState;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }

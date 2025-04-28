@@ -10,13 +10,10 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins(
-                "http://localhost:5173", 
-                "http://localhost:8080"
-            )
+            .allowedOrigins("http://localhost:5173")  // Chỉ cần thêm domain của frontend
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
-                .exposedHeaders("Authorization")
-            .allowCredentials(true);
+            .exposedHeaders("Authorization")
+            .allowCredentials(true);  // Chỉ cho phép gửi thông tin đăng nhập từ frontend
     }
 }

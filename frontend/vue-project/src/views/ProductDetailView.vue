@@ -7,7 +7,7 @@
                     <div class="carousel-inner">
                         <div v-for="(img, index) in product.imageList" :key="index"
                             :class="['carousel-item', { active: index === 0 }]">
-                            <img :src="img.imageUrl" class="d-block w-100 rounded" alt="Product Image" />
+                            <img :src="img?.imageUrl || 'fallback-image.png'" class="d-block w-100 rounded" alt="Product Image" />
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel"
@@ -29,28 +29,29 @@
                 <p class="mt-3">{{ product.productDescription }}</p>
 
                 <!-- Lựa chọn màu sắc -->
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Chọn màu:</label>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <button v-for="color in availableColors" :key="color" class="btn"
-                            :class="color === selectedColor ? 'btn-dark' : 'btn-outline-secondary'"
-                            @click="selectColor(color)">
-                            {{ color }}
-                        </button>
-                    </div>
-                </div>
+<div class="mb-3" v-if="availableColors.length > 0 ">
+    <label class="form-label fw-semibold">Chọn màu:</label>
+    <div class="d-flex gap-2 flex-wrap">
+        <button v-for="color in availableColors" :key="color" class="btn"
+            :class="color === selectedColor ? 'btn-dark' : 'btn-outline-secondary'"
+            @click="selectColor(color)">
+            {{ color }}
+        </button>
+    </div>
+</div>
 
-                <!-- Lựa chọn size -->
-                <div class="mb-3" v-if="selectedColor">
-                    <label class="form-label fw-semibold">Chọn size:</label>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <button v-for="size in availableSizes" :key="size" class="btn"
-                            :class="size === selectedSize ? 'btn-dark' : 'btn-outline-secondary'"
-                            @click="selectSize(size)">
-                            {{ size }}
-                        </button>
-                    </div>
-                </div>
+<!-- Lựa chọn size -->
+<div class="mb-3" v-if="selectedColor && availableSizes.length > 0">
+    <label class="form-label fw-semibold">Chọn size:</label>
+    <div class="d-flex gap-2 flex-wrap">
+        <button v-for="size in availableSizes" :key="size" class="btn"
+            :class="size === selectedSize ? 'btn-dark' : 'btn-outline-secondary'"
+            @click="selectSize(size)">
+            {{ size }}
+        </button>
+    </div>
+</div>
+
 
                 <!-- Tồn kho -->
                 <div class="mb-3" v-if="selectedColor && selectedSize">
@@ -61,16 +62,16 @@
                 </div>
 
                 <div>
-            <button 
-              class="btn btn-primary mt-3" 
-              :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0" 
+            <button
+              class="btn btn-primary mt-3"
+              :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
               @click="handleAddToCart">
               Thêm vào giỏ hàng
             </button>
 
-             <button 
-              class="btn btn-success mt-3 ms-2"  
-              :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0" 
+             <button
+              class="btn btn-success mt-3 ms-2"
+              :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
               @click="handleBuyNow">
               Mua ngay
             </button>
@@ -98,7 +99,7 @@ const router = useRouter(); // <-- Sử dụng useRouter
 const productId = route.params.productId
 
 
-const product = ref(null)
+const product = ref({ sizeColorList: [] });
 const selectedColor = ref(null)
 const selectedSize = ref(null)
 const quantityToAdd = ref(1); // <-- Thêm state cho số lượng muốn thêm (mặc định là 1)
@@ -107,35 +108,48 @@ const cartStore = useCartStore(); // <-- Khởi tạo store
 
 
 
+// function handleImageError(event) {
+//   event.target.src = 'fallback-image.png';
+// }
 
 // Gọi API lấy dữ liệu sản phẩm
 const fetchProduct = async () => {
-    if (!productId) {
-    console.error('Không tìm thấy Product ID trong route.');
-    // Có thể chuyển hướng hoặc hiển thị thông báo lỗi cho người dùng
-    return; 
+  try {
+    const response = await axios.get(`http://localhost:8080/api/products/${productId}`);
+    const data = response.data;
+    product.value = {
+      ...data,
+      sizeColorList: data.sizeColorList?.map(item => ({
+        color: item.colour || item.color, // Handle different property names
+        size: item.size,
+        quantity: item.quantity
+      })) || []
+    };
+  } catch (error) {
+    console.error('Lỗi khi tải sản phẩm:', error);
   }
-    try {
-        const response = await axios.get(`http://localhost:8080/ShopNHN/products/${productId}`)
-        product.value = response.data
-    } catch (error) {
-        console.error('Lỗi khi tải sản phẩm:', error)
-    }
-}
+};
 
 onMounted(fetchProduct)
 
+onMounted(async () => {
+  await fetchProduct();
+  console.log("Product data:", product.value);
+  console.log("Available colors:", availableColors.value);
+  console.log("Available sizes when color selected:", availableSizes.value);
+});
 const availableColors = computed(() => {
-    if (!product.value) return []
-    return [...new Set(product.value.sizeColorList.map(item => item.color))]
-})
+  if (!product.value?.sizeColorList) return [];
+  const colors = product.value.sizeColorList.map(item => item.color);
+  return [...new Set(colors)]; // Loại bỏ màu trùng lặp
+});
 
 const availableSizes = computed(() => {
-    if (!product.value || !selectedColor.value) return []
-    return product.value.sizeColorList
-        .filter(item => item.color === selectedColor.value)
-        .map(item => item.size)
-})
+  if (!product.value?.sizeColorList || !selectedColor.value) return [];
+  return product.value.sizeColorList
+    .filter(item => item.color === selectedColor.value)
+    .map(item => item.size);
+});
 
 const getQuantity = (color, size) => {
     const item = product.value?.sizeColorList.find(
@@ -163,7 +177,7 @@ const handleAddToCart = () => {
   if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
     console.warn('Vui lòng chọn màu, size và đảm bảo còn hàng.');
     alert('Vui lòng chọn màu, size và đảm bảo còn hàng.'); // Thông báo cho người dùng
-    return; 
+    return;
   }
 
   // Tạo đối tượng chi tiết sản phẩm (biến thể) để thêm vào giỏ
@@ -171,7 +185,7 @@ const handleAddToCart = () => {
     productId: product.value.productId,
     name: product.value.productName,
     // Lấy ảnh đầu tiên hoặc ảnh đại diện nếu có. Cần kiểm tra imageList không rỗng.
-    imageUrl: product.value.imageList && product.value.imageList.length > 0 ? product.value.imageList[0].imageUrl : 'placeholder.jpg', 
+    imageUrl: product.value.imageList && product.value.imageList.length > 0 ? product.value.imageList[0].imageUrl : 'placeholder.jpg',
     price: product.value.price,
     color: selectedColor.value,
     size: selectedSize.value,
@@ -189,7 +203,7 @@ const handleAddToCart = () => {
   // Tùy chọn: Reset các lựa chọn màu/size hoặc số lượng sau khi thêm để người dùng có thể chọn lại
   // selectedColor.value = null;
   // selectedSize.value = null;
-  // quantityToAdd.value = 1; 
+  // quantityToAdd.value = 1;
 };
 
 // <-- THÊM HÀM NÀY để xử lý logic khi nhấn nút "Mua ngay"

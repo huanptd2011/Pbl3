@@ -1,246 +1,302 @@
 <template>
-    <div class="container mt-4">
-        <h1>Sản phẩm</h1>
+  <div class="container mt-4">
+      <h1>Sản phẩm</h1>
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><router-link to="/">Trang chủ</router-link></li>
-                <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
-            </ol>
-        </nav>
+      <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><router-link to="/">Trang chủ</router-link></li>
+              <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
+          </ol>
+      </nav>
 
-        <div class="row">
-            <div class="col-md-3">
-                <div class="mb-4">
-                    <h5>Tìm kiếm</h5>
-                    <div class="input-group rounded-pill">
-                        <span class="input-group-text bg-transparent border-0">
-                            <i class="bi bi-search"></i>
-                        </span>
-                        <input type="text" class="form-control border-0 rounded-pill" placeholder="Tìm kiếm sản phẩm..."
-                            v-model="searchQuery" @input="handlePageSearchInput" @keyup.enter="handlePageSearchEnter">
-                    </div>
-                </div>
+      <div class="row">
+          <div class="col-md-3">
+              <div class="mb-4">
+                  <h5>Tìm kiếm</h5>
+                  <div class="input-group rounded-pill">
+                      <span class="input-group-text bg-transparent border-0">
+                          <i class="bi bi-search"></i>
+                      </span>
+                      <input type="text" class="form-control border-0 rounded-pill" placeholder="Tìm kiếm sản phẩm..."
+                          v-model="searchKeyword" @input="handleSearchInput" @keyup.enter="handleSearchEnter">
+                  </div>
+              </div>
 
+              <div class="mb-4">
+                  <h5>Bộ lọc</h5>
+                  <h6>Mức giá</h6>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="price1">
+                      <label class="form-check-label" for="price1">
+                          Dưới 1 triệu
+                      </label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="price2">
+                      <label class="form-check-label" for="price2">
+                          1 - 2 triệu
+                      </label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="price3">
+                      <label class="form-check-label" for="price3">
+                          2 - 3 triệu
+                      </label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="price4">
+                      <label class="form-check-label" for="price4">
+                          Trên 3 triệu
+                      </label>
+                  </div>
+                  <h6 class="mt-3">Thương hiệu</h6>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="brand1">
+                      <label class="form-check-label" for="brand1">
+                          Nike
+                      </label>
+                  </div>
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="brand2">
+                      <label class="form-check-label" for="brand2">
+                          Adidas
+                      </label>
+                  </div>
+              </div>
 
-                <div class="mb-4">
-                    <h5>Bộ lọc</h5>
-                    <h6>Mức giá</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="price1">
-                        <label class="form-check-label" for="price1">
-                            Dưới 1 triệu
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="price2">
-                        <label class="form-check-label" for="price2">
-                            1 - 2 triệu
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="price3">
-                        <label class="form-check-label" for="price3">
-                            2 - 3 triệu
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="price4">
-                        <label class="form-check-label" for="price4">
-                            Trên 3 triệu
-                        </label>
-                    </div>
-                    <h6 class="mt-3">Thương hiệu</h6>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="brand1">
-                        <label class="form-check-label" for="brand1">
-                            Nike
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="brand2">
-                        <label class="form-check-label" for="brand2">
-                            Adidas
-                        </label>
-                    </div>
-                </div>
+              <div class="mb-4">
+                  <h5>Sắp xếp theo</h5>
+                  <select class="form-select">
+                      <option selected>Sản phẩm bán chạy</option>
+                      <option value="1">Sản phẩm mới nhất</option>
+                      <option value="2">Giá: Tăng dần</option>
+                      <option value="3">Giá: Giảm dần</option>
+                  </select>
+              </div>
+          </div>
 
-                <div class="mb-4">
-                    <h5>Sắp xếp theo</h5>
-                    <select class="form-select">
-                        <option selected>Sản phẩm bán chạy</option>
-                        <option value="1">Sản phẩm mới nhất</option>
-                        <option value="2">Giá: Tăng dần</option>
-                        <option value="3">Giá: Giảm dần</option>
-                    </select>
-                </div>
-            </div>
+          <div class="col-md-9">
+              <div class="row row-cols-1 row-cols-md-3 g-4">
+                  <div class="col" v-for="product in products" :key="product.productId">
+                      <div class="card h-100">
+                          <img :src="product?.imageList?.[0]?.imageUrl || 'fallback-image.png'" class="card-img-top" alt="Product Image">
+                          <div class="card-body">
+                              <h6 class="card-title">{{ product.productName }}</h6>
+                              <div class="text-warning mb-1">
+                                  <i class="bi bi-star-fill"></i>
+                                  <i class="bi bi-star-fill"></i>
+                                  <i class="bi bi-star-fill"></i>
+                                  <i class="bi bi-star-fill"></i>
+                                  <i class="bi bi-star-half"></i>
+                              </div>
+                              <p class="card-text fw-bold">{{ product.price ? product.price.toLocaleString() + 'đ' : 'N/A' }}</p>
+                              <router-link :to="`/products/${product.productId}`" class="btn btn-primary btn-sm">Xem tất cả</router-link>
+                              <a href="#" class="btn btn-outline-secondary btn-sm">Thêm vào giỏ</a>
+                          </div>
+                      </div>
+                  </div>
 
-            <div class="col-md-9">
-                <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <div class="col" v-for="product in filteredProducts" :key="product.id">
-                        <div class="card h-100">
-                            <img :src="product.imageList[0].imageUrl" class="card-img-top" alt="Product Image">
-                            <div class="card-body">
-                                <h6 class="card-title">{{ product.ProductName }}</h6>
-                                <div class="text-warning mb-1">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-half"></i>
-                                </div>
-                                <p class="card-text fw-bold">{{ product.price }}</p>
-                                <a href="#" class="btn btn-primary btn-sm">Xem chi tiết</a>
-                                <a href="#" class="btn btn-outline-secondary btn-sm">Thêm vào giỏ</a>
-                            </div>
-                        </div>
-                    </div>
+                  <div class="col-12 text-center mt-4" v-if="products.length === 0 && searchKeyword.trim()">
+                      <p>Không tìm thấy sản phẩm nào với từ khóa "{{ searchKeyword }}"</p>
+                  </div>
+                  <div class="col-12 text-center mt-4"
+                      v-if="products.length === 0 && !searchKeyword.trim() && !isLoading">
+                      <p>Chưa có sản phẩm nào.</p>
+                  </div>
+                  <div class="col-12 text-center mt-4" v-if="isLoading">
+                      <p>Đang tải sản phẩm...</p>
+                  </div>
+              </div>
 
-                    <div class="col-12 text-center mt-4" v-if="filteredProducts.length === 0 && searchQuery.trim()">
-                        <p>Không tìm thấy sản phẩm nào với từ khóa "{{ searchQuery }}"</p>
-                    </div>
-                    <div class="col-12 text-center mt-4"
-                        v-if="!filteredProducts.length && !searchQuery.trim() && !isLoading">
-                        <p>Chưa có sản phẩm nào.</p>
-                    </div>
-                    <div class="col-12 text-center mt-4" v-if="isLoading">
-                        <p>Đang tải sản phẩm...</p>
-                    </div>
-                </div>
-
-                <nav aria-label="Page navigation example" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link">Previous</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+              <nav aria-label="Page navigation" v-if="totalPages > 1">
+                  <ul class="pagination justify-content-center">
+                      <li class="page-item" :class="{ disabled: currentPage === 0 }">
+                          <button class="page-link" @click="prevPage">Trước</button>
+                      </li>
+                      <li class="page-item disabled">
+                          <span class="page-link">Trang {{ currentPage + 1 }} / {{ totalPages }}</span>
+                      </li>
+                      <li class="page-item" :class="{ disabled: currentPage >= totalPages - 1 }">
+                          <button class="page-link" @click="nextPage">Sau</button>
+                      </li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const searchQuery = ref(''); // Biến cho input search trên trang SP
-const allProducts = ref([]); // Danh sách TẤT CẢ sản phẩm
+// Constants
+const defaultPage = 0;
+const defaultSize = 3;
+
+// Reactive state
+const searchKeyword = ref('');
+const products = ref([]);
+const currentPage = ref(0);
+const pageSize = ref(defaultSize);
+const totalPages = ref(1);
+const totalElements = ref(0);
 const route = useRoute();
 const router = useRouter();
-const isLoading = ref(false); // Biến trạng thái tải dữ liệu
+const isLoading = ref(false);
 
-// Hàm fetch dữ liệu sản phẩm (simulated fetch)
-const fetchProducts = async () => {
+// Token for authentication
+
+const token = localStorage.getItem("authToken");
+
+// Định nghĩa hàm loadProducts trước
+const loadProducts = async () => {
     isLoading.value = true;
-    // Thay thế bằng logic fetch API thực tế của bạn
-    const response = await fetch('http://localhost:8080/api/products');
-    allProducts.value = await response.json();
 
-    isLoading.value = false;
-    // Sau khi fetch xong, áp dụng lọc lần đầu (nếu có query param)
-    applyFilterFromUrl();
+    // Build query parameters
+    let params = new URLSearchParams();
+    params.append('page', currentPage.value);
+    params.append('size', pageSize.value);
+
+    if (searchKeyword.value) {
+        params.append('keyword', searchKeyword.value);
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/products/search?${params.toString()}`, {
+            headers: {
+                'Authorization': token ? `Bearer ${token}` : ''
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Update component state
+        products.value = data.content || [];
+        totalElements.value = data.totalElements || 0;
+        totalPages.value = data.totalPages || 1;
+
+        console.log(`Loaded ${products.value.length} products, page ${currentPage.value + 1}/${totalPages.value}`);
+
+    } catch (error) {
+        console.error('Error loading products:', error);
+        products.value = [];
+        totalElements.value = 0;
+        totalPages.value = 1;
+    } finally {
+        isLoading.value = false;
+    }
 };
 
-
-// Computed property để lọc sản phẩm hiển thị
-const filteredProducts = computed(() => {
-    // Nếu đang tải hoặc không có sản phẩm gốc, trả về mảng rỗng hoặc rỗng
-    if (isLoading.value || !allProducts.value) {
-        return [];
-    }
-
-    if (!searchQuery.value.trim()) {
-        return allProducts.value; // Hiển thị tất cả nếu input search trống
-    }
-    const lowerCaseQuery = searchQuery.value.toLowerCase();
-    return allProducts.value.filter(product => {
-        // Lọc dựa trên tên sản phẩm
-        return product.name.toLowerCase().includes(lowerCaseQuery);
-        // Bạn có thể thêm các trường khác ở đây nếu muốn tìm kiếm trong mô tả, thương hiệu, v.v.
-        // || (product.description && product.description.toLowerCase().includes(lowerCaseQuery))
-        // || (product.brand && product.brand.toLowerCase().includes(lowerCaseQuery));
-    });
-});
-
-// Hàm áp dụng lọc dựa trên query parameter trên URL
-const applyFilterFromUrl = () => {
-    if (route.query.q) {
-        // Cập nhật input search trên trang SP với giá trị từ URL
-        searchQuery.value = route.query.q;
-        // Computed property filteredProducts sẽ tự động lọc lại
+// Sau đó mới watch
+watch(() => route.query, (newQuery) => {
+    if (newQuery.page) {
+        currentPage.value = parseInt(newQuery.page);
     } else {
-        // Nếu không có query param 'q' trên URL, đảm bảo input search trên trang SP trống
-        searchQuery.value = '';
-        // Computed property filteredProducts sẽ tự động hiển thị tất cả
+        currentPage.value = defaultPage;
     }
+
+    if (newQuery.size) {
+        pageSize.value = parseInt(newQuery.size);
+    } else {
+        pageSize.value = defaultSize;
+    }
+
+    if (newQuery.q) {
+        searchKeyword.value = newQuery.q;
+    } else {
+        searchKeyword.value = '';
+    }
+
+    loadProducts();
+}, { immediate: true });
+
+// Các hàm khác...
+// Watch for route query changes
+watch(() => route.query, (newQuery) => {
+  if (newQuery.page) {
+      currentPage.value = parseInt(newQuery.page);
+  } else {
+      currentPage.value = defaultPage;
+  }
+
+  if (newQuery.size) {
+      pageSize.value = parseInt(newQuery.size);
+  } else {
+      pageSize.value = defaultSize;
+  }
+
+  if (newQuery.q) {
+      searchKeyword.value = newQuery.q;
+  } else {
+      searchKeyword.value = '';
+  }
+
+  loadProducts();
+}, { immediate: true });
+
+// Methods
+const handleSearchInput = () => {
+  // Apply real-time filtering if needed
+  // We'll update the URL but not trigger a search immediately
+  router.push({ query: { ...route.query, q: searchKeyword.value.trim() } });
 };
 
+const handleSearchEnter = () => {
+  // Reset to first page and trigger search
+  currentPage.value = 0;
+  loadProducts();
+};
 
-// Xử lý khi gõ bất kỳ ký tự nào vào input search trên trang SP (tùy chọn: lọc tức thời)
-// Nếu muốn lọc chỉ khi nhấn Enter thì bỏ đoạn watcher này
-watch(searchQuery, (newVal) => {
-    // Cập nhật URL với từ khóa mới mỗi khi searchQuery thay đổi
-    router.push({ query: { ...route.query, q: newVal.trim() } });
-    // Logic lọc đã nằm trong computed property filteredProducts
-});
+const prevPage = () => {
+  if (currentPage.value > 0) {
+      currentPage.value--;
+      updateRouteAndLoadProducts();
+  }
+};
 
+const nextPage = () => {
+  if (currentPage.value < totalPages.value - 1) {
+      currentPage.value++;
+      updateRouteAndLoadProducts();
+  }
+};
 
-// Theo dõi sự thay đổi của query parameter 'q' trên URL
-// Điều này quan trọng khi người dùng search từ Header lần nữa trong khi đang ở trang sản phẩm
-watch(() => route.query.q, (newQ, oldQ) => {
-    // Chỉ xử lý nếu query 'q' thực sự thay đổi
-    if (newQ !== oldQ && newQ !== searchQuery.value) {
-        // Cập nhật searchQuery dựa trên query param mới từ URL
-        // Watcher của searchQuery ở trên sẽ lo việc cập nhật URL và lọc lại
-        searchQuery.value = newQ || ''; // Sử dụng '' nếu newQ là undefined (khi xóa query param)
-    } else if (!newQ && oldQ && searchQuery.value) {
-        // Xử lý trường hợp query 'q' bị xóa khỏi URL (ví dụ: người dùng xóa bằng tay)
-        searchQuery.value = '';
-    }
-});
+const updateRouteAndLoadProducts = () => {
+  // Update URL with current state
+  const query = { ...route.query };
 
+  if (currentPage.value > 0) {
+      query.page = currentPage.value;
+  } else {
+      delete query.page;
+  }
 
-// Khi component được mount (trang được tải lần đầu)
+  router.push({ query });
+  loadProducts();
+};
+
+// Initial load on component mount
 onMounted(() => {
-    fetchProducts(); // Lấy dữ liệu sản phẩm
-    // applyFilterFromUrl() sẽ được gọi sau khi fetchProducts hoàn tất
+  loadProducts();
 });
-
-// Hàm xử lý khi người dùng nhấn Enter trong input search trên trang SP
-const handlePageSearchEnter = () => {
-    // Logic cập nhật URL và lọc đã được xử lý bởi watcher của searchQuery
-    // Không cần làm gì thêm ở đây nếu watcher đã hoạt động
-};
-
-// Hàm xử lý khi người dùng gõ vào input search trên trang SP
-const handlePageSearchInput = () => {
-    // Logic cập nhật URL và lọc đã được xử lý bởi watcher của searchQuery
-    // Nếu bạn chỉ muốn lọc khi nhấn Enter, hãy bỏ watcher của searchQuery
-    // và chỉ gọi router.push/applyFilterFromUrl trong handlePageSearchEnter
-};
-
-
 </script>
 
 <style scoped>
 /* CSS tùy chỉnh cho trang sản phẩm nếu cần */
 .rounded-pill {
-    border-radius: 50rem !important;
+  border-radius: 50rem !important;
 }
 
 .card-img-top {
-    width: 100%;
-    height: 150px;
-    /* Điều chỉnh chiều cao ảnh sản phẩm */
-    object-fit: cover;
-    /* Giữ tỷ lệ ảnh */
+  width: 100%;
+  height: 150px;
+  /* Điều chỉnh chiều cao ảnh sản phẩm */
+  object-fit: cover;
+  /* Giữ tỷ lệ ảnh */
 }
 </style>

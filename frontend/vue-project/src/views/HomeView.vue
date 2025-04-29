@@ -3,26 +3,26 @@
 
     <!-- Hero Banner -->
     <section class="hero-banner ">
-     
+
         <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
               <img src="../assets/web/slide.jpg" class="d-block w-100 " alt="Khuyến mãi tại Los Angeles" />
-        
+
             </div>
             <div class="carousel-item">
               <img src="../assets/web/slide.jpg" class="d-block w-100" alt="Khuyến mãi tại Chicago" />
-            
+
             </div>
             <div class="carousel-item">
               <img src="../assets/web/slide.jpg" class="d-block w-100" alt="Khuyến mãi tại New York" />
-             
+
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            
+
             <i class="fa-solid fa-caret-left rounded-pill color_d9 px-1" style="color: #000;"></i>
-          
+
           </button>
           <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
             <i class="fa-solid fa-caret-right rounded-pill color_d9 px-1" style="color: #000;"></i>
@@ -35,8 +35,8 @@
       <div class="container">
         <div class="text-center py-5">
           <h2 class=" vollkorn-title " >Sản phẩm nổi bật</h2>
-          <span class=" roboto-thin">Sự kết hợp hoàn hảo giữa công nghệ và thẩm mỹ. 
-            <br> 
+          <span class=" roboto-thin">Sự kết hợp hoàn hảo giữa công nghệ và thẩm mỹ.
+            <br>
             Không chỉ đẹp mắt, mà còn vượt trội trong hiệu năng.</span>
           <!-- <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link> -->
         </div>
@@ -90,16 +90,17 @@ const isLoading = ref(true)
 
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/products/new')
+    const response = await axios.get('http://localhost:8080/api/products')
     const allProducts = response.data
 
+    // Gán dữ liệu
     newArrivals.value = [...allProducts]
-    //   // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    //   .slice(0, 4)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 4)
 
-    // recentlyUpdated.value = [...allProducts]
-    //   // .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-    //   .slice(0, 4)
+    recentlyUpdated.value = [...allProducts]
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      .slice(0, 4)
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)
   } finally {
@@ -107,13 +108,14 @@ const fetchData = async () => {
   }
 }
 
+
 onMounted(fetchData)
 </script>
 
 <style scoped>
 .hero-banner {
   background-color: #f8f9fa;
-  
+
 }
 .carousel-inner{
   height: 500px;

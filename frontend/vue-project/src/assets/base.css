@@ -17,3 +17,21 @@ body {
       background-color: black;
       font-weight: 600 !important;
   }
+
+  .form-control:focus{
+    box-shadow: 0;
+  }
+
+  .rounded-start-50 {
+    border-top-left-radius: 50px !important;
+    border-bottom-left-radius: 50px !important;
+  }
+
+  .rounded-end-50 {
+    border-top-right-radius: 50px !important;
+    border-bottom-right-radius: 50px !important;
+  }
+
+  .bg-gray{
+    background-color: #ddd5d5;
+  }

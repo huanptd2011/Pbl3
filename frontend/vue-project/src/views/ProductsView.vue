@@ -26,25 +26,25 @@
                   <h5>Bộ lọc</h5>
                   <h6>Mức giá</h6>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price1">
+                      <input class="form-check-input" type="radio" value="" id="price1">
                       <label class="form-check-label" for="price1">
                           Dưới 1 triệu
                       </label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price2">
+                      <input class="form-check-input" type="radio" value="" id="price2">
                       <label class="form-check-label" for="price2">
                           1 - 2 triệu
                       </label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price3">
+                      <input class="form-check-input" type="radio" value="" id="price3">
                       <label class="form-check-label" for="price3">
                           2 - 3 triệu
                       </label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price4">
+                      <input class="form-check-input" type="radio" value="" id="price4">
                       <label class="form-check-label" for="price4">
                           Trên 3 triệu
                       </label>

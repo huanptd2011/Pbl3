@@ -59,10 +59,10 @@ public class ProductController {
                 return productService.getAllProducts();
     }
 
-    // @GetMapping("/new")
-    // public List<ProductResponse> getNewProduct(){
-    //     return productService.getNewProduct();
-    // }
+     @GetMapping("/new")
+     public List<ProductResponse> getNewProduct(){
+         return productService.getNewProduct();
+     }
 
     @PutMapping("/edit/{productId}")
     public ProductResponse updateProduct(@PathVariable Integer productId, @RequestBody ProductRequest productRequest) {

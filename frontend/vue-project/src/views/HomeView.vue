@@ -90,17 +90,14 @@ const isLoading = ref(true)
 
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/products')
+    const response = await axios.get('http://localhost:8080/api/products/new')
     const allProducts = response.data
 
     // Gán dữ liệu
     newArrivals.value = [...allProducts]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, 4)
 
     recentlyUpdated.value = [...allProducts]
-      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-      .slice(0, 4)
+
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)
   } finally {

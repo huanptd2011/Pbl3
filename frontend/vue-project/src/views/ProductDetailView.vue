@@ -188,7 +188,7 @@ const handleAddToCart = () => {
 
       if (!isAuthenticated) {
           // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
-          alert('Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng!');
+          alert('Vui lòng đăng nhập!');
           router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
           return;
       }
@@ -235,7 +235,7 @@ const handleBuyNow = () => {
 
         if (!isAuthenticated) {
             // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
-            alert('Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng!');
+            alert('Vui lòng đăng nhập!');
             router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
             return;
         }

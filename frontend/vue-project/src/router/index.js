@@ -29,13 +29,13 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: () => import('@/views/CartView.vue'),
-    // meta: { requiresAuth: true }
+     meta: { requiresAuth: true }
   },
   {
     path: '/checkout',
     name: 'Checkout',
     component: () => import('@/views/CheckoutView.vue'),
-    // meta: { requiresAuth: true }
+     meta: { requiresAuth: true }
   },
   {
     path: '/account',
@@ -95,16 +95,17 @@ const router = createRouter({
 });
 //phaan quyen o cho nay nhaaaaaa phan quyen cac view
 // Authentication guard
-router.beforeEach((to, from, next) => {
-const authStore = useUserStore();
-const isAuthenticated = authStore.isLoggedIn;
+ router.beforeEach((to, from, next) => {
+ const authStore = useUserStore();
+ const isAuthenticated = authStore.isLoggedIn;
 
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'Home' });/// quay veef ddawng moup đăng nhập
-  } else {
-    next();
-  }
-});
+   if (to.meta.requiresAuth && !isAuthenticated) {
+    alert('Vui lòng đăng nhập!');
+     next({ name: 'Login' });/// quay veef ddawng moup đăng nhập
+   } else {
+     next();
+   }
+ });
 
 export default router;

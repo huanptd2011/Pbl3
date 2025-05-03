@@ -20,6 +20,7 @@ import com.nahuannghia.shopnhn.service.ProductInventoryService;
 @RestController
 @RequestMapping("/api/product-inventory")
 @CrossOrigin(origins = {"http://localhost:5173"})
+
 public class ProductInventoryController {
 
     @Autowired

@@ -1,17 +1,17 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import AppHeader from './components/appHeader.vue';
+import { RouterView } from 'vue-router'
+import { useUserStore } from './stores/user'
+import appHeader from './components/appHeader.vue'
+import headerUser from './components/headerUser.vue'
+
+const userStore = useUserStore()
+userStore.logout()
 </script>
 
 <template>
-  
   <div>
-    <AppHeader />
-    <RouterView></RouterView>
+    <headerUser v-if="userStore.isLoggedIn" />
+    <appHeader v-else />
+    <RouterView />
   </div>
-
 </template>
-
-<style scoped>
-
-</style>

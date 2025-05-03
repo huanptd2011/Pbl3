@@ -104,7 +104,10 @@ public class UserService {
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             return new RegisterResponse(400, null, "Password and confirm password do not match", null, null, null, null, LocalDateTime.now());
         }
-
+        if (userRepository.findByPhone(registerRequest.getPhone()).isPresent()) {
+            return new RegisterResponse(409, null, "Phone already exists", null, null, null, null, LocalDateTime.now());
+        }
+        
         User newUser = new User();
         newUser.setUsername(registerRequest.getUsername());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));

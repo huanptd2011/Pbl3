@@ -11,16 +11,16 @@
 
       <div class="row">
           <div class="col-md-3">
-              <div class="mb-4">
+              <!-- <div class="mb-4">
                   <h5>Tìm kiếm</h5>
                   <div class="input-group rounded-pill">
                       <span class="input-group-text bg-transparent border-0">
                           <i class="bi bi-search"></i>
                       </span>
                       <input type="text" class="form-control border-0 rounded-pill" placeholder="Tìm kiếm sản phẩm..."
-                          v-model="searchKeyword" @input="handleSearchInput" @keyup.enter="handleSearchEnter">
+                          v-model="searchKeyword" @input="debounceSearch" @keyup.enter="handleSearchEnter"> //@input="handleSearchInput"
                   </div>
-              </div>
+              </div> -->
 
               <div class="mb-4">
                   <h5>Bộ lọc</h5>

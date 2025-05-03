@@ -97,7 +97,7 @@ export default {
           localStorage.setItem('email', email);
 
           // Show success message (optional)
-          alert(response.data.message);
+          // alert(response.data.message);
 
           // Redirect to the homepage or dashboard
           const userStore = useUserStore();

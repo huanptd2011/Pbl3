@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class RegisterRequest {
-    @NotBlank(message = "Username is required")
-    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
-    private String username;
+//    @NotBlank(message = "Username is required")
+//    @Size(min = 4, max = 20, message = "Username must be between 4 and 20 characters")
+//    private String username;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
@@ -20,25 +20,37 @@ public class RegisterRequest {
     @NotBlank(message = "Confirm password is required")
     private String confirmPassword;
 
-    private String fullName;
+    private String firstName;
+    private String lastName;
     private String phone;
     public RegisterRequest() {
     }
-    public RegisterRequest(String username, String email, String password, String confirmPassword, String fullName,
-            String phone) {
-        this.username = username;
+
+    public RegisterRequest(String email, String password, String confirmPassword, String firstName, String lastName, String phone) {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
-        this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phone = phone;
     }
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    //    public RegisterRequest(String username, String email, String password, String confirmPassword, String fullName,
+//            String phone) {
+////        this.username = username;
+//        this.email = email;
+//        this.password = password;
+//        this.confirmPassword = confirmPassword;
+////        this.fullName = fullName;
+//        this.firstName
+//        this.phone = phone;
+//    }
+
+//    public String getUsername() {
+//        return username;
+//    }
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
     public String getEmail() {
         return email;
     }
@@ -60,12 +72,12 @@ public class RegisterRequest {
         this.confirmPassword = confirmPassword;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+//    public String getFullName() {
+//        return fullName;
+//    }
+//    public void setFullName(String fullName) {
+//        this.fullName = fullName;
+//    }
     public String getPhone() {
         return phone;
     }
@@ -73,4 +85,19 @@ public class RegisterRequest {
         this.phone = phone;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class RegisterResponse {
     private String username;
     private String email;
-    private String password;
     private int status;
     private String message;
     private Integer userId;
@@ -15,16 +14,16 @@ public class RegisterResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
     public RegisterResponse(){}
-    public RegisterResponse(int status, String message, String username, String email, String password, Integer userId, String role, LocalDateTime timestamp) {
+    public RegisterResponse(int status, String message, String username, String email, Integer userId, String role, LocalDateTime timestamp) {
         this.status = status;
         this.message = message;
         this.username = username;
         this.email = email;
-        this.password = password;
         this.userId = userId;
         this.role = role;
         this.timestamp = timestamp;
     }
+
     public String getUsername() {
         return username;
     }
@@ -36,12 +35,6 @@ public class RegisterResponse {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
     }
     public int getStatus() {
         return status;

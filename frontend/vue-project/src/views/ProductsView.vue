@@ -132,7 +132,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 // Constants
 const defaultPage = 0;
-const defaultSize = 3;
+const defaultSize = 12;
 
 // Reactive state
 const searchKeyword = ref('');

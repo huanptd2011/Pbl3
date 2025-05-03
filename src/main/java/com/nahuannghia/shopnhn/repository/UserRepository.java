@@ -1,10 +1,11 @@
 package com.nahuannghia.shopnhn.repository;
 
-import com.nahuannghia.shopnhn.model.User;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.nahuannghia.shopnhn.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -15,6 +16,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String usernameOrEmail);
 
     Optional<User> findByUsername(String usernameOrEmail);
+    Optional<User>  findByPhone(String phone);
 }
 
 

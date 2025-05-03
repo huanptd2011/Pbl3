@@ -1,5 +1,6 @@
 
 import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '@/stores/user'
 
 const routes = [
   {
@@ -18,7 +19,7 @@ const routes = [
     component: () => import('@/views/ProductDetailView.vue'),
     props: true
   },
-  
+
   {
     path: '/sale',
     name: 'Sale',
@@ -67,6 +68,16 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFoundView.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/LoginView.vue')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/RegisterView.vue')
   }
 ];
 
@@ -84,10 +95,12 @@ const router = createRouter({
 //phaan quyen o cho nay nhaaaaaa phan quyen cac view
 // Authentication guard
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = /* logic to check auth */ false;
-  
+const authStore = useUserStore();
+const isAuthenticated = authStore.isLoggedIn;
+
+
   if (to.meta.requiresAuth && !isAuthenticated) {
-    next({ name: 'Home' });/// quay veef ddawng moup đăng nhập 
+    next({ name: 'Home' });/// quay veef ddawng moup đăng nhập
   } else {
     next();
   }

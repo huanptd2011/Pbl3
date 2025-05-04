@@ -97,15 +97,12 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        List<ProductInventoryResponse> inventoryList = productInventoryRepository.findByProductProductId(productId)
-                .stream()
-                .map(inventory -> new ProductInventoryResponse(inventory.getColor(), inventory.getSize(), inventory.getQuantity()))
-                .collect(Collectors.toList());
+        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
 
-        List<ProductImageResponse> imageList = productImageRepository.findByProductProductId(productId)
-                .stream()
-                .map(image -> new ProductImageResponse(image.getImageUrl()))
-                .collect(Collectors.toList());
+        if(!inventoryList.isEmpty()){
+            System.out.println("Djiasudhfusdnd");
+        }
 
         return new ProductResponse(
                 product.getProductId(),
@@ -264,5 +261,24 @@ public class ProductService {
 
         Pageable pageable = PageRequest.of(page, size);
         return new PageImpl<>(paginatedList, pageable, total);
+    }
+
+    public List<ProductResponse> getNewProduct(){
+        List<Product> products = productRepository.findTop4ByOrderByCreatedDateDesc();
+        return products.stream().map(product -> {
+            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+            List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+            return new ProductResponse(
+                    product.getProductId(),
+                    product.getProductName(),
+                    product.getProductDescription(),
+                    product.getBrand(),
+                    product.getPrice(),
+                    product.getCreatedAt(),
+                    product.getUpdatedAt(),
+                    inventoryList,
+                    imageList
+            );
+        }).collect(Collectors.toList());
     }
 }

@@ -15,10 +15,9 @@ public class ProductResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<ProductInventoryResponse> sizeColorList;
-    private List<ProductInventoryResponse> inventoryList;
     private List<ProductImageResponse> imageList;
     public ProductResponse(Integer productId, String productName, String productDescription, String brand, BigDecimal price,
-                           LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductInventoryResponse> inventoryList,
+                           LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductInventoryResponse> sizeColorList,
                            List<ProductImageResponse> imageList) {
         this.productId = productId;
         this.productName = productName;
@@ -27,7 +26,7 @@ public class ProductResponse {
         this.price = price;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.inventoryList = inventoryList;
+        this.sizeColorList = sizeColorList;
         this.imageList = imageList;
     }
     public ProductResponse() {

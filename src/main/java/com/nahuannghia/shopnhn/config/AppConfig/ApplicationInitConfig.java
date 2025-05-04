@@ -19,18 +19,18 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(UserRepository userRepository){
         return args -> {
             try{
-                if(userRepository.findByUsername("admin").isEmpty()){
+                if(userRepository.findByUsername("ShoeStore").isEmpty()){
                     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                     User Admin = new User(
-                        null, // Assuming ID is auto-generated
-                        "admin",
+                        null,
+                        "ShoeStore",
                         passwordEncoder.encode("admin123"),
-                        "Admin First Name", // Replace with appropriate value
-                        "Admin Last Name",  // Replace with appropriate value
-                        "admin@example.com", // Replace with appropriate value
-                        UserRole.ADMIN,
-                        LocalDateTime.now(), // Assuming current time for creation date
-                        "Admin Address" // Replace with appropriate value
+                        "admin@example.com",
+                        "0943468506",
+                        "54 - Nguyễn Lương Bằng - Liên Chiểu - Đà Nẵng",
+                            UserRole.ADMIN,
+                            LocalDateTime.now(),
+                            "Shoe Store"
                     );
                     userRepository.save(Admin);
                     // log.warn("Admin user has been created");

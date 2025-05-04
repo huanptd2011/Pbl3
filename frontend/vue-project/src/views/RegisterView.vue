@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "UserLogin",
   data() {
@@ -80,12 +81,45 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
+      if (!/^\S+@\S+\.\S+$/.test(this.form.email)) {
+        alert("Email không hợp lệ!");
+        return;
+      }
+
+      if (!/^[0-9]{9,11}$/.test(this.form.phone)) {
+        alert("Số điện thoại không hợp lệ!");
+        return;
+      }
+
       if (this.form.password !== this.form.confirmPassword) {
         alert("Mật khẩu không khớp!");
         return;
       }
-      console.log("Đăng ký:", this.form);
+
+      try {
+            const response = await axios.post('http://localhost:8080/api/users/create', {
+              email: this.form.email,
+              password: this.form.password,
+              confirmPassword: this.form.confirmPassword,
+              firstName: this.form.firstName,
+              lastName: this.form.lastName,
+              phone: this.form.phone
+            });
+            console.log(response)
+            alert("Đăng ký thành công!");
+          } catch (error) {
+              if (error.response) {
+                console.error("Máy chủ phản hồi với:", error.response.status, error.response.data);
+                alert(`Lỗi: ${error.response.data.message || 'Đăng ký thất bại'}`);
+              } else if (error.request) {
+                console.error("Không nhận được phản hồi:", error.request);
+                alert("Không có phản hồi từ máy chủ - kiểm tra kết nối mạng");
+              } else {
+                console.error("Lỗi thiết lập request:", error.message);
+                alert("Lỗi request: " + error.message);
+              }
+            }
     }
   }
 };

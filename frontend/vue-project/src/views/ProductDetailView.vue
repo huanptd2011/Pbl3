@@ -29,28 +29,28 @@
                 <p class="mt-3">{{ product.productDescription }}</p>
 
                 <!-- Lựa chọn màu sắc -->
-<div class="mb-3" v-if="availableColors.length > 0 ">
-    <label class="form-label fw-semibold">Chọn màu:</label>
-    <div class="d-flex gap-2 flex-wrap">
-        <button v-for="color in availableColors" :key="color" class="btn"
-            :class="color === selectedColor ? 'btn-dark' : 'btn-outline-secondary'"
-            @click="selectColor(color)">
-            {{ color }}
-        </button>
-    </div>
-</div>
+                <div class="mb-3" v-if="availableColors.length > 0 ">
+                    <label class="form-label fw-semibold">Chọn màu:</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button v-for="color in availableColors" :key="color" class="btn"
+                            :class="color === selectedColor ? 'btn-dark' : 'btn-outline-secondary'"
+                            @click="selectColor(color)">
+                            {{ color }}
+                        </button>
+                    </div>
+                </div>
 
-<!-- Lựa chọn size -->
-<div class="mb-3" v-if="selectedColor && availableSizes.length > 0">
-    <label class="form-label fw-semibold">Chọn size:</label>
-    <div class="d-flex gap-2 flex-wrap">
-        <button v-for="size in availableSizes" :key="size" class="btn"
-            :class="size === selectedSize ? 'btn-dark' : 'btn-outline-secondary'"
-            @click="selectSize(size)">
-            {{ size }}
-        </button>
-    </div>
-</div>
+                <!-- Lựa chọn size -->
+                <div class="mb-3" v-if="selectedColor && availableSizes.length > 0">
+                    <label class="form-label fw-semibold">Chọn size:</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button v-for="size in availableSizes" :key="size" class="btn"
+                            :class="size === selectedSize ? 'btn-dark' : 'btn-outline-secondary'"
+                            @click="selectSize(size)">
+                            {{ size }}
+                        </button>
+                    </div>
+                </div>
 
 
                 <!-- Tồn kho -->
@@ -92,6 +92,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useCartStore } from '@/stores/cartStore'
+import { useUserStore } from '@/stores/user';
 
 const route = useRoute()
 const router = useRouter(); // <-- Sử dụng useRouter
@@ -173,12 +174,25 @@ const selectSize = (size) => {
 
 // <-- THÊM HÀM NÀY để xử lý logic khi nhấn nút "Thêm vào giỏ hàng"
 const handleAddToCart = () => {
+
   // Kiểm tra lại điều kiện (thừa nếu nút đã disabled đúng, nhưng an toàn hơn)
   if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
     console.warn('Vui lòng chọn màu, size và đảm bảo còn hàng.');
     alert('Vui lòng chọn màu, size và đảm bảo còn hàng.'); // Thông báo cho người dùng
     return;
   }
+
+  ////check đăng nhập
+  const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
+  const isAuthenticated = authStore.isLoggedIn;
+
+      if (!isAuthenticated) {
+          // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
+          alert('Vui lòng đăng nhập!');
+          router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
+          return;
+      }
+
 
   // Tạo đối tượng chi tiết sản phẩm (biến thể) để thêm vào giỏ
   const itemToAdd = {
@@ -214,6 +228,17 @@ const handleBuyNow = () => {
         alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         return;
      }
+
+  //check đăng nhập
+  const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
+    const isAuthenticated = authStore.isLoggedIn;
+
+        if (!isAuthenticated) {
+            // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
+            alert('Vui lòng đăng nhập!');
+            router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
+            return;
+        }
 
     // Tạo đối tượng chi tiết sản phẩm (biến thể) để thêm vào giỏ
     const itemToBuy = {

@@ -93,40 +93,38 @@ public class UserService {
     }
 
     public RegisterResponse createUser(RegisterRequest registerRequest) {
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            return new RegisterResponse(409, null, "Username already exists", null, null, null, null, LocalDateTime.now());
-        }
+//        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+//            return new RegisterResponse(409, null, "Username already exists", null, null, null, null, LocalDateTime.now());
+//        }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            return new RegisterResponse(409, null, "Email already exists", null, null, null, null, LocalDateTime.now());
+            return new RegisterResponse(409, null, "Email already exists", null, null, null, LocalDateTime.now());
         }
 
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return new RegisterResponse(400, null, "Password and confirm password do not match", null, null, null, null, LocalDateTime.now());
-        }
-        if (userRepository.findByPhone(registerRequest.getPhone()).isPresent()) {
-            return new RegisterResponse(409, null, "Phone already exists", null, null, null, null, LocalDateTime.now());
+            return new RegisterResponse(400, null, "Password and confirm password do not match", null, null, null, LocalDateTime.now());
         }
         
         User newUser = new User();
-        newUser.setUsername(registerRequest.getUsername());
+        newUser.setUsername(createUsername(registerRequest.getEmail()));
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         newUser.setEmail(registerRequest.getEmail());
         newUser.setRole(UserRole.CUSTOMER);
         newUser.setCreatedDate(LocalDateTime.now());
         newUser.setStatus(true);
         newUser.setUpdatedDate(LocalDateTime.now());
+        newUser.setFullName(registerRequest.getFirstName() + registerRequest.getLastName());
+        newUser.setPhone(registerRequest.getPhone());
 
         User savedUser = userRepository.save(newUser);
 
         return new RegisterResponse(
                 201,
                 "User created successfully",
-                savedUser.getUserId().toString(),
                 savedUser.getUsername(),
                 savedUser.getEmail(),
-                savedUser.getRole() != null ? savedUser.getRole().ordinal() : null,
-                savedUser.getAddress(),
+                savedUser.getUserId(),
+                savedUser.getRole().toString() != null ? savedUser.getRole().toString() : null,
                 LocalDateTime.now()
         );
 
@@ -225,4 +223,9 @@ public class UserService {
         Optional<User> userByEmail = userRepository.findByEmail(usernameOrEmail);
         return userByEmail.isPresent() ? userByEmail : userRepository.findByUsername(usernameOrEmail);
     }
+
+    private String createUsername(String email) {
+        return email.substring(0, email.indexOf("@"));
+    }
+
 }

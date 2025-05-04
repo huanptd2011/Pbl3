@@ -79,6 +79,7 @@ import { ref, computed } from 'vue';
 import { useCartStore } from '@/stores/cartStore';
 import AuthModal from '@/components/AuthModal.vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const router = useRouter();
 
@@ -106,9 +107,8 @@ const toggleAuthModal = () => {
 };
 
 const performSearch = () => {
-  // Xử lý tìm kiếm
   if (searchQuery.value.trim()) {
-      router.push({ path: '/search', query: { q: searchQuery.value } });
+    router.push({ path: '/search', query: { q: searchQuery.value } });
   }
 };
 

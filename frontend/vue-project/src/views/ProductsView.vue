@@ -11,40 +11,40 @@
 
       <div class="row">
           <div class="col-md-3">
-              <div class="mb-4">
+              <!-- <div class="mb-4">
                   <h5>Tìm kiếm</h5>
                   <div class="input-group rounded-pill">
                       <span class="input-group-text bg-transparent border-0">
                           <i class="bi bi-search"></i>
                       </span>
                       <input type="text" class="form-control border-0 rounded-pill" placeholder="Tìm kiếm sản phẩm..."
-                          v-model="searchKeyword" @input="handleSearchInput" @keyup.enter="handleSearchEnter">
+                          v-model="searchKeyword" @input="debounceSearch" @keyup.enter="handleSearchEnter"> //@input="handleSearchInput"
                   </div>
-              </div>
+              </div> -->
 
               <div class="mb-4">
                   <h5>Bộ lọc</h5>
                   <h6>Mức giá</h6>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price1">
+                      <input class="form-check-input" type="radio" value="" id="price1">
                       <label class="form-check-label" for="price1">
                           Dưới 1 triệu
                       </label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price2">
+                      <input class="form-check-input" type="radio" value="" id="price2">
                       <label class="form-check-label" for="price2">
                           1 - 2 triệu
                       </label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price3">
+                      <input class="form-check-input" type="radio" value="" id="price3">
                       <label class="form-check-label" for="price3">
                           2 - 3 triệu
                       </label>
                   </div>
                   <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="price4">
+                      <input class="form-check-input" type="radio" value="" id="price4">
                       <label class="form-check-label" for="price4">
                           Trên 3 triệu
                       </label>
@@ -132,7 +132,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 // Constants
 const defaultPage = 0;
-const defaultSize = 3;
+const defaultSize = 12;
 
 // Reactive state
 const searchKeyword = ref('');

@@ -22,8 +22,8 @@
 
           <form @submit.prevent="submitForm">
             <div class="mb-3">
-              <label for="email" class="form-label">Tên tài khoản/ Email</label>
-              <input type="email" v-model="form.usernameOrEmail" class="form-control" id="usernameOrEmail" placeholder="usernameOrEmail" required>
+              <label for="text" class="form-label">Tên tài khoản/ Email</label>
+              <input type="text" v-model="form.usernameOrEmail" class="form-control" id="usernameOrEmail" placeholder="Username/Email" required>
             </div>
 
             <div class="mb-4">
@@ -97,12 +97,17 @@ export default {
           localStorage.setItem('email', email);
 
           // Show success message (optional)
-          alert(response.data.message);
+          // alert(response.data.message);
 
           // Redirect to the homepage or dashboard
           const userStore = useUserStore();
           userStore.login(); // Cập nhật trạng thái isLoggedIn
-          this.router.push('/');
+
+          if(role === 'ADMIN') {
+            this.router.push('/admin');
+          } else if (role === 'CUSTOMER') {
+            this.router.push('/');
+          }
         } else {
           // Handle errors returned by the backend
           alert(response.data.message);

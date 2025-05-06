@@ -359,10 +359,10 @@ onMounted(() => {
                         <p class="text-muted">Không có người dùng nào trong hệ thống.</p>
                     </div>
                     <div v-else>
-                        <div class="table-responsive"> {/* Bọc bảng trong div responsive */}
-                            <table class="table table-striped table-hover table-bordered"> {/* Thêm table-hover */}
+                        <div class="table-responsive"> 
+                            <table class="table table-striped table-hover table-bordered"> 
                                 <thead>
-                                    <tr class="bg-light"> {/* Thêm màu nền cho header */}
+                                    <tr class="bg-light">
                                         <th>ID</th>
                                         <th>Tên đăng nhập</th>
                                         <th>Email</th>
@@ -386,18 +386,17 @@ onMounted(() => {
                                         </td>
                                         <td>{{ formatDate(user.createdAt) }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-warning me-2 rounded-pill"> {/* Nút bo tròn
-                                                */}
+                                            <button class="btn btn-sm btn-warning me-2 rounded-pill"> 
                                                 <i class="bi bi-pencil-square"></i> Sửa
                                             </button>
-                                            <button class="btn btn-sm btn-danger rounded-pill"> {/* Nút bo tròn */}
+                                            <button class="btn btn-sm btn-danger rounded-pill"> 
                                                 <i class="bi bi-trash"></i> Xóa
                                             </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div> {/* Kết thúc div responsive */}
+                        </div> 
 
                         <div class="d-flex justify-content-center mt-3">
                             <nav aria-label="Page navigation example">
@@ -520,7 +519,7 @@ onMounted(() => {
 
     // --- Watch searchKeyword để tìm kiếm tức thời ---
     if (watchEnabled) {
-        watch(searchKeyword, (newValue, oldValue) => {
+        watch(searchKeyword, () => {
             // Clear timer cũ nếu có
             if (searchTimer) {
                 clearTimeout(searchTimer);

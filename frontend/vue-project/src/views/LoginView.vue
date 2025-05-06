@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid vh-100">
     <div class="row h-100">
-      <!-- Hình ảnh và branding bên trái -->
       <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-light">
         <div class="text-center">
           <h1 class="mb-3 fw-bold">MATISSE</h1>
@@ -10,10 +9,8 @@
         </div>
       </div>
 
-      <!-- Form bên phải -->
       <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="w-75">
-          <!-- Logo ở góc trên bên phải -->
           <div class="text-end mb-4">
             <img src="@/assets/logo.jpeg" alt="Sneakers Logo" style="height: 40px;">
           </div>
@@ -22,7 +19,7 @@
 
           <form @submit.prevent="submitForm">
             <div class="mb-3">
-              <label for="text" class="form-label">Tên tài khoản/ Email</label>
+              <label for="usernameOrEmail" class="form-label">Tên tài khoản/ Email</label>
               <input type="text" v-model="form.usernameOrEmail" class="form-control" id="usernameOrEmail" placeholder="Username/Email" required>
             </div>
 
@@ -32,7 +29,10 @@
             </div>
 
             <div class="d-grid mb-3">
-              <button type="submit" class="btn btn-dark py-2">Đăng nhập</button>
+              <button type="submit" class="btn btn-dark py-2" :disabled="isLoading">
+                 <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                 <span v-else>Đăng nhập</span>
+              </button>
             </div>
 
             <div class="text-start mb-3">
@@ -60,53 +60,75 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useCartStore } from '@/stores/cartStore';
 
-const router = useRouter();
-const userStore = useUserStore();
-const cartUser = useCartStore();
+<script>
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
-const form = ref({
-  usernameOrEmail: '',
-  password: '',
-});
+export default {
+  name: "LoginView",
+  setup() {
+    const router = useRouter();
+    return { router };
+  },
+  data() {
+    return {
+      form: {
+        usernameOrEmail: '',
+        password: '',
+      },
+      isLoading: false,
+    };
+  },
+  methods: {
+    async submitForm() {
+      this.isLoading = true;
 
-const isLoading = ref(false);
+      try {
+        const response = await axios.post('http://localhost:8080/api/users/log-in', {
+          usernameOrEmail: this.form.usernameOrEmail,
+          password: this.form.password,
+        });
 
-const submitForm = async () => {
-  isLoading.value = true;
-  try {
-    const response = await axios.post('http://localhost:8080/api/users/log-in', {
-      usernameOrEmail: form.value.usernameOrEmail,
-      password: form.value.password,
-    });
+        const { token, username, role, email } = response.data;
 
-    if (response.data.status === 200) {
-      const { token, username, role, email, userId } = response.data;
+        if (token && username && role && email) {
+          localStorage.setItem('token', token);
+          localStorage.setItem('username', username);
+          localStorage.setItem('role', role);
+          localStorage.setItem('email', email);
 
-      userStore.setUser({ username, email, role, userId, token });
+          const userStore = useUserStore();
+          userStore.login({ token, username, role, email });
 
-      if (role === 'ADMIN') {
-        router.push('/admin');
-      } else if (role === 'CUSTOMER') {
-        await cartUser.loadUserCart(userStore.user.userId);
-        router.push('/');
+          if (role === 'ADMIN') {
+            this.router.push('/admin');
+          } else if (role === 'CUSTOMER') {
+            this.router.push('/');
+          } else {
+            alert('Đăng nhập thành công nhưng vai trò không xác định.');
+            this.router.push('/');
+          }
+        } else {
+          alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
+          this.router.push('/login');
+        }
+
+      } catch (error) {
+        console.error('Lỗi đăng nhập:', error);
+
+        if (error.response?.data?.message) {
+          alert(error.response.data.message);
+        } else {
+          alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
+        }
+      } finally {
+        this.isLoading = false;
       }
-    } else {
-      alert(response.data.message);
     }
-  } catch (error) {
-    console.error('Lỗi khi đăng nhập:', error);
-    if (error.response && error.response.data) {
-      alert(error.response.data.message || 'Đăng nhập thất bại!');
-    } else {
-      alert('Có lỗi xảy ra, vui lòng thử lại sau!');
-    }
-  } finally {
-    isLoading.value = false;
   }
 };
 </script>
-
-
 
 <style scoped>
 .bg-light {
@@ -161,10 +183,14 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Responsive hình ảnh cho mobile */
 @media (max-width: 767.98px) {
   .img-fluid {
     display: none;
   }
 }
+
+.spinner-border {
+  margin-right: 5px;
+}
 </style>
+

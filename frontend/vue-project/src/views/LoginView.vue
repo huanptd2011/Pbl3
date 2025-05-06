@@ -53,79 +53,59 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import { useCartStore } from '@/stores/cartStore';
 
-export default {
-  name: "LoginView",
-  setup() {
-    const router = useRouter();
-    return { router };
-  },
-  data() {
-    return {
-      form: {
-        usernameOrEmail: '',
-        password: '',
-      },
-      isLoading: false,
-    };
-  },
-  methods: {
-    async submitForm() {
-      this.isLoading = true;
+const router = useRouter();
+const userStore = useUserStore();
+const cartUser = useCartStore();
 
-      try {
-        // Send POST request to the backend login endpoint
-        const response = await axios.post('http://localhost:8080/api/users/log-in', {
-          usernameOrEmail: this.form.usernameOrEmail,
-          password: this.form.password,
-        });
-        // Check the response status code
-        if (response.data.status === 200) {
+const form = ref({
+  usernameOrEmail: '',
+  password: '',
+});
 
+const isLoading = ref(false);
 
-          // Login successful
-          const { token, username, role, email } = response.data;
+const submitForm = async () => {
+  isLoading.value = true;
+  try {
+    const response = await axios.post('http://localhost:8080/api/users/log-in', {
+      usernameOrEmail: form.value.usernameOrEmail,
+      password: form.value.password,
+    });
 
-          // Store the token (e.g., in localStorage or a Vuex/Pinia store)
-          localStorage.setItem('token', token);
-          localStorage.setItem('username', username);
-          localStorage.setItem('role', role);
-          localStorage.setItem('email', email);
+    if (response.data.status === 200) {
+      const { token, username, role, email, userId } = response.data;
 
-          // Show success message (optional)
-          // alert(response.data.message);
+      userStore.setUser({ username, email, role, userId, token });
 
-          // Redirect to the homepage or dashboard
-          const userStore = useUserStore();
-          userStore.login(); // Cập nhật trạng thái isLoggedIn
-
-          if(role === 'ADMIN') {
-            this.router.push('/admin');
-          } else if (role === 'CUSTOMER') {
-            this.router.push('/');
-          }
-        } else {
-          // Handle errors returned by the backend
-          alert(response.data.message);
-        }
-      } catch (error) {
-        // Handle network or unexpected errors
-        if (error.response && error.response.data) {
-          alert(error.response.data.message || 'Đăng nhập thất bại!');
-        } else {
-          alert('Có lỗi xảy ra, vui lòng thử lại sau!');
-        }
-      } finally {
-        this.isLoading = false;
+      if (role === 'ADMIN') {
+        router.push('/admin');
+      } else if (role === 'CUSTOMER') {
+        await cartUser.loadUserCart(userStore.user.userId);
+        router.push('/');
       }
-    },
-  },
+    } else {
+      alert(response.data.message);
+    }
+  } catch (error) {
+    console.error('Lỗi khi đăng nhập:', error);
+    if (error.response && error.response.data) {
+      alert(error.response.data.message || 'Đăng nhập thất bại!');
+    } else {
+      alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+    }
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
+
 
 
 <style scoped>

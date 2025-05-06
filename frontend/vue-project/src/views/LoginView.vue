@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid vh-100">
     <div class="row h-100">
-      <!-- Hình ảnh và branding bên trái -->
       <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-light">
         <div class="text-center">
           <h1 class="mb-3 fw-bold">MATISSE</h1>
@@ -10,10 +9,8 @@
         </div>
       </div>
 
-      <!-- Form bên phải -->
       <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="w-75">
-          <!-- Logo ở góc trên bên phải -->
           <div class="text-end mb-4">
             <img src="@/assets/logo.jpeg" alt="Sneakers Logo" style="height: 40px;">
           </div>
@@ -22,7 +19,7 @@
 
           <form @submit.prevent="submitForm">
             <div class="mb-3">
-              <label for="text" class="form-label">Tên tài khoản/ Email</label>
+              <label for="usernameOrEmail" class="form-label">Tên tài khoản/ Email</label>
               <input type="text" v-model="form.usernameOrEmail" class="form-control" id="usernameOrEmail" placeholder="Username/Email" required>
             </div>
 
@@ -32,7 +29,10 @@
             </div>
 
             <div class="d-grid mb-3">
-              <button type="submit" class="btn btn-dark py-2">Đăng nhập</button>
+              <button type="submit" class="btn btn-dark py-2" :disabled="isLoading">
+                 <span v-if="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                 <span v-else>Đăng nhập</span>
+              </button>
             </div>
 
             <div class="text-start mb-3">
@@ -62,7 +62,9 @@ export default {
   name: "LoginView",
   setup() {
     const router = useRouter();
-    return { router };
+    // Lấy instance của store trong setup() nếu bạn muốn dùng nó ở đây
+    // const userStore = useUserStore();
+    return { router }; // Chỉ trả về router nếu bạn dùng nó trong template hoặc options API
   },
   data() {
     return {
@@ -70,63 +72,74 @@ export default {
         usernameOrEmail: '',
         password: '',
       },
-      isLoading: false,
+      isLoading: false, // Trạng thái loading cho button
     };
   },
   methods: {
     async submitForm() {
-      this.isLoading = true;
+      this.isLoading = true; // Bắt đầu loading
 
       try {
         // Send POST request to the backend login endpoint
+        // Axios sẽ tự động xử lý các mã trạng thái HTTP (2xx là success, 4xx/5xx là error)
         const response = await axios.post('http://localhost:8080/api/users/log-in', {
           usernameOrEmail: this.form.usernameOrEmail,
           password: this.form.password,
         });
-        // Check the response status code
-        if (response.data.status === 200) {
 
+        // Nếu code chạy đến đây, nghĩa là backend đã trả về mã trạng thái 2xx (thành công)
+        // Dữ liệu người dùng cần được lấy trực tiếp từ response.data
+        // Đảm bảo backend trả về các trường này trong body response khi thành công
+        const { token, username, role, email } = response.data;
 
-          // Login successful
-          const { token, username, role, email } = response.data;
+        // Kiểm tra xem các trường cần thiết có tồn tại không (tùy thuộc vào response backend)
+        if (token && username && role && email) {
+             // Lưu token và thông tin người dùng vào localStorage
+            localStorage.setItem('token', token);
+            localStorage.setItem('username', username);
+            localStorage.setItem('role', role);
+            localStorage.setItem('email', email);
 
-          // Store the token (e.g., in localStorage or a Vuex/Pinia store)
-          localStorage.setItem('token', token);
-          localStorage.setItem('username', username);
-          localStorage.setItem('role', role);
-          localStorage.setItem('email', email);
+            // Cập nhật trạng thái đăng nhập trong Pinia store
+            const userStore = useUserStore();
+            // Truyền dữ liệu người dùng vào action login của store
+            userStore.login({ token, username, role, email });
 
-          // Show success message (optional)
-          // alert(response.data.message);
-
-          // Redirect to the homepage or dashboard
-          const userStore = useUserStore();
-          userStore.login(); // Cập nhật trạng thái isLoggedIn
-
-          if(role === 'ADMIN') {
-            this.router.push('/admin');
-          } else if (role === 'CUSTOMER') {
-            this.router.push('/');
-          }
+            // Chuyển hướng dựa trên vai trò
+            if(role === 'ADMIN') {
+              this.router.push('/admin');
+            } else if (role === 'CUSTOMER') {
+              this.router.push('/');
+            } else {
+              // Xử lý trường hợp vai trò không xác định
+              alert('Đăng nhập thành công nhưng vai trò không xác định.');
+              this.router.push('/'); // Chuyển hướng mặc định
+            }
         } else {
-          // Handle errors returned by the backend
-          alert(response.data.message);
+            // Trường hợp backend trả về 200 nhưng thiếu dữ liệu cần thiết
+            alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
+             this.router.push('/login'); // Ở lại trang login hoặc chuyển hướng khác
         }
+
+
       } catch (error) {
-        // Handle network or unexpected errors
-        if (error.response && error.response.data) {
-          alert(error.response.data.message || 'Đăng nhập thất bại!');
+        // Nếu code chạy vào đây, nghĩa là Axios đã bắt được lỗi (mã trạng thái 4xx/5xx hoặc lỗi mạng)
+        console.error('Lỗi đăng nhập:', error); // Log lỗi chi tiết hơn
+
+        if (error.response && error.response.data && error.response.data.message) {
+          // Hiển thị thông báo lỗi từ backend nếu có
+          alert(error.response.data.message);
         } else {
-          alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+          // Hiển thị thông báo lỗi chung
+          alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
         }
       } finally {
-        this.isLoading = false;
+        this.isLoading = false; // Kết thúc loading
       }
     },
   },
 };
 </script>
-
 
 <style scoped>
 .bg-light {
@@ -186,5 +199,10 @@ a:hover {
   .img-fluid {
     display: none;
   }
+}
+
+/* Styling cho spinner */
+.spinner-border {
+    margin-right: 5px;
 }
 </style>

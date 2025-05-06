@@ -1,21 +1,20 @@
-
 <template>
   <header class="sticky-top">
       <div class="container">
-          <div class="d-flex align-items-center py-3">
+          <div class="d-flex align-items-center justify-content-between py-3">
               <!-- Mobile menu toggle -->
               <button class="btn btn-link d-lg-none me-2" @click="toggleMobileMenu">
                   <i class="fas fa-bars"></i>
               </button>
 
               <!-- Logo -->
-              <router-link to="/" class="navbar-brand me-auto">
-                  <img src="@/assets/logo.jpeg" alt="ShoeStore" height="40">
+              <router-link to="/" class="navbar-brand me-44">
+                  <img src="@/assets/logo.jpeg" alt="ShoeStore" height="50">
               </router-link>
 
               <!-- Main Navigation -->
               <nav class="d-none d-lg-block">
-                  <ul class="nav">
+                  <ul class="nav justify-content-center gap-4">
                       <li class="nav-item" v-for="(item, index) in navItems" :key="index">
                           <router-link :to="item.path" class="nav-link">{{ item.title }}</router-link>
                       </li>
@@ -23,12 +22,12 @@
               </nav>
 
               <!-- Search and User Actions -->
-              <div class="d-flex ms-auto">
-                  <div class="input-group me-3 d-none d-lg-flex">
-                      <input type="text" class="form-control" placeholder="Tìm kiếm giày..." v-model="searchQuery">
-                      <button class="btn btn-outline-secondary" @click="performSearch">
+              <div class="d-flex ">
+                  <div class="input-group me-3 d-none d-lg-flex  bg-gray">
+                      <span class="input-group-text bg-gray border-0 rounded-start-50" >
                           <i class="fas fa-search"></i>
-                      </button>
+                      </span>
+                      <input type="text" class="form-control border-0 bg-gray rounded-end-50" placeholder="Tìm kiếm giày..." v-model="searchQuery" @keyup.enter="gotoProductView" />
                   </div>
 
                   <router-link to="/wishlist" class="btn btn-link position-relative me-2">
@@ -39,16 +38,15 @@
                       </span>
                   </router-link>
 
-                  <router-link to="/cart" class="btn btn-link position-relative me-2">
-                      <i class="fas fa-shopping-cart"></i>
+                  <router-link to="/cart" class="btn btn-link position-relative me-2 bg-gray rounded-5">                     
+                      <i class="fas fa-shopping-cart text-dark	"></i>
                       <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
                           v-if="cartCount > 0">
                           {{ cartCount }}
-                      </span>
+                      </span>  
                   </router-link>
-
-                  <button class="btn btn-link" @click="toggleAuthModal">
-                      <i class="fas fa-user"></i>
+                  <button class="btn btn-link bg-gray rounded-5" @click="toggleAuthModal">
+                      <i class="fas fa-user text-dark	"></i>
                   </button>
               </div>
           </div>
@@ -77,14 +75,15 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useCartStore } from '@/stores/cartStore';
+import { useWishlistStore } from '@/stores/wishlist';
 import AuthModal from '@/components/AuthModal.vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
 
 const router = useRouter();
 
 
 const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
 
 const mobileMenuOpen = ref(false);
 const showAuthModal = ref(false);
@@ -106,13 +105,17 @@ const toggleAuthModal = () => {
   showAuthModal.value = !showAuthModal.value;
 };
 
-const performSearch = () => {
+const gotoProductView = () => {
+  // Xử lý tìm kiếm
   if (searchQuery.value.trim()) {
-    router.push({ path: '/search', query: { q: searchQuery.value } });
+      router.push({ path: '/products', query: { q: searchQuery.value } });
   }
+  searchQuery.value = ""
 };
 
+// Computed properties
 const cartCount = computed(() => cartStore.totalItemsCount);
+const wishlistCount = computed(() => wishlistStore.items.length);
 </script>
 
 <style scoped>
@@ -123,15 +126,15 @@ header {
 }
 
 .nav-link {
-  font-weight: 500;
-  color: #333;
+  font-weight: 550;
+  color: #777676;
   padding: 0.5rem 1rem;
   transition: all 0.3s;
 }
 
 .nav-link:hover,
 .nav-link.router-link-active {
-  color: #d32f2f;
+  color: #130808;
 }
 
 .mobile-menu {
@@ -148,9 +151,7 @@ header {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.mobile-menu.show {
-  transform: translateX(0);
-}
+
 
 .mobile-menu-header {
   padding: 1rem;
@@ -168,5 +169,28 @@ header {
 
 .input-group {
   max-width: 300px;
+  border-radius: 50px;
+  transition: border 0.3s ease;
+}
+
+.form-control:focus{
+  box-shadow: none;
+}
+
+.input-group:focus-within {
+  border: 1px solid #130808;
+  border-radius: 50px;
+  
+}
+ 
+.input-group:focus-within .input-group-text {
+background-color: #fff !important; 
+}
+.btn{
+  transition: all 0.1s ease-in-out;
+}
+.btn:hover {
+  background-color: #ddd;
+  border-radius: 0.5rem;
 }
 </style>

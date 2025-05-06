@@ -30,7 +30,9 @@ public class ApplicationInitConfig {
                         "54 - Nguyễn Lương Bằng - Liên Chiểu - Đà Nẵng",
                             UserRole.ADMIN,
                             LocalDateTime.now(),
-                            "Shoe Store"
+                            "Shoe Store",
+                            null,
+                            null
                     );
                     userRepository.save(Admin);
                     // log.warn("Admin user has been created");

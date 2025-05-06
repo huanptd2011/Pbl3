@@ -4,6 +4,7 @@ package com.nahuannghia.shopnhn.controller;
 
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,11 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping
+    public List<UserInfoResponse> getAllUser(){
+        return userService.getAllCustomer();
     }
 
     @GetMapping("/{userId}")

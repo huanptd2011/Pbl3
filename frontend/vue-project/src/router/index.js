@@ -79,7 +79,39 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () => import('@/views/RegisterView.vue')
-  }
+  },
+  {
+      path: '/admin',
+      component: () => import('../layouts/AdminLayout.vue'), // Sử dụng AdminLayout làm component chính
+      meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route cha
+      children: [
+        {
+          path: '', // Route con mặc định cho /admin (Dashboard)
+          name: 'AdminDashboard',
+          component: () => import('@/views/admin/AdminDashboard.vue'), // Component Dashboard Admin
+          meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
+        },
+        {
+          path: 'users', // Đường dẫn con: /admin/users
+          name: 'AdminUsers',
+          component: () => import('@/views/admin/AdminUsers.vue'), // Component Quản lý Người dùng
+          meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
+        },
+        // Thêm các route con khác cho products, orders, etc. tại đây
+        // {
+        //   path: 'products',
+        //   name: 'AdminProducts',
+        //   component: () => import('@/views/admin/AdminProductsView.vue'),
+        //   meta: { requiresAuth: true, requiredRole: 'ADMIN' },
+        // },
+        // {
+        //   path: 'orders',
+        //   name: 'AdminOrders',
+        //   component: () => import('@/views/admin/AdminOrdersView.vue'),
+        //   meta: { requiresAuth: true, requiredRole: 'ADMIN' },
+        // },
+      ],
+  },
 ];
 
 const router = createRouter({

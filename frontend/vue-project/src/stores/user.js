@@ -37,5 +37,8 @@ export const useUserStore = defineStore('user', {
       };
     }
   },
+  getters: {
+      isAdmin: (state) => state.user.role === 'ADMIN',
+  },
   persist: true, //Giữ dữ liệu trong localStorage sau reload
 });

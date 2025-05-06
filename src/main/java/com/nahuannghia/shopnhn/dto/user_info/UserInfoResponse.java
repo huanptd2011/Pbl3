@@ -3,6 +3,8 @@ package com.nahuannghia.shopnhn.dto.user_info;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nahuannghia.shopnhn.model.User;
+
 public class UserInfoResponse {
 
     private Integer id;
@@ -29,6 +31,19 @@ public class UserInfoResponse {
     }
     public UserInfoResponse() {
     }
+
+    public UserInfoResponse(User user) {
+        this.id = user.getUserId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.role = user.getRole().toString();
+        this.fullName = user.getFullName();
+        this.isActive = user.getStatus();
+        this.createdDate = user.getCreatedDate();
+        this.address = user.getAddress();
+        this.phone = user.getPhone();
+    }
+
     public Integer getId() {
         return id;
     }

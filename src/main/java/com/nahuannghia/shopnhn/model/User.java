@@ -56,9 +56,15 @@ public class User {
 
     @Column(name = "fullName")
     private String fullName;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "avatar")
+    private String avatarUrl;
     public User() {}
 
-    public User(Integer userId, String username, String encode, String email, String phone, String address, UserRole role, LocalDateTime lastLogin, String fullName) {
+    public User(Integer userId, String username, String encode, String email, String phone, String address, UserRole role, LocalDateTime lastLogin, String fullName, String gender, String avatarUrl) {
         this.userId = userId;
         this.username = username;
         this.password = encode;
@@ -68,6 +74,16 @@ public class User {
         this.role = role;
         this.lastLogin = lastLogin;
         this.fullName = fullName;
+        this.gender = gender;
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public Integer getUserId() {
@@ -166,4 +182,12 @@ public class User {
         this.fullName = fullName;
     }
     //
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 }

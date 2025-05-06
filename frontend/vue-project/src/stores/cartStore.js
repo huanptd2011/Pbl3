@@ -1,79 +1,91 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
 
-// <-- HÀM NÀY ĐỂ TẢI DỮ LIỆU BAN ĐẦU TỪ LOCAL STORAGE -->
-const getInitialCartState = () => {
-    // Lấy dữ liệu từ localStorage với key 'cartItems'
-    const savedCart = localStorage.getItem('cartItems')
-    if (savedCart) {
-        try {
-            // Parse chuỗi JSON thành object/array JavaScript.
-            // Nếu quá trình parse lỗi (dữ liệu bị hỏng), trả về mảng rỗng.
-            return JSON.parse(savedCart)
-        } catch (e) {
-            console.error('Failed to parse cart data from localStorage', e)
-            return [] // Trả về mảng rỗng nếu dữ liệu lỗi
-        }
-    }
-    return [] // Trả về mảng rỗng nếu không tìm thấy dữ liệu trong localStorage
-}
-
-// Định nghĩa store có ID là 'cart'
 export const useCartStore = defineStore('cart', {
-    // State: Nơi lưu trữ dữ liệu của giỏ hàng
     state: () => ({
-        // <-- KHỞI TẠO STATE TỪ LOCAL STORAGE -->
-        items: getInitialCartState(),
-    }), // Actions: Các hàm để thay đổi state hoặc thực hiện logic
+        items: [],
+        isLoggedIn: false,
+        cartId: null,
+        userId: null
+    }),
 
     actions: {
-        // <-- HÀM HỖ TRỢ ĐỂ LƯU STATE VÀO LOCAL STORAGE -->
-        saveCartToLocalStorage() {
-            // Chuyển object/array items thành chuỗi JSON và lưu vào localStorage với key 'cartItems'
-            localStorage.setItem('cartItems', JSON.stringify(this.items))
-        },
+        async loadUserCart(userID) {
+            try {
+              const url = `http://localhost:8080/api/carts/user/${userID}`;
+              const response = await axios.get(url);
 
-        addItem(itemDetails) {
-            const existingItem = this.items.find(
-                (item) =>
-                    item.productId === itemDetails.productId &&
-                    item.color === itemDetails.color &&
-                    item.size === itemDetails.size,
-            )
-
-            if (existingItem) {
-                existingItem.quantity += itemDetails.quantity
-            } else {
-                this.items.push({ ...itemDetails, isSelected: true })
+              if (response.status === 200 && Array.isArray(response.data.listCartItem)) {
+                    this.userId = userID;
+                    this.cartId = response.data.cartId;
+                    this.items = response.data.listCartItem.map(item => ({
+                      ...item,
+                      isSelected: true,
+                    }));
+                    this.isLoggedIn = true;
+                  } else {
+                    console.error('Dữ liệu trả về không hợp lệ hoặc lỗi API', response.data);
+                  }
+            } catch (error) {
+              console.error('Lỗi khi tải giỏ hàng', error);
             }
 
-            this.saveCartToLocalStorage() // <-- LƯU VÀO LOCAL STORAGE SAU KHI THAY ĐỔI
         },
 
-        removeItem(productId, color, size) {
-            this.items = this.items.filter(
-                (item) => !(item.productId === productId && item.color === color && item.size === size),
-            )
-            this.saveCartToLocalStorage() // <-- LƯU VÀO LOCAL STORAGE SAU KHI THAY ĐỔI
+        clearUserCart() {
+            this.items = []
+            this.isLoggedIn = false
         },
 
-        updateItemQuantity(productId, color, size, newQuantity) {
-            newQuantity = parseInt(newQuantity, 10)
+        //Thêm cart item
+        async addItem(itemDetails) {
+            if (!this.isLoggedIn) {
+                alert('Vui lòng đăng nhập!');
+                return;
+            }
+
+            const cartItemRequest = {
+                cartId: this.cartId,
+                productId: itemDetails.productId,
+                quantity: itemDetails.quantity,
+                price: itemDetails.price,
+                color: itemDetails.color,
+                size: itemDetails.size
+            };
+
+            try {
+                await axios.post('http://localhost:8080/api/cart-items/add', cartItemRequest);
+                await this.loadUserCart(this.userId);
+            } catch (error) {
+                console.error('Thêm sản phẩm thất bại', error);
+            }
+        },
+
+        //xóa cart item
+        async removeItem(cartItemId) {
+            try {
+                await axios.delete(`http://localhost:8080/api/cart-items/delete/${cartItemId}`);
+                this.items = this.items.filter(item => item.cartItemId !== cartItemId);
+            } catch (error) {
+                console.error('Xoá sản phẩm thất bại', error);
+            }
+        },
+
+        async updateItemQuantity(cartItemId, newQuantity) {
+            newQuantity = parseInt(newQuantity, 10);
             if (isNaN(newQuantity) || newQuantity < 0) {
-                console.warn('Số lượng không hợp lệ:', newQuantity)
-                return
+                console.warn('Số lượng không hợp lệ:', newQuantity);
+                return;
             }
 
-            const itemToUpdate = this.items.find(
-                (item) => item.productId === productId && item.color === color && item.size === size,
-            )
-
-            if (itemToUpdate) {
-                if (newQuantity === 0) {
-                    this.removeItem(productId, color, size) // removeItem đã gọi save
-                } else {
-                    itemToUpdate.quantity = newQuantity
-                    this.saveCartToLocalStorage() // <-- LƯU VÀO LOCAL STORAGE SAU KHI THAY ĐỔI
+            try {
+                await axios.put(`http://localhost:8080/api/cart-items/update-quantity/${cartItemId}?quantity=${newQuantity}`);
+                const item = this.items.find(item => item.cartItemId === cartItemId);
+                if (item) {
+                    item.quantity = newQuantity;
                 }
+            } catch (error) {
+                console.error('Cập nhật số lượng thất bại:', error);
             }
         },
 
@@ -83,7 +95,7 @@ export const useCartStore = defineStore('cart', {
             )
             if (item) {
                 item.isSelected = isSelected
-                this.saveCartToLocalStorage() // <-- LƯU VÀO LOCAL STORAGE SAU KHI THAY ĐỔI
+                this.updateCartOnServer()
             }
         },
 
@@ -91,14 +103,14 @@ export const useCartStore = defineStore('cart', {
             this.items.forEach((item) => {
                 item.isSelected = isSelected
             })
-            this.saveCartToLocalStorage() // <-- LƯU VÀO LOCAL STORAGE SAU KHI THAY ĐỔI
+            this.updateCartOnServer()
         },
 
         removeSelectedItems() {
             this.items = this.items.filter((item) => !item.isSelected)
-            this.saveCartToLocalStorage() // <-- LƯU VÀO LOCAL STORAGE SAU KHI THAY ĐỔI
+            this.updateCartOnServer()
         },
-    }, // Getters: Các hàm để tính toán dữ liệu từ state (giống computed properties)
+    },
 
     getters: {
         totalItemsCount(state) {
@@ -106,19 +118,19 @@ export const useCartStore = defineStore('cart', {
         },
         totalPrice(state) {
             return state.items.reduce((total, item) => total + item.price * item.quantity, 0)
-        },
-        selectedItems(state) {
+       },
+       selectedItems(state) {
             return state.items.filter((item) => item.isSelected)
-        },
-        totalSelectedItemsCount(state) {
+       },
+       totalSelectedItemsCount(state) {
             return state.items
-                .filter((item) => item.isSelected)
-                .reduce((total, item) => total + item.quantity, 0)
-        },
-        totalSelectedPrice(state) {
-            return state.items
-                .filter((item) => item.isSelected) // Bước 1: Lọc ra các item được chọn
-                .reduce((total, item) => total + (item.price * item.quantity), 0); // Bước 2: Tính tổng giá trị (giá * số lượng) của các item đã lọc
+                   .filter((item) => item.isSelected)
+                   .reduce((total, item) => total + item.quantity, 0)
+       },
+       totalSelectedPrice(state) {
+             return state.items
+                    .filter((item) => item.isSelected)
+                    .reduce((total, item) => total + (item.price * item.quantity), 0);
         }
-    },
+    }
 })

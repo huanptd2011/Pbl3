@@ -38,10 +38,15 @@ public class CartController {
         return cartService.getCartById(cartId);
     }
 
-    // GET /carts/customer/{customerId}
-    @GetMapping("/customer/{customerId}")
-    public List<CartResponse> getCartsByCustomer(@PathVariable Integer customerId) {
-        return cartService.getCartsByCustomerId(customerId);
+//    // GET /carts/customer/{customerId}
+//    @GetMapping("/user/{userId}")
+//    public List<CartResponse> getCartsByCustomer(@PathVariable("userId") Integer userId) {
+//        return cartService.getCartsByCustomerId(userId);
+//    }
+
+    @GetMapping("/user/{userId}")
+    public CartResponse getCartIsActive(@PathVariable("userId") Integer userId){
+        return cartService.getCartIsActive(userId);
     }
 
     // PUT /carts/{cartId}/status?status=Đã thanh toán

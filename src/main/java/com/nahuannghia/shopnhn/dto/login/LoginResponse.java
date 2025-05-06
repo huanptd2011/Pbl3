@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class LoginResponse {
+    private Integer userId;
     private int status;
     private String message;
     private String token;
@@ -15,7 +16,7 @@ public class LoginResponse {
     private Boolean isActive;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
-    public LoginResponse(int status, String token, String message, String username, Boolean isActive, LocalDateTime timestamp, String role, String email) {
+    public LoginResponse(Integer userId, int status, String token, String message, String username, Boolean isActive, LocalDateTime timestamp, String role, String email) {
         this.status = status;
         this.token = token;
         this.message = message;
@@ -27,6 +28,23 @@ public class LoginResponse {
     }
     public LoginResponse() {
     }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
     public int getStatus() {
         return status;
     }

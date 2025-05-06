@@ -53,6 +53,13 @@
   </div>
 </template>
 
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+import { useCartStore } from '@/stores/cartStore';
+
 <script>
 import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -62,9 +69,7 @@ export default {
   name: "LoginView",
   setup() {
     const router = useRouter();
-    // Lấy instance của store trong setup() nếu bạn muốn dùng nó ở đây
-    // const userStore = useUserStore();
-    return { router }; // Chỉ trả về router nếu bạn dùng nó trong template hoặc options API
+    return { router };
   },
   data() {
     return {
@@ -72,72 +77,56 @@ export default {
         usernameOrEmail: '',
         password: '',
       },
-      isLoading: false, // Trạng thái loading cho button
+      isLoading: false,
     };
   },
   methods: {
     async submitForm() {
-      this.isLoading = true; // Bắt đầu loading
+      this.isLoading = true;
 
       try {
-        // Send POST request to the backend login endpoint
-        // Axios sẽ tự động xử lý các mã trạng thái HTTP (2xx là success, 4xx/5xx là error)
         const response = await axios.post('http://localhost:8080/api/users/log-in', {
           usernameOrEmail: this.form.usernameOrEmail,
           password: this.form.password,
         });
 
-        // Nếu code chạy đến đây, nghĩa là backend đã trả về mã trạng thái 2xx (thành công)
-        // Dữ liệu người dùng cần được lấy trực tiếp từ response.data
-        // Đảm bảo backend trả về các trường này trong body response khi thành công
         const { token, username, role, email } = response.data;
 
-        // Kiểm tra xem các trường cần thiết có tồn tại không (tùy thuộc vào response backend)
         if (token && username && role && email) {
-             // Lưu token và thông tin người dùng vào localStorage
-            localStorage.setItem('token', token);
-            localStorage.setItem('username', username);
-            localStorage.setItem('role', role);
-            localStorage.setItem('email', email);
+          localStorage.setItem('token', token);
+          localStorage.setItem('username', username);
+          localStorage.setItem('role', role);
+          localStorage.setItem('email', email);
 
-            // Cập nhật trạng thái đăng nhập trong Pinia store
-            const userStore = useUserStore();
-            // Truyền dữ liệu người dùng vào action login của store
-            userStore.login({ token, username, role, email });
+          const userStore = useUserStore();
+          userStore.login({ token, username, role, email });
 
-            // Chuyển hướng dựa trên vai trò
-            if(role === 'ADMIN') {
-              this.router.push('/admin');
-            } else if (role === 'CUSTOMER') {
-              this.router.push('/');
-            } else {
-              // Xử lý trường hợp vai trò không xác định
-              alert('Đăng nhập thành công nhưng vai trò không xác định.');
-              this.router.push('/'); // Chuyển hướng mặc định
-            }
+          if (role === 'ADMIN') {
+            this.router.push('/admin');
+          } else if (role === 'CUSTOMER') {
+            this.router.push('/');
+          } else {
+            alert('Đăng nhập thành công nhưng vai trò không xác định.');
+            this.router.push('/');
+          }
         } else {
-            // Trường hợp backend trả về 200 nhưng thiếu dữ liệu cần thiết
-            alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
-             this.router.push('/login'); // Ở lại trang login hoặc chuyển hướng khác
+          alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
+          this.router.push('/login');
         }
 
-
       } catch (error) {
-        // Nếu code chạy vào đây, nghĩa là Axios đã bắt được lỗi (mã trạng thái 4xx/5xx hoặc lỗi mạng)
-        console.error('Lỗi đăng nhập:', error); // Log lỗi chi tiết hơn
+        console.error('Lỗi đăng nhập:', error);
 
-        if (error.response && error.response.data && error.response.data.message) {
-          // Hiển thị thông báo lỗi từ backend nếu có
+        if (error.response?.data?.message) {
           alert(error.response.data.message);
         } else {
-          // Hiển thị thông báo lỗi chung
           alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
         }
       } finally {
-        this.isLoading = false; // Kết thúc loading
+        this.isLoading = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -194,15 +183,14 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Responsive hình ảnh cho mobile */
 @media (max-width: 767.98px) {
   .img-fluid {
     display: none;
   }
 }
 
-/* Styling cho spinner */
 .spinner-border {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 </style>
+

@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
     isAdmin: (state) => state.role === 'ADMIN',
   },
   actions: {
-    // *** ĐẢM BẢO ACTION loadUserFromStorage ĐƯỢC ĐỊNH NGHĨA Ở ĐÂY ***
+    // Load thông tin người dùng từ localStorage
     loadUserFromStorage() {
       const token = localStorage.getItem('token');
       const username = localStorage.getItem('username');
@@ -27,38 +27,37 @@ export const useUserStore = defineStore('user', {
         this.email = email;
         this.isLoggedIn = true;
       } else {
-        // Xóa dữ liệu nếu không đầy đủ
         this.logout();
       }
     },
 
-    // Action login (đảm bảo cập nhật role ở đây)
+    // Đăng nhập người dùng
     login(userData) {
       this.token = userData.token;
       this.username = userData.username;
-      this.role = userData.role; // Set the role
+      this.role = userData.role;
       this.email = userData.email;
       this.isLoggedIn = true;
 
-      // Lưu vào localStorage
       localStorage.setItem('token', userData.token);
       localStorage.setItem('username', userData.username);
       localStorage.setItem('role', userData.role);
       localStorage.setItem('email', userData.email);
     },
 
-    // Action logout
+    // Đăng xuất người dùng
     logout() {
       this.isLoggedIn = false;
       this.token = null;
       this.username = null;
-      this.role = null; // Clear the role
+      this.role = null;
       this.email = null;
+
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('role');
       localStorage.removeItem('email');
     },
-    // ***************************************************************
   },
 });
+

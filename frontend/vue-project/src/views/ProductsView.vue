@@ -78,22 +78,7 @@
           <div class="col-md-9">
               <div class="row row-cols-1 row-cols-md-3 g-4">
                   <div class="col" v-for="product in products" :key="product.productId">
-                      <div class="card h-100">
-                          <img :src="product?.imageList?.[0]?.imageUrl || 'fallback-image.png'" class="card-img-top" alt="Product Image">
-                          <div class="card-body">
-                              <h6 class="card-title">{{ product.productName }}</h6>
-                              <div class="text-warning mb-1">
-                                  <i class="bi bi-star-fill"></i>
-                                  <i class="bi bi-star-fill"></i>
-                                  <i class="bi bi-star-fill"></i>
-                                  <i class="bi bi-star-fill"></i>
-                                  <i class="bi bi-star-half"></i>
-                              </div>
-                              <p class="card-text fw-bold">{{ product.price ? product.price.toLocaleString() + 'đ' : 'N/A' }}</p>
-                              <router-link :to="`/products/${product.productId}`" class="btn btn-primary btn-sm">Xem tất cả</router-link>
-                              <a href="#" class="btn btn-outline-secondary btn-sm">Thêm vào giỏ</a>
-                          </div>
-                      </div>
+                      <ProductCard :product="product" />
                   </div>
 
                   <div class="col-12 text-center mt-4" v-if="products.length === 0 && searchKeyword.trim()">
@@ -129,6 +114,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import ProductCard from '../components/productCard.vue'
 
 // Constants
 const defaultPage = 0;

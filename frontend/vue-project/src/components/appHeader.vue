@@ -102,7 +102,7 @@ const navItems = [
 
 // Check if the current route is an auth-related page (login or register)
 const isAuthPage = computed(() => {
-  return route.path === '/products' || route.path === '/register';
+  return route.path === '/login' || route.path === '/register';
 });
 
 const toggleMobileMenu = () => {

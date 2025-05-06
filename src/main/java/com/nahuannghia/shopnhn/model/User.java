@@ -56,7 +56,7 @@ public class User {
 
     @Column(name = "fullName")
     private String fullName;
-     public User() {}
+    public User() {}
 
     public User(Integer userId, String username, String encode, String email, String phone, String address, UserRole role, LocalDateTime lastLogin, String fullName) {
         this.userId = userId;
@@ -167,4 +167,3 @@ public class User {
     }
     //
 }
-

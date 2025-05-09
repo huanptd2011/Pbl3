@@ -133,13 +133,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useUserStore();
   const isAuthenticated = authStore.isLoggedIn; // Lấy trạng thái đăng nhập từ store
-  const userRole = authStore.role;             // Lấy vai trò người dùng từ store
+  const userRole = authStore.user.role;             // Lấy vai trò người dùng từ store
 
   const requiresAuth = to.meta.requiresAuth; // Lấy giá trị meta 'requiresAuth' của route đích
   const requiredRole = to.meta.requiredRole; // Lấy giá trị meta 'requiredRole' của route đích
   console.log(`Đang kiểm tra route: ${to.path}`);
   console.log(`isAuthenticated: ${isAuthenticated}, userRole: ${userRole}, requiredRole: ${requiredRole}`);
-  
+
   // Case 1: Route yêu cầu xác thực (đăng nhập) nhưng người dùng chưa đăng nhập
   if (requiresAuth && !isAuthenticated) {
     alert('Vui lòng đăng nhập để truy cập trang này.');

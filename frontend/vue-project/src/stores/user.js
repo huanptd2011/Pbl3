@@ -1,6 +1,6 @@
 // stores/user.js
 import { defineStore } from 'pinia'
-import { useCartStore } from '@/stores/cartStore';
+import { useCartStore } from '@/stores/cartStore'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -13,8 +13,14 @@ export const useUserStore = defineStore('user', {
       token: '',
     }
   }),
+
+  getters: {
+    isAdmin: (state) => state.user.role === 'ADMIN',
+  },
+
   actions: {
-    setUser(userData) { //login
+    // Khi đăng nhập:
+    setUser(userData) {
       this.user = {
         username: userData.username,
         email: userData.email,
@@ -23,10 +29,27 @@ export const useUserStore = defineStore('user', {
         token: userData.token,
       };
       this.isLoggedIn = true;
+
+      // Lưu vào localStorage
+      localStorage.setItem('user', JSON.stringify(this.user));
     },
+
+    // Load lại từ localStorage khi reload trang:
+    loadUserFromStorage() {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        this.user = JSON.parse(savedUser);
+        this.isLoggedIn = true;
+      } else {
+        this.logout();
+      }
+    },
+
+    // Đăng xuất
     logout() {
       const cartStore = useCartStore();
       cartStore.clearUserCart();
+
       this.isLoggedIn = false;
       this.user = {
         username: '',
@@ -35,7 +58,10 @@ export const useUserStore = defineStore('user', {
         userId: 0,
         token: '',
       };
+
+      localStorage.removeItem('user');
     }
   },
-  persist: true, //Giữ dữ liệu trong localStorage sau reload
+
+  persist: true // Nếu đang dùng plugin pinia-plugin-persistedstate
 });

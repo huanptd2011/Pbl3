@@ -6,3 +6,47 @@ Sản phẩm:
     del: http://localhost:8080/api/products/delete/{id}
     edit: http://localhost:8080/api/products/edit/{id}
     new: http://localhost:8080/api/products/new
+
+
+
+
+
+
+http://localhost:8080/api/dashboard/summary
+
+Test Case 1: Doanh số hàng ngày (không chỉ định ngày)
+GET http://localhost:8080/api/dashboard/sales-over-time?period=daily
+Test Case 2: Doanh số hàng tuần với khoảng thời gian cụ thể
+GET http://localhost:8080/api/dashboard/sales-over-time?period=weekly&startDate=2025-01-01&endDate=2025-03-31
+Test Case 3: Doanh số hàng tháng
+GET http://localhost:8080/api/dashboard/sales-over-time?period=monthly&startDate=2024-01-01
+Test Case 4: Doanh số hàng năm
+GET http://localhost:8080/api/dashboard/sales-over-time?period=yearly&startDate=2020-01-01&endDate=2025-12-31
+
+Test Case 1: Lấy dữ liệu đơn hàng theo trạng thái (mặc định)
+GET http://localhost:8080/api/dashboard/orders-data?type=by-status
+
+Test Case 2: Lấy dữ liệu đơn hàng theo thời gian (tuần - mặc định)
+GET http://localhost:8080/api/dashboard/orders-data?type=over-time&period=weekly
+
+Test Case 3: Lấy dữ liệu đơn hàng theo tháng
+GET http://localhost:8080/api/dashboard/orders-data?type=over-time&period=monthly
+
+Test Case 4: Lấy dữ liệu đơn hàng theo năm
+GET http://localhost:8080/api/dashboard/orders-data?type=over-time&period=yearly
+
+Test Case 5: Lấy dữ liệu đơn hàng theo ngày (tùy chỉnh)
+GET http://localhost:8080/api/dashboard/orders-data?type=over-time&period=daily
+
+Test Case 1: Top 5 sản phẩm bán chạy trong 30 ngày (mặc định)
+GET http://localhost:8080/api/dashboard/top-selling-products
+Test Case 2: Top 3 sản phẩm bán chạy trong 7 ngày
+GET http://localhost:8080/api/dashboard/top-selling-products?limit=3&period=last-7-days
+
+Test Case 3: Top 10 sản phẩm bán chạy trong 1 năm
+GET http://localhost:8080/api/dashboard/top-selling-products?limit=10&period=last-year
+Test Case 4: Top 5 sản phẩm bán chạy mọi thời đại
+GET http://localhost:8080/api/dashboard/top-selling-products?period=all-time
+
+
+http://localhost:8080/api/dashboard/recent-orders

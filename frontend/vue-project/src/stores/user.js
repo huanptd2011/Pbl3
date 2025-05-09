@@ -1,64 +1,67 @@
-// src/stores/user.js
-import { defineStore } from 'pinia';
+// stores/user.js
+import { defineStore } from 'pinia'
+import { useCartStore } from '@/stores/cartStore'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
-    token: null,
-    username: null,
-    role: null,
-    email: null,
+    user: {
+      username: '',
+      email: '',
+      role: '',
+      userId: 0,
+      token: '',
+    }
   }),
-  getters: {
-    isAdmin: (state) => state.role === 'ADMIN',
-  },
-  actions: {
-    // *** ĐẢM BẢO ACTION loadUserFromStorage ĐƯỢC ĐỊNH NGHĨA Ở ĐÂY ***
-    loadUserFromStorage() {
-      const token = localStorage.getItem('token');
-      const username = localStorage.getItem('username');
-      const role = localStorage.getItem('role');
-      const email = localStorage.getItem('email');
 
-      if (token && username && role && email) {
-        this.token = token;
-        this.username = username;
-        this.role = role;
-        this.email = email;
+  getters: {
+    isAdmin: (state) => state.user.role === 'ADMIN',
+  },
+
+  actions: {
+    // Khi đăng nhập:
+    setUser(userData) {
+      this.user = {
+        username: userData.username,
+        email: userData.email,
+        role: userData.role,
+        userId: Number(userData.userId),
+        token: userData.token,
+      };
+      this.isLoggedIn = true;
+
+      // Lưu vào localStorage
+      localStorage.setItem('user', JSON.stringify(this.user));
+    },
+
+    // Load lại từ localStorage khi reload trang:
+    loadUserFromStorage() {
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        this.user = JSON.parse(savedUser);
         this.isLoggedIn = true;
       } else {
-        // Xóa dữ liệu nếu không đầy đủ
         this.logout();
       }
     },
 
-    // Action login (đảm bảo cập nhật role ở đây)
-    login(userData) {
-      this.token = userData.token;
-      this.username = userData.username;
-      this.role = userData.role; // Set the role
-      this.email = userData.email;
-      this.isLoggedIn = true;
-
-      // Lưu vào localStorage
-      localStorage.setItem('token', userData.token);
-      localStorage.setItem('username', userData.username);
-      localStorage.setItem('role', userData.role);
-      localStorage.setItem('email', userData.email);
-    },
-
-    // Action logout
+    // Đăng xuất
     logout() {
+      const cartStore = useCartStore();
+      cartStore.clearUserCart();
+
       this.isLoggedIn = false;
-      this.token = null;
-      this.username = null;
-      this.role = null; // Clear the role
-      this.email = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      localStorage.removeItem('role');
-      localStorage.removeItem('email');
-    },
-    // ***************************************************************
+      this.user = {
+        username: '',
+        email: '',
+        role: '',
+        userId: 0,
+        token: '',
+      };
+
+      localStorage.removeItem('user');
+    }
   },
+
+  persist: true // Nếu đang dùng plugin pinia-plugin-persistedstate
 });

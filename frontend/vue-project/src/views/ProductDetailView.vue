@@ -172,52 +172,36 @@ const selectSize = (size) => {
     selectedSize.value = size
 }
 
-// <-- THÊM HÀM NÀY để xử lý logic khi nhấn nút "Thêm vào giỏ hàng"
+//Thêm vào giỏ hàng
 const handleAddToCart = () => {
 
-  // Kiểm tra lại điều kiện (thừa nếu nút đã disabled đúng, nhưng an toàn hơn)
   if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
-    console.warn('Vui lòng chọn màu, size và đảm bảo còn hàng.');
-    alert('Vui lòng chọn màu, size và đảm bảo còn hàng.'); // Thông báo cho người dùng
+    alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
     return;
   }
 
-  ////check đăng nhập
-  const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
-  const isAuthenticated = authStore.isLoggedIn;
+  //check đăng nhập
+    const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
+      const isAuthenticated = authStore.isLoggedIn;
 
-      if (!isAuthenticated) {
-          // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
-          alert('Vui lòng đăng nhập!');
-          router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
-          return;
-      }
+          if (!isAuthenticated) {
+              // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
+              alert('Vui lòng đăng nhập!');
+              router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
+              return;
+          }
 
-
-  // Tạo đối tượng chi tiết sản phẩm (biến thể) để thêm vào giỏ
   const itemToAdd = {
     productId: product.value.productId,
     name: product.value.productName,
-    // Lấy ảnh đầu tiên hoặc ảnh đại diện nếu có. Cần kiểm tra imageList không rỗng.
     imageUrl: product.value.imageList && product.value.imageList.length > 0 ? product.value.imageList[0].imageUrl : 'placeholder.jpg',
     price: product.value.price,
     color: selectedColor.value,
     size: selectedSize.value,
-    quantity: quantityToAdd.value, // <-- Sử dụng quantityToAdd đã định nghĩa
-    // Tùy chọn: Thêm các thông tin khác cần hiển thị trong giỏ hàng (ví dụ: brand)
-    brand: product.value.brand
+    quantity: quantityToAdd.value,
   };
-
-  // <-- Gọi action 'addItem' của cart store để thêm sản phẩm vào giỏ hàng
+  alert('Đã thêm vào giỏ hàng');
   cartStore.addItem(itemToAdd);
-
-  // <-- Tùy chọn: Thông báo cho người dùng biết đã thêm thành công
-  alert(`Đã thêm ${quantityToAdd.value} sản phẩm "${itemToAdd.name}" vào giỏ hàng.`);
-
-  // Tùy chọn: Reset các lựa chọn màu/size hoặc số lượng sau khi thêm để người dùng có thể chọn lại
-  // selectedColor.value = null;
-  // selectedSize.value = null;
-  // quantityToAdd.value = 1;
 };
 
 // <-- THÊM HÀM NÀY để xử lý logic khi nhấn nút "Mua ngay"

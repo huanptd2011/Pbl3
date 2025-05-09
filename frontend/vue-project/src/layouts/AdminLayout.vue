@@ -1,6 +1,6 @@
 <template>
     <div class="admin-layout d-flex">
-      <div class="sidebar bg-dark text-white p-3">
+      <div class="sidebar  text-white p-3">
         <h4 class="text-center mb-4">Admin Menu</h4>
         <ul class="nav flex-column">
           <li class="nav-item">
@@ -51,7 +51,9 @@
   
   <style scoped>
   .admin-layout {
-    min-height: 100vh; /* Đảm bảo layout chiếm toàn bộ chiều cao màn hình */
+    min-height: 100vh; 
+    background-color: #080F27
+    ;
   }
   
   .sidebar {
@@ -59,6 +61,8 @@
     flex-shrink: 0; /* Ngăn sidebar co lại */
     display: flex; /* Sử dụng flexbox để căn chỉnh nội dung bên trong sidebar */
     flex-direction: column; /* Sắp xếp các mục theo cột */
+    background-color: #081028;
+    border-right: 0.1px solid #dcd9d9;
   }
   
   .main-content {

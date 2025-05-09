@@ -337,11 +337,6 @@ onMounted(() => {
                         <i class="bi bi-search"></i> Tìm kiếm
                     </button>
                 </div>
-                <div class="col-md-6 text-end">
-                    <button class="btn btn-success shadow-sm rounded">
-                        <i class="bi bi-plus-circle"></i> Thêm Người dùng Mới
-                    </button>
-                </div>
             </div>
 
             <div class="card shadow-sm rounded">
@@ -363,7 +358,7 @@ onMounted(() => {
                             <table class="table table-striped table-hover table-bordered"> 
                                 <thead>
                                     <tr class="bg-light">
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên đăng nhập</th>
                                         <th>Email</th>
                                         <th>Vai trò</th>
@@ -374,7 +369,7 @@ onMounted(() => {
                                 </thead>
                                 <tbody>
                                     <tr v-for="user in users" :key="user.userId">
-                                        <td>{{ user.userId }}</td>
+                                        <!-- <td>{{ user.userId }}</td> -->
                                         <td>{{ user.username }}</td>
                                         <td>{{ user.email }}</td>
                                         <td>{{ user.role }}</td>
@@ -386,11 +381,11 @@ onMounted(() => {
                                         </td>
                                         <td>{{ formatDate(user.createdAt) }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-warning me-2 rounded-pill"> 
-                                                <i class="bi bi-pencil-square"></i> Sửa
+                                            <button v-if="user.isActive" class="btn btn-sm btn-warning me-2 rounded-pill"> 
+                                                <i class="bi bi-pencil-square"></i> Khóa
                                             </button>
-                                            <button class="btn btn-sm btn-danger rounded-pill"> 
-                                                <i class="bi bi-trash"></i> Xóa
+                                            <button v-else class="btn btn-sm btn-danger rounded-pill"> 
+                                                <i class="bi bi-trash"></i> Kích hoat 
                                             </button>
                                         </td>
                                     </tr>

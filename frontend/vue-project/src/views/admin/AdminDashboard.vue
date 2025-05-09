@@ -738,7 +738,8 @@
   <style scoped>
   /* Tùy chỉnh CSS cho nội dung dashboard */
   .admin-dashboard-content {
-    /* Thêm padding hoặc margin nếu cần */
+    
+    
   }
   
   .card {

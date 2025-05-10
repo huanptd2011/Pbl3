@@ -20,7 +20,9 @@ public class ChangePasswordRequest {
         this.newPassword = newPassword;
         this.confirmNewPassword = confirmNewPassword;
     }
- 
+    
+
+
     public String getCurrentPassword() {
         return currentPassword;
     }

@@ -35,14 +35,15 @@ public class SecurityConfig {
                 .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/api/accounts/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/users/**",  //tam thoi chua phan quyen
+                .requestMatchers("/api/users/**",  //tam thoi chua phan quyen
                             "/api/carts/**",
                             "/api/cart-items/**",
                             "/api/payment-methods/**",
                             "/api/orders/**",
                             "/api/products/**",
                             "/api/product-categories/**",
-                            "/api/product-inventory/**").permitAll()
+                            "/api/product-inventory/**",
+                            "/api/dashboard/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .anyRequest().authenticated()
             )

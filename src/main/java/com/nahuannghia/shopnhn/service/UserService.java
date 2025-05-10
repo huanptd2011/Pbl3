@@ -37,8 +37,8 @@ public class UserService {
     private final JwtTokenUtil jwtTokenUtil;
 
     public UserService(UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            JwtTokenUtil jwtTokenUtil) {
+                       PasswordEncoder passwordEncoder,
+                       JwtTokenUtil jwtTokenUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -104,7 +104,7 @@ public class UserService {
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             return new RegisterResponse(400, null, "Password and confirm password do not match", null, null, null, LocalDateTime.now());
         }
-        
+
         User newUser = new User();
         newUser.setUsername(createUsername(registerRequest.getEmail()));
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -143,36 +143,38 @@ public class UserService {
         try {
             if (StringUtils.isBlank(loginRequest.getUsernameOrEmail())
                     || StringUtils.isBlank(loginRequest.getPassword())) {
-                return new LoginResponse(400, null, "Username/Email and password are required", null, false, LocalDateTime.now(), null, null);
+                return new LoginResponse(null, 400, null, "Username/Email and password are required", null, false, LocalDateTime.now(), null, null);
             }
 
             User user = findUserByUsernameOrEmail(loginRequest.getUsernameOrEmail())
                     .orElseThrow(() -> new UserNotFoundException("Account not found"));
 
             if (user.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                return new LoginResponse(401, null, "Invalid username or password", null, false, LocalDateTime.now(), null, null);
+                return new LoginResponse(null, 401, null, "Invalid username or password", null, false, LocalDateTime.now(), null, null);
             }
 
             String token = jwtTokenUtil.generateToken(user);
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
 
-            return new LoginResponse(
-                    200,
-                    token,
-                    "Login successful",
-                    user.getUsername(),
-                    user.getStatus(),
-                    LocalDateTime.now(),
-                    user.getRole().toString(),
-                    user.getEmail()
-            );
+            LoginResponse response = new LoginResponse();
+            response.setUserId(user.getUserId());
+            response.setStatus(200);
+            response.setMessage("Login successful");
+            response.setUsername(user.getUsername());
+            response.setEmail(user.getEmail());
+            response.setIsActive(user.getStatus());
+            response.setRole(user.getRole().toString());
+            response.setToken(token);
+            response.setTimestamp(LocalDateTime.now());
+
+            return response;
 
         } catch (UserNotFoundException e) {
-            return new LoginResponse(404, null, "Account not found", null, false, LocalDateTime.now(), null, null);
+            return new LoginResponse(null, 404, null, "Account not found", null, false, LocalDateTime.now(), null, null);
         } catch (Exception e) {
             logger.error("Unexpected error during login", e);
-            return new LoginResponse(500, null, "Internal server error", null, false, LocalDateTime.now(), null, null);
+            return new LoginResponse(null, 500, null, "Internal server error", null, false, LocalDateTime.now(), null, null);
         }
     }
 

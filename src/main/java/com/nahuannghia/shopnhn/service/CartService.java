@@ -74,6 +74,17 @@ public class CartService {
         cartRepository.deleteById(cartId);
     }
 
+
+    public CartResponse getCartIsActive(Integer userId){
+        Cart cart = cartRepository.findCartByUserIdAndStatus(userId, "Đang mua");
+        if(cart == null){
+            return createCart(new CartRequest(userId));
+        }
+
+        return toResponse(cart);
+    }
+
+
     private CartResponse toResponse(Cart cart) {
         List<CartItemResponse> list = cartItemService.getItemsByCartId(cart.getCartId());
         return new CartResponse(

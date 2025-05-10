@@ -28,34 +28,34 @@
            <button @click="logoutAdmin" class="btn btn-outline-light w-100">Đăng xuất</button>
         </div>
       </div>
-  
+
       <div class="main-content flex-grow-1 p-4">
         <router-view></router-view>
       </div>
     </div>
   </template>
-  
+
   <script setup>
   import { useRouter } from 'vue-router';
   import { useUserStore } from '@/stores/user'; // Import store người dùng
-  
+
   const router = useRouter();
   const userStore = useUserStore(); // Lấy instance của store
-  
+
   const logoutAdmin = () => {
     userStore.logout(); // Gọi action logout từ store
-    router.push('/login'); // Chuyển hướng về trang đăng nhập sau khi logout
+    router.push('/'); // Chuyển hướng về trang đăng nhập sau khi logout
   };
-  
+
   </script>
-  
+
   <style scoped>
   .admin-layout {
-    min-height: 100vh; 
+    min-height: 100vh;
     background-color: #080F27
     ;
   }
-  
+
   .sidebar {
     width: 250px; /* Chiều rộng cố định của sidebar */
     flex-shrink: 0; /* Ngăn sidebar co lại */
@@ -64,27 +64,27 @@
     background-color: #081028;
     border-right: 0.1px solid #dcd9d9;
   }
-  
+
   .main-content {
     overflow-y: auto; /* Thêm scrollbar nếu nội dung quá dài */
   }
-  
+
   /* Tùy chỉnh style cho các link trong sidebar */
   .sidebar .nav-link {
     padding: 10px 15px;
     border-radius: 5px;
     margin-bottom: 5px;
   }
-  
+
   .sidebar .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Hiệu ứng hover */
   }
-  
+
   .sidebar .nav-link.router-link-active {
     background-color: rgba(255, 255, 255, 0.2); /* Style cho link đang active */
     font-weight: bold;
   }
-  
+
   /* Style cho nút đăng xuất */
   .sidebar .mt-auto {
       margin-top: auto; /* Đẩy nút đăng xuất xuống cuối sidebar */
@@ -92,4 +92,3 @@
       border-top: 1px solid rgba(255, 255, 255, 0.1); /* Đường kẻ phân cách */
   }
   </style>
-  

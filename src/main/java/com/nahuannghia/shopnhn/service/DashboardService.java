@@ -18,6 +18,7 @@ import com.nahuannghia.shopnhn.Response.OrderStateCount;
 import com.nahuannghia.shopnhn.Response.RecentOrderResponse;
 import com.nahuannghia.shopnhn.Response.SalesDataResponse;
 import com.nahuannghia.shopnhn.Response.TopSellingProductResponse;
+import com.nahuannghia.shopnhn.Response.TopUserSellerResponse;
 import com.nahuannghia.shopnhn.model.Order;
 import com.nahuannghia.shopnhn.repository.OrderRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
@@ -242,5 +243,24 @@ public class DashboardService {
                 order.getOrderState())
             )
             .collect(Collectors.toList());
+    }
+
+    public List<TopUserSellerResponse> getTopUserSeller() {
+        List<Object[]> results = userRepository.findTopUsersBySalesStats();
+        List<TopUserSellerResponse> response = new ArrayList<>();
+        
+        for (Object[] result : results) {
+            TopUserSellerResponse userStats = new TopUserSellerResponse(
+                ((Number) result[0]).longValue(),       // userId
+                (String) result[1],                     // username
+                (String) result[2],                     // email
+                ((Number) result[3]).longValue(),       // totalOrders
+                ((Number) result[4]).doubleValue(),
+                (Boolean) result[5]                     // Ensure proper casting to Boolean
+            );
+            response.add(userStats);
+        }
+        
+        return response;
     }
 }

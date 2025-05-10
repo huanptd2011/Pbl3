@@ -6,3 +6,9 @@ Sản phẩm:
     del: http://localhost:8080/api/products/delete/{id}
     edit: http://localhost:8080/api/products/edit/{id}
     new: http://localhost:8080/api/products/new
+
+Đơn hàng :
+    add :http://localhost:8080/api/orders/add
+    getall/ : http://localhost:8080/api/orders
+    getid : http://localhost:8080/api/orders/{orderId}
+    delete :http://localhost:8080/api/orders/{orderId}

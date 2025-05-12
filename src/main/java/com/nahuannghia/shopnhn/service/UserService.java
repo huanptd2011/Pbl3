@@ -174,13 +174,13 @@ public class UserService {
             return new LoginResponse(
                     user.getUserId(),
                     200,
-                    user.getUsername(),
+                    token,
                     "Login successful",
-                    user.getEmail(),
+                    user.getUsername(),
                     user.getStatus(),
                     LocalDateTime.now(),
-                    token,
-                    user.getRole().toString()
+                    user.getRole().toString(),
+                    user.getEmail()
             );
 
         } catch (Exception e) {

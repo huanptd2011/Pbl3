@@ -17,6 +17,7 @@ public class LoginResponse {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
     public LoginResponse(Integer userId, int status, String token, String message, String username, Boolean isActive, LocalDateTime timestamp, String role, String email) {
+        this.userId = userId;
         this.status = status;
         this.token = token;
         this.message = message;

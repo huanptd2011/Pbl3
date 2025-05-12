@@ -38,12 +38,12 @@
                       </span>
                   </router-link>
 
-                  <router-link to="/cart" class="btn btn-link position-relative me-2 bg-gray rounded-5">                     
+                  <router-link to="/cart" class="btn btn-link position-relative me-2 bg-gray rounded-5">
                       <i class="fas fa-shopping-cart text-dark	"></i>
                       <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
                           v-if="cartCount > 0">
                           {{ cartCount }}
-                      </span>  
+                      </span>
                   </router-link>
                   <button class="btn btn-link bg-gray rounded-5" @click="toggleAuthModal">
                       <i class="fas fa-user text-dark	"></i>
@@ -180,11 +180,11 @@ header {
 .input-group:focus-within {
   border: 1px solid #130808;
   border-radius: 50px;
-  
+
 }
- 
+
 .input-group:focus-within .input-group-text {
-background-color: #fff !important; 
+background-color: #fff !important;
 }
 .btn{
   transition: all 0.1s ease-in-out;

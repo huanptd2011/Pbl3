@@ -4,6 +4,7 @@ package com.nahuannghia.shopnhn.controller;
 
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,12 @@ public class UserController {
             @PathVariable("userId") Integer accountId) throws UserNotFoundException {
         return ResponseEntity.ok(userService.getUserInfo(accountId));
     }
+
+    @GetMapping("/all-customer")
+    public List<UserInfoResponse> getAllCustomer(){
+        return userService.getAllCustomer();
+    }
+
 
     @PostMapping("/log-in")
     public ResponseEntity<LoginResponse> loginSystem(@RequestBody LoginRequest loginRequest){

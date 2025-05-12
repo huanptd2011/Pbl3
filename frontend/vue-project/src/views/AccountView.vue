@@ -90,6 +90,7 @@
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
@@ -135,7 +136,6 @@ const saveProfile = async () => {
       fullName: user.value.fullName,
       phone: user.value.phone,
       address: user.value.address,
-      avatar: user.value.avatar,
       dob: formattedDob,
     }
 

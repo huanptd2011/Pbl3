@@ -1,7 +1,9 @@
 package com.nahuannghia.shopnhn.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +61,15 @@ public class UserService {
                 user.getFullName(),
                 user.getDob()
         );
+    }
+
+    public List<UserInfoResponse> getAllCustomer(){
+        try {
+            List<User> list = userRepository.getAllCustomer(UserRole.CUSTOMER);
+            return list.stream().map(UserInfoResponse::new).collect(Collectors.toList());
+        } catch (Exception e){
+            return null;
+        }
     }
 
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {

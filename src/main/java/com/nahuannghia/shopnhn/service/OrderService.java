@@ -101,8 +101,13 @@ public class OrderService {
     return response;
 }
 
-    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId) {
-    List<OrderResponse> orders = orderRepository.findOrdersByUserId(userId);
+    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
+    List<OrderResponse> orders;
+    if (orderState != null && !orderState.isEmpty()) {
+        orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
+    } else {
+        orders = orderRepository.findOrdersByUserId(userId); // All states
+    }
 
     for (OrderResponse order : orders) {
         List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());

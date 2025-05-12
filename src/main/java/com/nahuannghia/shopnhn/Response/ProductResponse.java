@@ -4,6 +4,7 @@ package com.nahuannghia.shopnhn.Response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductResponse {
@@ -21,7 +22,21 @@ public class ProductResponse {
     //
     public ProductResponse() {
     }
-    
+    public ProductResponse(Integer productId, String productName, String productDescription,
+                       String brand, BigDecimal price, Boolean isActive,
+                       LocalDateTime createdAt, LocalDateTime updatedAt) {
+    this.productId = productId;
+    this.productName = productName;
+    this.productDescription = productDescription;
+    this.brand = brand;
+    this.price = price;
+    this.isActive = isActive;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.sizeColorList  = new ArrayList<>();
+    this.imageList  = new ArrayList<>();
+}
+
     public ProductResponse(Integer productId, String productName, String productDescription, String brand,
             BigDecimal price, long totalInventory, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt,
             List<ProductInventoryResponse> sizeColorList, List<ProductImageResponse> imageList) {

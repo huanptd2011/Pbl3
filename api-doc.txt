@@ -8,6 +8,13 @@ Sản phẩm:
     new: http://localhost:8080/api/products/new
 
 
+Đơn hàng :HEAD
+    add :http://localhost:8080/api/orders/add
+    getall/ : http://localhost:8080/api/orders
+    getid : http://localhost:8080/api/orders/{orderId}
+    delete :http://localhost:8080/api/orders/{orderId}
+
+
 
 
 
@@ -50,3 +57,4 @@ GET http://localhost:8080/api/dashboard/top-selling-products?period=all-time
 
 
 http://localhost:8080/api/dashboard/recent-orders
+

@@ -61,15 +61,4 @@ public class OrderController {
         Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId);
         return ResponseEntity.ok(groupedOrders);
     }
-     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable Integer userId) {
-        List<OrderResponse> orders = orderService.getOrdersByUserId(userId);
-
-        if (orders.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 204 No Content
-        }
-
-        return ResponseEntity.ok(orders); // 200 OK with data
-    }
-
 }

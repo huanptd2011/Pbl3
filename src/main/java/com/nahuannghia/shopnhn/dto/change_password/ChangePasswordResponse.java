@@ -6,18 +6,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ChangePasswordResponse {
     private String username;
-    private String newPassword;
     private int status;
     private String message;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
     public ChangePasswordResponse() {
     }
-    public ChangePasswordResponse(int status, String message, String username, String newPassword, LocalDateTime timestamp) {
+    public ChangePasswordResponse(int status, String message, String username, LocalDateTime timestamp) {
         this.status = status;
         this.message = message;
         this.username = username;
-        this.newPassword = newPassword;
         this.timestamp = timestamp;
     }
     public String getUsername() {
@@ -25,12 +23,6 @@ public class ChangePasswordResponse {
     }
     public void setUsername(String username) {
         this.username = username;
-    }
-    public String getNewPassword() {
-        return newPassword;
-    }
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
     }
     public int getStatus() {
         return status;

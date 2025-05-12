@@ -1,11 +1,13 @@
 package com.nahuannghia.shopnhn.repository;
 
-import com.nahuannghia.shopnhn.model.Product;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.nahuannghia.shopnhn.model.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
@@ -23,6 +25,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p ORDER BY p.createdAt DESC LIMIT 4")
     List<Product> findTop4ByOrderByCreatedDateDesc();
+    @Query("SELECT COUNT(DISTINCT p.productId) FROM Product p LEFT JOIN ProductInventory pi ON p.productId = pi.productInventoryId.productId WHERE pi.quantity <= :count")
+    long countLowStockProducts(@Param("count") int count);
 }
 
 

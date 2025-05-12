@@ -54,81 +54,78 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
-import { useCartStore } from '@/stores/cartStore';
+  import { ref } from 'vue';
+  import axios from 'axios';
+  import { useRouter } from 'vue-router';
+  import { useUserStore } from '@/stores/user';
+  import { useCartStore } from '@/stores/cartStore';
 
-<script>
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
+  const router = useRouter();
+  const userStore = useUserStore();
+  const cartUser = useCartStore();
 
-export default {
-  name: "LoginView",
-  setup() {
-    const router = useRouter();
-    return { router };
-  },
-  data() {
-    return {
-      form: {
-        usernameOrEmail: '',
-        password: '',
-      },
-      isLoading: false,
-    };
-  },
-  methods: {
-    async submitForm() {
-      this.isLoading = true;
+  const form = ref({
+    usernameOrEmail: '',
+    password: '',
+  });
 
-      try {
-        const response = await axios.post('http://localhost:8080/api/users/log-in', {
-          usernameOrEmail: this.form.usernameOrEmail,
-          password: this.form.password,
-        });
+  const isLoading = ref(false);
 
-        const { token, username, role, email } = response.data;
-
-        if (token && username && role && email) {
-          localStorage.setItem('token', token);
-          localStorage.setItem('username', username);
-          localStorage.setItem('role', role);
-          localStorage.setItem('email', email);
-
-          const userStore = useUserStore();
-          userStore.login({ token, username, role, email });
-
-          if (role === 'ADMIN') {
-            this.router.push('/admin');
-          } else if (role === 'CUSTOMER') {
-            this.router.push('/');
-          } else {
-            alert('Đăng nhập thành công nhưng vai trò không xác định.');
-            this.router.push('/');
-          }
-        } else {
-          alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
-          this.router.push('/login');
-        }
-
-      } catch (error) {
-        console.error('Lỗi đăng nhập:', error);
-
-        if (error.response?.data?.message) {
-          alert(error.response.data.message);
-        } else {
-          alert('Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin.');
-        }
-      } finally {
-        this.isLoading = false;
-      }
+  const submitForm = async () => {
+    // Kiểm tra nếu trường usernameOrEmail hoặc password rỗng
+    if (!form.value.usernameOrEmail || !form.value.password) {
+      alert('Vui lòng điền đầy đủ thông tin!');
+      return; // Dừng nếu dữ liệu không hợp lệ
     }
-  }
-};
-</script>
+
+    isLoading.value = true;
+
+    try {
+      const response = await axios.post('http://localhost:8080/api/users/log-in', {
+        usernameOrEmail: form.value.usernameOrEmail,
+        password: form.value.password,
+      });
+
+      if (response.data.status === 200) {
+        const { token, username, role, email, userId } = response.data;
+
+        // Cập nhật user store
+        userStore.setUser({ username, email, role, userId, token });
+
+        // Điều hướng dựa vào vai trò
+        if (role === 'ADMIN') {
+          router.push('/admin');
+        } else if (role === 'CUSTOMER') {
+          await cartUser.loadUserCart(userStore.user.userId);
+          router.push('/');
+        } else {
+          console.log('username: ', username);
+          console.log('role: ', role);
+          console.log('email: ', email);
+          console.log('token: ', token);
+          console.log('userId: ', userId);
+
+          alert('Đăng nhập thành công nhưng vai trò không xác định.');
+          router.push('/');
+        }
+      } else {
+        // Trường hợp backend trả về status 200 nhưng dữ liệu không đầy đủ
+        alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
+        router.push('/login');
+      }
+    } catch (error) {
+      console.error('Lỗi khi đăng nhập:', error);
+      if (error.response && error.response.data) {
+        alert(error.response.data.message || 'Đăng nhập thất bại!');
+      } else {
+        alert('Có lỗi xảy ra, vui lòng thử lại sau!');
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  };
+  </script>
+
 
 <style scoped>
 .bg-light {
@@ -183,14 +180,15 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Responsive hình ảnh cho mobile */
 @media (max-width: 767.98px) {
   .img-fluid {
     display: none;
   }
 }
 
+/* Styling cho spinner */
 .spinner-border {
-  margin-right: 5px;
+    margin-right: 5px;
 }
 </style>
-

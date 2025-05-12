@@ -315,4 +315,18 @@ public class ProductService {
             );
         }).collect(Collectors.toList());
     }
+ public List<ProductResponse> getProductsByCategory(String categoryName) {
+        List<ProductResponse> responses = productRepository.searchByProductCategory(categoryName);
+
+        for (ProductResponse response : responses) {
+            Integer productId = response.getProductId();
+
+            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(productId);
+            List<ProductImageResponse> imageList = productImageService.getImagesByProductId(productId);
+            response.setSizeColorList(inventoryList);
+            response.setImageList(imageList);
+        }
+
+        return responses;
+    }
 }

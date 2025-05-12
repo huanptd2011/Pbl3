@@ -73,4 +73,8 @@ public class ProductController {
     public void deleteProduct(@PathVariable Integer productId) {
         productService.deleteProduct(productId);
     }
+    @GetMapping("/by-category")
+    public List<ProductResponse> getProductsByCategory(@RequestParam("categoryName") String categoryName) {
+        return productService.getProductsByCategory(categoryName);
+    }
 }

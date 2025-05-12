@@ -87,24 +87,19 @@
       });
 
       if (response.data.status === 200) {
-        const { token, username, role, email, userId } = response.data;
+        const { token, username, role, email, userId, fullName, address, phone, dob, avatar } = response.data;
 
         // Cập nhật user store
-        userStore.setUser({ username, email, role, userId, token });
+        userStore.setUser({ username, email, role, userId, token, fullName, phone, address, avatar, dob });
 
         // Điều hướng dựa vào vai trò
         if (role === 'ADMIN') {
           router.push('/admin');
         } else if (role === 'CUSTOMER') {
+          // console.log(userStore.value.user);
           await cartUser.loadUserCart(userStore.user.userId);
           router.push('/');
         } else {
-          console.log('username: ', username);
-          console.log('role: ', role);
-          console.log('email: ', email);
-          console.log('token: ', token);
-          console.log('userId: ', userId);
-
           alert('Đăng nhập thành công nhưng vai trò không xác định.');
           router.push('/');
         }

@@ -16,7 +16,16 @@ public class LoginResponse {
     private Boolean isActive;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
-    public LoginResponse(Integer userId, int status, String token, String message, String username, Boolean isActive, LocalDateTime timestamp, String role, String email) {
+    private String fullName;
+    private LocalDateTime dob;
+
+    private String phone;
+    private String address;
+    private String avatar;
+
+    public LoginResponse(Integer userId, int status, String token, String message, String username, Boolean isActive,
+                         LocalDateTime timestamp, String role, String email, String fullName, LocalDateTime dob, String phone,
+                         String address, String avatar) {
         this.userId = userId;
         this.status = status;
         this.token = token;
@@ -26,8 +35,53 @@ public class LoginResponse {
         this.timestamp = timestamp;
         this.role = role;
         this.email = email;
+        this.fullName = fullName;
+        this.dob = dob;
+        this.phone= phone;
+        this.address = address;
+        this.avatar = avatar;
     }
     public LoginResponse() {
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public LocalDateTime getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDateTime dob) {
+        this.dob = dob;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Integer getUserId() {

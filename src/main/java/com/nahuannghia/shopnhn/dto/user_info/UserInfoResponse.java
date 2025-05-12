@@ -20,12 +20,14 @@ public class UserInfoResponse {
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
-    public UserInfoResponse(String username, String email, String phone, String address, String role) {
+    public UserInfoResponse(String username, String email, String phone, String address, String role, String fullName, LocalDateTime dob) {
         this.username = username;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.role = role;
+        this.fullName = fullName;
+        this.dob = dob;
     }
     public UserInfoResponse() {
     }

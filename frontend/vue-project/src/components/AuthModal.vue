@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown">
     <div class="dropdown-content">
-      <div class="dropdown-item">Tài Khoản Của Tôi</div>
+      <div class="dropdown-item" @click="handleMyAccount">Tài Khoản Của Tôi</div>
       <div class="dropdown-item">Đơn Mua</div>
       <div class="dropdown-item" @click="handleLogout">Đăng Xuất</div>
     </div>
@@ -16,6 +16,10 @@ import { useUserStore } from '@/stores/user';
 
 const router = useRouter();
 const userStore = useUserStore();
+
+async function handleMyAccount(){
+  router.push('/account');
+}
 
 async function handleLogout() {
   try {

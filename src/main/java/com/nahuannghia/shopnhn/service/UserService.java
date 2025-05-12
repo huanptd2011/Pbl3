@@ -55,7 +55,9 @@ public class UserService {
                 user.getEmail(),
                 user.getPhone(),
                 user.getAddress(),
-                user.getRole().toString()
+                user.getRole().toString(),
+                user.getFullName(),
+                user.getDob()
         );
     }
 
@@ -158,12 +160,14 @@ public class UserService {
         try {
             if (StringUtils.isBlank(loginRequest.getUsernameOrEmail())
                     || StringUtils.isBlank(loginRequest.getPassword())) {
-                return new LoginResponse(null, 400, null, "Username/Email and password are required", null, false, LocalDateTime.now(), null, null);
+                return new LoginResponse(null, 400, null, "Username/Email and password are required", null, false, LocalDateTime.now(),
+                        null, null , null, null, null, null, null);
             }
 
             Optional<User> optionalUser = findUserByUsernameOrEmail(loginRequest.getUsernameOrEmail());
             if (optionalUser.isEmpty() || !passwordEncoder.matches(loginRequest.getPassword(), optionalUser.get().getPassword())) {
-                return new LoginResponse(null, 401, null, "Invalid username or password", null, false, LocalDateTime.now(), null, null);
+                return new LoginResponse(null, 401, null, "Invalid username or password", null, false, LocalDateTime.now(),
+                        null, null, null, null, null, null, null);
             }
 
             User user = optionalUser.get();
@@ -180,12 +184,18 @@ public class UserService {
                     user.getStatus(),
                     LocalDateTime.now(),
                     user.getRole().toString(),
-                    user.getEmail()
+                    user.getEmail(),
+                    user.getFullName(),
+                    user.getDob(),
+                    user.getPhone(),
+                    user.getAddress(),
+                    user.getAvatar()
             );
 
         } catch (Exception e) {
             logger.error("Unexpected error during login", e);
-            return new LoginResponse(null, 500, null, "Internal server error", null, false, LocalDateTime.now(), null, null);
+            return new LoginResponse(null, 500, null, "Internal server error", null, false, LocalDateTime.now(),
+                    null, null, null, null, null, null, null);
         }
     }
 
@@ -233,7 +243,9 @@ public class UserService {
                 user.getEmail(),
                 user.getPhone(),
                 user.getAddress(),
-                user.getRole().toString()
+                user.getRole().toString(),
+                user.getFullName(),
+                user.getDob()
         );
 
         return new UpdateUserResponse(

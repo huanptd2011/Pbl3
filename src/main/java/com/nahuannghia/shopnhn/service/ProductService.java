@@ -79,13 +79,17 @@ public class ProductService {
 
         List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(savedProduct.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(savedProduct.getProductId());
-
+         Long totalInventory = inventoryList.stream()
+        .mapToLong(ProductInventoryResponse::getQuantity)
+        .sum();
         return new ProductResponse(
                 savedProduct.getProductId(),
                 savedProduct.getProductName(),
                 savedProduct.getProductDescription(),
                 savedProduct.getBrand(),
                 savedProduct.getPrice(),
+                totalInventory,
+                savedProduct.getStatus(),
                 savedProduct.getCreatedAt(),
                 savedProduct.getUpdatedAt(),
                 inventoryList,
@@ -99,6 +103,9 @@ public class ProductService {
 
         List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+        Long totalInventory = inventoryList.stream()
+        .mapToLong(ProductInventoryResponse::getQuantity)
+        .sum();
 
         if(!inventoryList.isEmpty()){
             System.out.println("Djiasudhfusdnd");
@@ -110,6 +117,8 @@ public class ProductService {
                 product.getProductDescription(),
                 product.getBrand(),
                 product.getPrice(),
+                totalInventory,
+                product.getStatus(),
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 inventoryList,
@@ -124,12 +133,18 @@ public class ProductService {
         return products.stream().map(product -> {
             List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+            Long totalInventory = inventoryList.stream()
+        .mapToLong(ProductInventoryResponse::getQuantity)
+        .sum();
+
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
                     product.getProductDescription(),
                     product.getBrand(),
                     product.getPrice(),
+                    totalInventory,
+                    product.getStatus(),
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,
@@ -199,13 +214,19 @@ public class ProductService {
 
         List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
+        Long totalInventory = inventoryList.stream()
+        .mapToLong(ProductInventoryResponse::getQuantity)
+        .sum();
 
+        
         return new ProductResponse(
                 product1.getProductId(),
                 product1.getProductName(),
                 product1.getProductDescription(),
                 product1.getBrand(),
                 product1.getPrice(),
+                totalInventory,
+                product.getStatus(),
                 product1.getCreatedAt(),
                 product1.getUpdatedAt(),
                 inventoryList,
@@ -230,12 +251,18 @@ public class ProductService {
         return products.stream().map(product -> {
             List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+            Long totalInventory = inventoryList.stream()
+        .mapToLong(ProductInventoryResponse::getQuantity)
+        .sum();
+
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
                     product.getProductDescription(),
                     product.getBrand(),
                     product.getPrice(),
+                    totalInventory,
+                    product.getStatus(),
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,
@@ -268,12 +295,19 @@ public class ProductService {
         return products.stream().map(product -> {
             List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+            Long totalInventory = inventoryList.stream()
+        .mapToLong(ProductInventoryResponse::getQuantity)
+        .sum();
+
+
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
                     product.getProductDescription(),
                     product.getBrand(),
                     product.getPrice(),
+                    totalInventory,
+                    product.getStatus(),
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,

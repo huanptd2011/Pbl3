@@ -1,8 +1,10 @@
 package com.nahuannghia.shopnhn.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,4 +56,20 @@ public class OrderController {
                                            @RequestParam String status) {
         return orderService.updateOrderStatus(orderId, status);
     }
+     @GetMapping("/group-by-status")
+    public ResponseEntity<Map<String, List<OrderResponse>>> getOrdersGroupedByStatus(@RequestParam Integer userId) {
+        Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId);
+        return ResponseEntity.ok(groupedOrders);
+    }
+     @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable Integer userId) {
+        List<OrderResponse> orders = orderService.getOrdersByUserId(userId);
+
+        if (orders.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        }
+
+        return ResponseEntity.ok(orders); // 200 OK with data
+    }
+
 }

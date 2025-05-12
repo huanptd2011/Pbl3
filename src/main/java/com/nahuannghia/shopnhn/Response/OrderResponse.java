@@ -3,6 +3,7 @@ package com.nahuannghia.shopnhn.Response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,9 +16,9 @@ public class OrderResponse {
     private String orderState;
     private String note;
     private List<OrderDetailResponse> orderDetails;
-    public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethodResponse, 
-                     LocalDateTime orderDate, BigDecimal totalPrice, String orderState, 
-                     String note, List<OrderDetailResponse> orderDetails) {
+    //
+public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethodResponse,
+    LocalDateTime orderDate, BigDecimal totalPrice, String orderState, String note) {
     this.orderId = orderId;
     this.userId = userId;
     this.paymentMethod = paymentMethodResponse;
@@ -25,8 +26,18 @@ public class OrderResponse {
     this.totalPrice = totalPrice;
     this.orderState = orderState;
     this.note = note;
-    this.orderDetails = orderDetails;
+    this.orderDetails = new ArrayList<>();
 }
+    // public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethod, LocalDateTime orderDate,
+    //         BigDecimal totalPrice, String orderState, String note) {
+    //     this.orderId = orderId;
+    //     this.userId = userId;
+    //     this.paymentMethod = paymentMethod;
+    //     this.orderDate = orderDate;
+    //     this.totalPrice = totalPrice;
+    //     this.orderState = orderState;
+    //     this.note = note;
+    // }
     public OrderResponse() {
     }
     public Integer getOrderId() {

@@ -29,3 +29,64 @@ body {
   .cl-main{
     color: #CB3CFF !important;;
   }
+  .bg-main{
+    background-color: #CB3CFF !important;
+  }
+  .bor-main{
+    border-color: #CB3CFF !important;;
+  }
+/* Style cho bảng */
+.table {
+  margin-bottom: 0;
+  font-family: 'mona sans', sans-serif;
+  color: #aeb9e1;
+  background-color: #0b1739; /* Nền bảng giống card */
+ border-color: #1e293b; /* Màu viền bảng */
+
+}
+.table th {
+  vertical-align: middle;
+  padding: 12px;
+  background-color: #0b1739;
+  color: #DAF2FE;
+  border: none;
+}
+.table  tr {
+    border-color: #1e293b;
+    background-color: #0b1739; 
+    border: none;/* Viền giữa các hàng */
+}
+
+.table  tr td{
+  border: none;
+}
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: #0A1330 !important; 
+    
+    color: #DAF2FE;
+}
+
+.table-striped>tbody>tr:nth-of-type(even)>* {
+    background-color: #0b1739 !important; 
+    border: none;
+    color: #DAF2FE;
+}
+.table-striped>tbody>tr:hover>* {
+    background-color: #0e1a42 !important; 
+    color: #DAF2FE;
+}
+
+.calenda {
+  background-color: #161e39;
+  color: #9FB9E1;
+  border-color: #161e39;
+}
+
+.form-control:focus{
+  border:none;
+  box-shadow: none;
+}
+.form-select:focus{
+  border-color: #86b7fe;
+  box-shadow: none;
+}

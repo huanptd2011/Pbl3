@@ -81,12 +81,12 @@ const routes = [
         meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
       },
       // Thêm các route con khác cho products, orders, etc. tại đây
-      // {
-      //   path: 'products',
-      //   name: 'AdminProducts',
-      //   component: () => import('@/views/admin/AdminProductsView.vue'),
-      //   meta: { requiresAuth: true, requiredRole: 'ADMIN' },
-      // },
+      {
+        path: 'products',
+        name: 'AdminProducts',
+        component: () => import('@/views/admin/AdminProducts.vue'),
+        meta: { requiresAuth: true, requiredRole: 'ADMIN' },
+      },
       // {
       //   path: 'orders',
       //   name: 'AdminOrders',
@@ -112,7 +112,13 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () => import('@/views/RegisterView.vue')
-  }
+  },
+ {
+  path: '/order',
+  name: 'Order',
+  component: () => import('@/views/OrderView.vue')
+},
+
 ];
 
 const router = createRouter({

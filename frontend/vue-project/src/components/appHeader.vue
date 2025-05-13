@@ -115,7 +115,7 @@ const toggleAuthModal = () => {
 
 const performSearch = () => {
   if (searchQuery.value.trim()) {
-    router.push({ path: '/search', query: { q: searchQuery.value } });
+    router.push({ path: '/products', query: { q: searchQuery.value } });
   }
 };
 

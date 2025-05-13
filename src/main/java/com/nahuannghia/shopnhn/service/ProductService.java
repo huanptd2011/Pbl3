@@ -315,6 +315,38 @@ public class ProductService {
             );
         }).collect(Collectors.toList());
     }
+
+    public List<ProductResponse> getTop4BestSellingProducts(){
+        try {
+            List<Product> products = productRepository.findTop4BestSellingProducts();
+            return products.stream().map(product -> {
+                List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+                List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
+                Long totalInventory = inventoryList.stream()
+                        .mapToLong(ProductInventoryResponse::getQuantity)
+                        .sum();
+
+
+                return new ProductResponse(
+                        product.getProductId(),
+                        product.getProductName(),
+                        product.getProductDescription(),
+                        product.getBrand(),
+                        product.getPrice(),
+                        totalInventory,
+                        product.getStatus(),
+                        product.getCreatedAt(),
+                        product.getUpdatedAt(),
+                        inventoryList,
+                        imageList
+                );
+            }).collect(Collectors.toList());
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
  public List<ProductResponse> getProductsByCategory(String categoryName) {
         List<ProductResponse> responses = productRepository.searchByProductCategory(categoryName);
 

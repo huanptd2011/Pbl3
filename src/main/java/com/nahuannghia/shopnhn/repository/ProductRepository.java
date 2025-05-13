@@ -42,4 +42,20 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     WHERE c.categoryName = :category
     """)
 List<ProductResponse> searchByProductCategory(@Param("category") String category);
+
+
+    @Query(value = """
+        WITH TopProducts AS (
+            SELECT TOP 4 
+                od.productId, 
+                SUM(od.quantity) AS total_quantity
+            FROM order_detail od
+            GROUP BY od.productId
+            ORDER BY total_quantity DESC
+        )
+        SELECT p.*
+        FROM product p
+        JOIN TopProducts tp ON p.productId = tp.productId
+    """, nativeQuery = true)
+    List<Product> findTop4BestSellingProducts();
 }

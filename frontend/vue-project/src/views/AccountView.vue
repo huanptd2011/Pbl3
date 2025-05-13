@@ -142,6 +142,8 @@ const saveProfile = async () => {
       avatar: user.value.avatar || null
     }
 
+    console.log('Payload:', payload)
+
 
     const response = await axios.put(`http://localhost:8080/api/users/${userStore.user.userId}`, payload)
 

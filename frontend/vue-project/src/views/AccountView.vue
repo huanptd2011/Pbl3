@@ -129,6 +129,7 @@ const saveProfile = async () => {
   isLoading.value = true
 
   try {
+    console.log("Hàm saveProfile đã được gọi")
     // Chuẩn hóa ngày sinh về dạng YYYY-MM-DD
     const formattedDob = user.value.dob ? user.value.dob.slice(0, 10) : null
 
@@ -139,17 +140,27 @@ const saveProfile = async () => {
       dob: formattedDob,
     }
 
-    const response = await axios.put('/api/user/profile', payload, {
+    const response = await axios.put(`http://localhost:8080/api/users/${userStore.user.userId}`, 
+    {
+        fullName: user.value.fullName,
+        phone: user.value.phone,
+        address: user.value.address,
+        dob: formattedDob,
+        email: userStore.user.email,
+        avatar: user.value.avatar,
+        password: userStore.user.password
+    }, 
+    {
       headers: {
         Authorization: `Bearer ${userStore.user.token}`
       }
     })
 
     // Cập nhật lại store nếu cần
-    userStore.setUser({
-      ...userStore.user,
-      ...payload
-    })
+    // userStore.setUser({
+    //   ...userStore.user,
+    //   ...payload
+    // })
 
     alert('Cập nhật thông tin thành công!')
   } catch (err) {

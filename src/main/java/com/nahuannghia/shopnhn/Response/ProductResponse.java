@@ -4,6 +4,7 @@ package com.nahuannghia.shopnhn.Response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductResponse {
@@ -12,25 +13,46 @@ public class ProductResponse {
     private String productDescription;
     private String brand;
     private BigDecimal price;
+    private long totalInventory;
+    private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<ProductInventoryResponse> sizeColorList;
     private List<ProductImageResponse> imageList;
-    public ProductResponse(Integer productId, String productName, String productDescription, String brand, BigDecimal price,
-                           LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductInventoryResponse> sizeColorList,
-                           List<ProductImageResponse> imageList) {
+    //
+    public ProductResponse() {
+    }
+    public ProductResponse(Integer productId, String productName, String productDescription,
+                       String brand, BigDecimal price, Boolean isActive,
+                       LocalDateTime createdAt, LocalDateTime updatedAt) {
+    this.productId = productId;
+    this.productName = productName;
+    this.productDescription = productDescription;
+    this.brand = brand;
+    this.price = price;
+    this.isActive = isActive;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.sizeColorList  = new ArrayList<>();
+    this.imageList  = new ArrayList<>();
+}
+
+    public ProductResponse(Integer productId, String productName, String productDescription, String brand,
+            BigDecimal price, long totalInventory, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt,
+            List<ProductInventoryResponse> sizeColorList, List<ProductImageResponse> imageList) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
         this.brand = brand;
         this.price = price;
+        this.totalInventory = totalInventory;
+        this.isActive = isActive;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.sizeColorList = sizeColorList;
         this.imageList = imageList;
     }
-    public ProductResponse() {
-    }
+
     public Integer getProductId() {
         return productId;
     }
@@ -61,6 +83,13 @@ public class ProductResponse {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+       public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -86,5 +115,11 @@ public class ProductResponse {
         this.imageList = imageList;
     }
     //
+    public long gettotalInventory() {
+        return totalInventory;
+    }
+    public void settotalInventory(long totalInventory) {
+        this.totalInventory = totalInventory;
+    }
 }
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.nahuannghia.shopnhn.Response.OrderResponse;
 import com.nahuannghia.shopnhn.Response.OrderStateCount;
 import com.nahuannghia.shopnhn.model.Order;
 
@@ -44,4 +45,17 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Object[]> findTopSellingProducts(LocalDateTime startDate, LocalDateTime endDate);
     @Query("SELECT o FROM Order o ORDER BY o.orderDate DESC")
     List<Order> findTopByOrderByOrderDateDesc();
+
+@Query("SELECT new com.nahuannghia.shopnhn.Response.OrderResponse(" +
+       "o.orderId, o.user.id, " +
+       "new com.nahuannghia.shopnhn.Response.PaymentMethodResponse(o.paymentMethod.paymentMethodId, o.paymentMethod.paymentMethodName), " +
+       "o.orderDate, o.totalPrice, o.orderState, o.note) " +
+       "FROM Order o WHERE o.user.id = :userId")
+List<OrderResponse> findOrdersByUserId(@Param("userId") Integer userId);
+@Query("SELECT new com.nahuannghia.shopnhn.Response.OrderResponse(" +
+       "o.orderId, o.user.id, " +
+       "new com.nahuannghia.shopnhn.Response.PaymentMethodResponse(o.paymentMethod.paymentMethodId, o.paymentMethod.paymentMethodName), " +
+       "o.orderDate, o.totalPrice, o.orderState, o.note) " +
+       "FROM Order o WHERE o.user.id = :userId AND LOWER(o.orderState) = LOWER(:orderState)")
+List<OrderResponse> findOrdersByUserIdAndOrderState(@Param("userId") Integer userId, @Param("orderState") String orderState);
 }

@@ -3,6 +3,8 @@ package com.nahuannghia.shopnhn.dto.user_info;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nahuannghia.shopnhn.model.User;
+
 public class UserInfoResponse {
 
     private Integer id;
@@ -20,15 +22,30 @@ public class UserInfoResponse {
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
-    public UserInfoResponse(String username, String email, String phone, String address, String role) {
+    public UserInfoResponse(String username, String email, String phone, String address, String role, String fullName, LocalDateTime dob) {
         this.username = username;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.role = role;
+        this.fullName = fullName;
+        this.dob = dob;
     }
     public UserInfoResponse() {
     }
+
+    public UserInfoResponse(User user) {
+        this.id = user.getUserId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.role = user.getRole().toString();
+        this.fullName = user.getFullName();
+        this.isActive = user.getStatus();
+        this.createdDate = user.getCreatedDate();
+        this.address = user.getAddress();
+        this.phone = user.getPhone();
+    }
+
     public Integer getId() {
         return id;
     }

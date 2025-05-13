@@ -2,6 +2,7 @@ package com.nahuannghia.shopnhn.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.nahuannghia.shopnhn.Response.PaymentMethodResponse;
 import com.nahuannghia.shopnhn.model.Order;
 import com.nahuannghia.shopnhn.model.PaymentMethod;
 import com.nahuannghia.shopnhn.model.User;
+import com.nahuannghia.shopnhn.repository.OrderDetailRepository;
 import com.nahuannghia.shopnhn.repository.OrderRepository;
 import com.nahuannghia.shopnhn.repository.PaymentMethodRepository;
 import com.nahuannghia.shopnhn.repository.UserRepository;
@@ -30,6 +32,8 @@ public class OrderService {
     private OrderDetailService orderDetailService;
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public OrderResponse createOrder(OrderRequest request) {
         User user = userRepository.findById(request.getUserId())
@@ -74,20 +78,47 @@ public class OrderService {
     }
 
     private OrderResponse mapToResponse(Order order) {
-        PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(
-                order.getPaymentMethod().getPaymentMethodId(),
-                order.getPaymentMethod().getPaymentMethodName()
-        );
-        List<OrderDetailResponse> list = orderDetailService.getOrderDetailByOrderId(order.getOrderId());
-        return new OrderResponse(
-                order.getOrderId(),
-                order.getUser().getUserId(),
-                paymentMethodResponse,
-                order.getOrderDate(),
-                order.getTotalPrice(),
-                order.getOrderState(),
-                order.getNote(),
-                list
-        );
+    PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(
+            order.getPaymentMethod().getPaymentMethodId(),
+            order.getPaymentMethod().getPaymentMethodName()
+    );
+    List<OrderDetailResponse> list = orderDetailService.getOrderDetailByOrderId(order.getOrderId());
+
+    // Khởi tạo đối tượng OrderResponse trước
+    OrderResponse response = new OrderResponse(
+            order.getOrderId(),
+            order.getUser().getUserId(),
+            paymentMethodResponse,
+            order.getOrderDate(),
+            order.getTotalPrice(),
+            order.getOrderState(),
+            order.getNote()
+    );
+
+    // Gán orderDetails sau khi đã có object
+    response.setOrderDetails(list);
+
+    return response;
+}
+
+    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
+    List<OrderResponse> orders;
+    if (orderState != null && !orderState.isEmpty()) {
+        orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
+    } else {
+        orders = orderRepository.findOrdersByUserId(userId); // All states
     }
+
+    for (OrderResponse order : orders) {
+        List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
+        order.setOrderDetails(details);
+    }
+
+    return orders.stream()
+                 .collect(Collectors.groupingBy(OrderResponse::getOrderState));
+}
+
+
+
+
 }

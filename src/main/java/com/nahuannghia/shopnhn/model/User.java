@@ -56,6 +56,12 @@ public class User {
 
     @Column(name = "fullName")
     private String fullName;
+
+    @Column(name = "userDob")
+    private LocalDateTime dob;
+
+    @Column(name = "avatar")
+    private String avatar;
     public User() {}
 
     public User(Integer userId, String username, String encode, String email, String phone, String address, UserRole role, LocalDateTime lastLogin, String fullName) {
@@ -68,6 +74,22 @@ public class User {
         this.role = role;
         this.lastLogin = lastLogin;
         this.fullName = fullName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public LocalDateTime getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDateTime dob) {
+        this.dob = dob;
     }
 
     public Integer getUserId() {

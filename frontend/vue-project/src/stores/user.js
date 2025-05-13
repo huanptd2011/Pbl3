@@ -11,6 +11,12 @@ export const useUserStore = defineStore('user', {
       role: '',
       userId: 0,
       token: '',
+
+      fullName: '',
+      phone: '',
+      address: '',
+      avatar: '',
+      dob: '',
     }
   }),
 
@@ -27,6 +33,11 @@ export const useUserStore = defineStore('user', {
         role: userData.role,
         userId: Number(userData.userId),
         token: userData.token,
+        fullName: userData.fullName,
+        phone: userData.phone,
+        address: userData.address,
+        avatar: userData.avatar,
+        dob: userData.dob ? userData.dob.split('T')[0] : '',
       };
       this.isLoggedIn = true;
 
@@ -57,6 +68,11 @@ export const useUserStore = defineStore('user', {
         role: '',
         userId: 0,
         token: '',
+        fullName: '',
+        phone: '',
+        address: '',
+        avatar: '',
+        dob: ''
       };
 
       localStorage.removeItem('user');

@@ -4,6 +4,7 @@ package com.nahuannghia.shopnhn.controller;
 
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserInfo(accountId));
     }
 
+    @GetMapping("/all-customer")
+    public List<UserInfoResponse> getAllCustomer(){
+        return userService.getAllCustomer();
+    }
+
+
     @PostMapping("/log-in")
     public ResponseEntity<LoginResponse> loginSystem(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.ok(userService.login(loginRequest));
@@ -66,7 +73,7 @@ public class UserController {
     public ResponseEntity<ChangePasswordResponse> changePassword(
             @PathVariable("userId") Integer accountId,
             @RequestBody @Valid ChangePasswordRequest request) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.changePassword(accountId, request));
+        return ResponseEntity.ok(userService.changePassword( request));
     }
 
     @PostMapping("/create")
@@ -75,8 +82,8 @@ public class UserController {
     }
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<DeleteUserResponse> deleteUser(
-            @PathVariable("userId") Integer accountId) throws UserNotFoundException {
-        return ResponseEntity.ok(userService.deleteUser(accountId));
+            @PathVariable("userId") String username) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.deleteUser(username));
     }
 
     @PutMapping("/{userId}")

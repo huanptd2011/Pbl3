@@ -16,6 +16,7 @@ import com.nahuannghia.shopnhn.Response.OrderDataResponse;
 import com.nahuannghia.shopnhn.Response.RecentOrderResponse;
 import com.nahuannghia.shopnhn.Response.SalesDataResponse;
 import com.nahuannghia.shopnhn.Response.TopSellingProductResponse;
+import com.nahuannghia.shopnhn.Response.TopUserSellerResponse;
 import com.nahuannghia.shopnhn.service.DashboardService;
 
 @RestController
@@ -81,5 +82,10 @@ public class DashboardController {
         
         List<RecentOrderResponse> recentOrders = dashboardService.getRecentOrders(limit);
         return ResponseEntity.ok(recentOrders);
+    }
+     @GetMapping("/top-users")
+    public ResponseEntity<List<TopUserSellerResponse>> getTopUserSeller() {
+        List<TopUserSellerResponse> topUsers = dashboardService.getTopUserSeller();
+        return ResponseEntity.ok(topUsers);
     }
 }

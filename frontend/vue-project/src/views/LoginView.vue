@@ -59,43 +59,45 @@
   import { useRouter } from 'vue-router';
   import { useUserStore } from '@/stores/user';
   import { useCartStore } from '@/stores/cartStore';
-  
+
   const router = useRouter();
   const userStore = useUserStore();
   const cartUser = useCartStore();
-  
+
   const form = ref({
     usernameOrEmail: '',
     password: '',
   });
-  
+
   const isLoading = ref(false);
-  
+
   const submitForm = async () => {
     // Kiểm tra nếu trường usernameOrEmail hoặc password rỗng
     if (!form.value.usernameOrEmail || !form.value.password) {
       alert('Vui lòng điền đầy đủ thông tin!');
       return; // Dừng nếu dữ liệu không hợp lệ
     }
-  
+
     isLoading.value = true;
-  
+
     try {
       const response = await axios.post('http://localhost:8080/api/users/log-in', {
         usernameOrEmail: form.value.usernameOrEmail,
         password: form.value.password,
       });
-  
+
       if (response.data.status === 200) {
-        const { token, username, role, email, userId } = response.data;
-  
+        const { token, username, role, email, userId, fullName, address, phone, dob, avatar } = response.data;
+
         // Cập nhật user store
-        userStore.setUser({ username, email, role, userId, token });
-  
+        userStore.setUser({ username, email, role, userId, token, fullName, phone, address, avatar, dob });
+
         // Điều hướng dựa vào vai trò
         if (role === 'ADMIN') {
           router.push('/admin');
         } else if (role === 'CUSTOMER') {
+          // console.log(userStore.value.user);
+          await cartUser.loadUserCart(userStore.user.userId);
           router.push('/');
         } else {
           alert('Đăng nhập thành công nhưng vai trò không xác định.');
@@ -118,7 +120,7 @@
     }
   };
   </script>
-  
+
 
 <style scoped>
 .bg-light {

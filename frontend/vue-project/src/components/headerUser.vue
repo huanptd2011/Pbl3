@@ -24,7 +24,7 @@
               <!-- Search and User Actions -->
               <div class="d-flex ">
                   <div class="input-group me-3 d-none d-lg-flex  bg-gray">
-                      <span class="input-group-text bg-gray border-0 rounded-start-50" >
+                      <span class="input-group-text bg-gray border-0 rounded-start-50" @click="gotoProductView" >
                           <i class="fas fa-search"></i>
                       </span>
                       <input type="text" class="form-control border-0 bg-gray rounded-end-50" placeholder="Tìm kiếm giày..." v-model="searchQuery" @keyup.enter="gotoProductView" />

@@ -62,12 +62,24 @@ export const useCartStore = defineStore('cart', {
         },
 
         //xóa cart item
-        async removeItem(cartItemId) {
+        async removeItems(productIds) {
             try {
-                await axios.delete(`http://localhost:8080/api/cart-items/delete/${cartItemId}`);
-                this.items = this.items.filter(item => item.cartItemId !== cartItemId);
+                // Lọc ra các item trong giỏ hàng có productId nằm trong danh sách
+                const itemsToRemove = this.items.filter(item =>
+                    productIds.includes(item.productId)
+                );
+
+                // Gửi từng yêu cầu DELETE lên server
+                for (const item of itemsToRemove) {
+                    await axios.delete(`http://localhost:8080/api/cart-items/delete/${item.cartItemId}`);
+                }
+
+                // Cập nhật lại local state
+                this.items = this.items.filter(item =>
+                    !productIds.includes(item.productId)
+                );
             } catch (error) {
-                console.error('Xoá sản phẩm thất bại', error);
+                console.error('Xoá nhiều sản phẩm thất bại', error);
             }
         },
 

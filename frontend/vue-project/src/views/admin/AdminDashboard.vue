@@ -28,7 +28,7 @@
               <i class="fas fa-shopping-cart me-2 cl-main"></i>
               <span class="card-title">Tổng Đơn hàng</span>
             </div>
-            
+
             <p class="card-text fs-3" v-if="metrics">{{ metrics.totalOrders }}</p>
             <p class="card-text fs-3" v-else>...</p>
             <!-- <p class="card-text"><small v-if="metrics && metrics.ordersChangePercent !== undefined">+{{
@@ -71,7 +71,7 @@
       <div class="col-md-12 col-lg-8 mb-4">
         <div class="card">
           <div class="card-header">
-            Biểu đồ Doanh thu (Ví dụ: Biểu đồ đường)
+            Biểu đồ Doanh thu
           </div>
           <div class="card-body">
             <div v-if="!salesChartData"
@@ -86,7 +86,7 @@
       <div class="col-md-12 col-lg-4 mb-4">
         <div class="card">
           <div class="card-header">
-            Biểu đồ Đơn hàng (Ví dụ: Biểu đồ cột/tròn)
+            Biểu đồ Đơn hàng
           </div>
           <div class="card-body">
             <div v-if="!ordersChartData"

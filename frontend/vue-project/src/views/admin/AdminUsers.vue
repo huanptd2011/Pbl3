@@ -415,8 +415,8 @@ onMounted(() => {
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'; // Import watch
-// import axios from 'axios'; // Không dùng Axios khi dùng dữ liệu giả
-// import { useUserStore } from '@/stores/user'; // Không cần thiết khi dùng dữ liệu giả
+import axios from 'axios'; // Không dùng Axios khi dùng dữ liệu giả
+import { useUserStore } from '@/stores/user'; // Không cần thiết khi dùng dữ liệu giả
 
 // Cờ bật/tắt watch (chỉ dùng để minh họa)
 const watchEnabled = true; // Đặt true để bật tìm kiếm tức thời
@@ -432,51 +432,58 @@ const searchKeyword = ref('');
 let searchTimer = null;
 
 // --- DỮ LIỆU GIẢ (MOCK DATA) ---
-const mockUsers = [
-    { userId: 1, username: 'admin', email: 'admin@example.com', role: 'ADMIN', createdAt: '2023-01-15T10:00:00Z', updatedAt: '2023-10-27T14:30:00Z', isActive: true },
-    { userId: 2, username: 'nguyenvana', email: 'nguyenvana@example.com', role: 'CUSTOMER', createdAt: '2023-02-20T11:00:00Z', updatedAt: '2023-02-20T11:00:00Z', isActive: true },
-    { userId: 3, username: 'tranb', email: 'tranb@example.com', role: 'CUSTOMER', createdAt: '2023-03-10T15:00:00Z', updatedAt: '2023-10-25T09:00:00Z', isActive: false },
-    { userId: 4, username: 'levanc', email: 'levanc@example.com', role: 'CUSTOMER', createdAt: '2023-04-01T08:00:00Z', updatedAt: '2023-04-01T08:00:00Z', isActive: true },
-    { userId: 5, username: 'phamthid', email: 'phamthid@example.com', role: 'CUSTOMER', createdAt: '2023-05-05T12:00:00Z', updatedAt: '2023-05-05T12:00:00Z', isActive: true },
-    { userId: 6, username: 'hoange', email: 'hoange@example.com', role: 'CUSTOMER', createdAt: '2023-06-10T14:00:00Z', updatedAt: '2023-06-10T14:00:00Z', isActive: true },
-    { userId: 7, username: 'nguyenf', email: 'nguyenf@example.com', role: 'CUSTOMER', createdAt: '2023-07-01T09:00:00Z', updatedAt: '2023-07-01T09:00:00Z', isActive: true },
-    { userId: 8, username: 'vantg', email: 'vantg@example.com', role: 'CUSTOMER', createdAt: '2023-08-18T16:00:00Z', updatedAt: '2023-08-18T16:00:00Z', isActive: false },
-    { userId: 9, username: 'thih', email: 'thih@example.com', role: 'CUSTOMER', createdAt: '2023-09-22T10:00:00Z', updatedAt: '2023-09-22T10:00:00Z', isActive: true },
-    { userId: 10, username: 'leik', email: 'leik@example.com', role: 'CUSTOMER', createdAt: '2023-10-05T11:00:00Z', updatedAt: '2023-10-05T11:00:00Z', isActive: true },
-    { userId: 11, username: 'phaml', email: 'phaml@example.com', role: 'CUSTOMER', createdAt: '2023-10-10T13:00:00Z', updatedAt: '2023-10-10T13:00:00Z', isActive: true },
-    { userId: 12, username: 'hoangm', email: 'hoangm@example.com', role: 'CUSTOMER', createdAt: '2023-10-15T15:00:00Z', updatedAt: '2023-10-15T15:00:00Z', isActive: true },
-    { userId: 13, username: 'nguyenn', email: 'nguyenn@example.com', role: 'CUSTOMER', createdAt: '2023-10-20T17:00:00Z', updatedAt: '2023-10-20T17:00:00Z', isActive: false },
-    { userId: 14, username: 'vanto', email: 'vanto@example.com', role: 'CUSTOMER', createdAt: '2023-10-25T09:00:00Z', updatedAt: '2023-10-25T09:00:00Z', isActive: true },
-    { userId: 15, username: 'thip', email: 'thip@example.com', role: 'CUSTOMER', createdAt: '2023-10-26T10:00:00Z', updatedAt: '2023-10-26T10:00:00Z', isActive: true },
-    { userId: 16, username: 'leq', email: 'leq@example.com', role: 'CUSTOMER', createdAt: '2023-10-27T11:00:00Z', updatedAt: '2023-10-27T11:00:00Z', isActive: true },
-    { userId: 17, username: 'phamr', email: 'phamr@example.com', role: 'CUSTOMER', createdAt: '2023-10-28T12:00:00Z', updatedAt: '2023-10-28T12:00:00Z', isActive: true },
-    { userId: 18, username: 'hoangs', email: 'hoangs@example.com', role: 'CUSTOMER', createdAt: '2023-10-29T13:00:00Z', updatedAt: '2023-10-29T13:00:00Z', isActive: true },
-    { userId: 19, username: 'nguyent', email: 'nguyent@example.com', role: 'CUSTOMER', createdAt: '2023-10-30T14:00:00Z', updatedAt: '2023-10-30T14:00:00Z', isActive: false },
-    { userId: 20, username: 'vantu', email: 'vantu@example.com', role: 'CUSTOMER', createdAt: '2023-10-31T15:00:00Z', updatedAt: '2023-10-31T15:00:00Z', isActive: true },
-    { userId: 21, username: 'thiv', email: 'thiv@example.com', role: 'CUSTOMER', createdAt: '2023-11-01T16:00:00Z', updatedAt: '2023-11-01T16:00:00Z', isActive: true },
-    { userId: 22, username: 'lew', email: 'lew@example.com', role: 'CUSTOMER', createdAt: '2023-11-02T17:00:00Z', updatedAt: '2023-11-02T17:00:00Z', isActive: true },
-    { userId: 23, username: 'phamx', email: 'phamx@example.com', role: 'CUSTOMER', createdAt: '2023-11-03T18:00:00Z', updatedAt: '2023-11-03T18:00:00Z', isActive: true },
-    { userId: 24, username: 'hoangy', email: 'hoangy@example.com', role: 'CUSTOMER', createdAt: '2023-11-04T19:00:00Z', updatedAt: '2023-11-04T19:00:00Z', isActive: true },
-    { userId: 25, username: 'nguyenz', email: 'nguyenz@example.com', role: 'CUSTOMER', createdAt: '2023-11-05T20:00:00Z', updatedAt: '2023-11-05T20:00:00Z', isActive: false },
-];
+// const mockUsers = [
+//     { userId: 1, username: 'admin', email: 'admin@example.com', role: 'ADMIN', createdAt: '2023-01-15T10:00:00Z', updatedAt: '2023-10-27T14:30:00Z', isActive: true },
+//     { userId: 2, username: 'nguyenvana', email: 'nguyenvana@example.com', role: 'CUSTOMER', createdAt: '2023-02-20T11:00:00Z', updatedAt: '2023-02-20T11:00:00Z', isActive: true },
+//     { userId: 3, username: 'tranb', email: 'tranb@example.com', role: 'CUSTOMER', createdAt: '2023-03-10T15:00:00Z', updatedAt: '2023-10-25T09:00:00Z', isActive: false },
+//     { userId: 4, username: 'levanc', email: 'levanc@example.com', role: 'CUSTOMER', createdAt: '2023-04-01T08:00:00Z', updatedAt: '2023-04-01T08:00:00Z', isActive: true },
+//     { userId: 5, username: 'phamthid', email: 'phamthid@example.com', role: 'CUSTOMER', createdAt: '2023-05-05T12:00:00Z', updatedAt: '2023-05-05T12:00:00Z', isActive: true },
+//     { userId: 6, username: 'hoange', email: 'hoange@example.com', role: 'CUSTOMER', createdAt: '2023-06-10T14:00:00Z', updatedAt: '2023-06-10T14:00:00Z', isActive: true },
+//     { userId: 7, username: 'nguyenf', email: 'nguyenf@example.com', role: 'CUSTOMER', createdAt: '2023-07-01T09:00:00Z', updatedAt: '2023-07-01T09:00:00Z', isActive: true },
+//     { userId: 8, username: 'vantg', email: 'vantg@example.com', role: 'CUSTOMER', createdAt: '2023-08-18T16:00:00Z', updatedAt: '2023-08-18T16:00:00Z', isActive: false },
+//     { userId: 9, username: 'thih', email: 'thih@example.com', role: 'CUSTOMER', createdAt: '2023-09-22T10:00:00Z', updatedAt: '2023-09-22T10:00:00Z', isActive: true },
+//     { userId: 10, username: 'leik', email: 'leik@example.com', role: 'CUSTOMER', createdAt: '2023-10-05T11:00:00Z', updatedAt: '2023-10-05T11:00:00Z', isActive: true },
+//     { userId: 11, username: 'phaml', email: 'phaml@example.com', role: 'CUSTOMER', createdAt: '2023-10-10T13:00:00Z', updatedAt: '2023-10-10T13:00:00Z', isActive: true },
+//     { userId: 12, username: 'hoangm', email: 'hoangm@example.com', role: 'CUSTOMER', createdAt: '2023-10-15T15:00:00Z', updatedAt: '2023-10-15T15:00:00Z', isActive: true },
+//     { userId: 13, username: 'nguyenn', email: 'nguyenn@example.com', role: 'CUSTOMER', createdAt: '2023-10-20T17:00:00Z', updatedAt: '2023-10-20T17:00:00Z', isActive: false },
+//     { userId: 14, username: 'vanto', email: 'vanto@example.com', role: 'CUSTOMER', createdAt: '2023-10-25T09:00:00Z', updatedAt: '2023-10-25T09:00:00Z', isActive: true },
+//     { userId: 15, username: 'thip', email: 'thip@example.com', role: 'CUSTOMER', createdAt: '2023-10-26T10:00:00Z', updatedAt: '2023-10-26T10:00:00Z', isActive: true },
+//     { userId: 16, username: 'leq', email: 'leq@example.com', role: 'CUSTOMER', createdAt: '2023-10-27T11:00:00Z', updatedAt: '2023-10-27T11:00:00Z', isActive: true },
+//     { userId: 17, username: 'phamr', email: 'phamr@example.com', role: 'CUSTOMER', createdAt: '2023-10-28T12:00:00Z', updatedAt: '2023-10-28T12:00:00Z', isActive: true },
+//     { userId: 18, username: 'hoangs', email: 'hoangs@example.com', role: 'CUSTOMER', createdAt: '2023-10-29T13:00:00Z', updatedAt: '2023-10-29T13:00:00Z', isActive: true },
+//     { userId: 19, username: 'nguyent', email: 'nguyent@example.com', role: 'CUSTOMER', createdAt: '2023-10-30T14:00:00Z', updatedAt: '2023-10-30T14:00:00Z', isActive: false },
+//     { userId: 20, username: 'vantu', email: 'vantu@example.com', role: 'CUSTOMER', createdAt: '2023-10-31T15:00:00Z', updatedAt: '2023-10-31T15:00:00Z', isActive: true },
+//     { userId: 21, username: 'thiv', email: 'thiv@example.com', role: 'CUSTOMER', createdAt: '2023-11-01T16:00:00Z', updatedAt: '2023-11-01T16:00:00Z', isActive: true },
+//     { userId: 22, username: 'lew', email: 'lew@example.com', role: 'CUSTOMER', createdAt: '2023-11-02T17:00:00Z', updatedAt: '2023-11-02T17:00:00Z', isActive: true },
+//     { userId: 23, username: 'phamx', email: 'phamx@example.com', role: 'CUSTOMER', createdAt: '2023-11-03T18:00:00Z', updatedAt: '2023-11-03T18:00:00Z', isActive: true },
+//     { userId: 24, username: 'hoangy', email: 'hoangy@example.com', role: 'CUSTOMER', createdAt: '2023-11-04T19:00:00Z', updatedAt: '2023-11-04T19:00:00Z', isActive: true },
+//     { userId: 25, username: 'nguyenz', email: 'nguyenz@example.com', role: 'CUSTOMER', createdAt: '2023-11-05T20:00:00Z', updatedAt: '2023-11-05T20:00:00Z', isActive: false },
+// ];
 // ---------------------------------
 
 // Hàm mô phỏng gọi API lấy danh sách người dùng
 async function fetchUsers() {
     loadingUsers.value = true; // Bắt đầu loading
-    // Mô phỏng độ trễ mạng
-    await new Promise(resolve => setTimeout(resolve, 500)); // Giả lập 0.5 giây tải data
+    // error.value = null;
 
-    // Lọc dữ liệu giả dựa trên searchKeyword
-    const keyword = searchKeyword.value.toLowerCase();
-    const filteredUsers = mockUsers.filter(user =>
+    try {
+        const response = await axios.get('http://localhost:8080/api/users/all-customer');
+        const allUsers = response.data;
+
+        const keyword = searchKeyword.value.toLowerCase();
+        const filteredUsers = allUsers.filter(user =>
         user.username.toLowerCase().includes(keyword) ||
         user.email.toLowerCase().includes(keyword)
-    );
+        );
 
-    // *** Lưu ý: Với dữ liệu giả, chúng ta không có phân trang thực tế.
-    // Logic này chỉ hiển thị toàn bộ dữ liệu đã lọc.
-    // Khi tích hợp API thật, bạn sẽ xử lý response.data.content và thông tin phân trang.
+        users.value = filteredUsers;
+        console.log('Filtered users:', filteredUsers);
+    } catch (err) {
+        // error.value = 'Lỗi khi tải danh sách người dùng';
+        console.error('Fetch users error:', err);
+    } finally {
+        loadingUsers.value = false;
+    }
 
     users.value = filteredUsers; // Gán dữ liệu đã lọc
     loadingUsers.value = false; // Kết thúc loading

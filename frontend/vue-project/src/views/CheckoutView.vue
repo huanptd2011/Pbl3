@@ -219,20 +219,19 @@
         }
         console.log("token:", token); // Log token để kiểm tra
         // Gửi yêu cầu POST đến backend với token trong header
-        const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            withCredentials: true // Nếu cần thiết
-        });
+        const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload);
         console.log("token:", token); // Log token để kiểm tra
         console.log("Kết quả từ backend:", response.data);
 
         const createdOrder = response.data;
 
         // Sau khi đặt hàng thành công
+        const productIds = orderPayload.listOrderDetail.map(item => item.productId);
+        cartStore.removeItems(productIds);
         cartStore.removeSelectedItems(); // Xóa các sản phẩm khỏi giỏ hàng
         alert('Đặt hàng thành công!');
+
+
         // router.push({ name: 'OrderConfirmation', params: { orderId: createdOrder.orderId } });
       } catch (error) {
           console.error('Lỗi khi đặt hàng:', error);

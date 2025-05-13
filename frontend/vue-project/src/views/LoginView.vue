@@ -96,7 +96,6 @@
         if (role === 'ADMIN') {
           router.push('/admin');
         } else if (role === 'CUSTOMER') {
-          // console.log(userStore.value.user);
           await cartUser.loadUserCart(userStore.user.userId);
           router.push('/');
         } else {

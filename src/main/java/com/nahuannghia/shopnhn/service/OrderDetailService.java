@@ -53,12 +53,12 @@ public class OrderDetailService {
     }
 
     public List<OrderDetailResponse> getOrderDetailByOrderId(Integer orderId){
-        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderDetailIdOrderId(orderId);
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(orderId);
         return orderDetails.stream().map(orderDetail -> {
             return new OrderDetailResponse(
                     orderDetail.getProduct().getProductId(),
                     orderDetail.getQuantity(),
-                    orderDetail.getTotal_price(),
+                    orderDetail.getPrice(),
                     orderDetail.getColor(),
                     orderDetail.getSize()
             );

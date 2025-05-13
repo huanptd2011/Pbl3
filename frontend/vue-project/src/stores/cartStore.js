@@ -95,7 +95,6 @@ export const useCartStore = defineStore('cart', {
             )
             if (item) {
                 item.isSelected = isSelected
-                this.updateCartOnServer()
             }
         },
 
@@ -103,12 +102,10 @@ export const useCartStore = defineStore('cart', {
             this.items.forEach((item) => {
                 item.isSelected = isSelected
             })
-            this.updateCartOnServer()
         },
 
         removeSelectedItems() {
             this.items = this.items.filter((item) => !item.isSelected)
-            this.updateCartOnServer()
         },
     },
 

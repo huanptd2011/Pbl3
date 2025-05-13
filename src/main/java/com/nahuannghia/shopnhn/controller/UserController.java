@@ -37,7 +37,7 @@ import com.nahuannghia.shopnhn.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:5173"})
+//@CrossOrigin(origins = {"http://localhost:5173"})
 @RequestMapping("/api/users")
 public class UserController {
     

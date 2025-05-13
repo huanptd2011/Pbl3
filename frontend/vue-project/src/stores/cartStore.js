@@ -82,6 +82,14 @@ export const useCartStore = defineStore('cart', {
                 console.error('Xoá nhiều sản phẩm thất bại', error);
             }
         },
+        async removeItem(cartItemId) {
+            try {
+                await axios.delete(`http://localhost:8080/api/cart-items/delete/${cartItemId}`);
+                this.items = this.items.filter(item => item.cartItemId !== cartItemId);
+            } catch (error) {
+                console.error('Xoá sản phẩm thất bại', error);
+            }
+        },
 
         async updateItemQuantity(cartItemId, newQuantity) {
             newQuantity = parseInt(newQuantity, 10);

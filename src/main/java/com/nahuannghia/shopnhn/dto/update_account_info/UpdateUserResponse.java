@@ -16,7 +16,7 @@ public class UpdateUserResponse {
     private String fullName;
     private String address;
     private String gender;
-    private String dob;
+    private LocalDateTime dob;
     private String avatarUrl;
     private UserInfoResponse updatedUser;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -26,7 +26,7 @@ public class UpdateUserResponse {
         return status;
     }
     public UpdateUserResponse(int status, String message, String username, String email, String password, String phone,
-            String fullName, String address, String gender, String dob, String avatarUrl, UserInfoResponse updatedUser,
+            String fullName, String address, String gender, LocalDateTime dob, String avatarUrl, UserInfoResponse updatedUser,
             LocalDateTime timestamp) {
         this.status = status;
         this.message = message;
@@ -95,10 +95,10 @@ public class UpdateUserResponse {
     public void setGender(String gender) {
         this.gender = gender;
     }
-    public String getDob() {
+    public LocalDateTime getDob() {
         return dob;
     }
-    public void setDob(String dob) {
+    public void setDob(LocalDateTime dob) {
         this.dob = dob;
     }
     public String getAvatarUrl() {

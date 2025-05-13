@@ -107,7 +107,7 @@ const user = ref({
     phone: userStore.user.phone,
     address: userStore.user.address,
     avatar: userStore.user.avatar || defaultAvatar,
-    dob: userStore.user.dob || null  
+    dob: userStore.user.dob || null
 })
 
 
@@ -129,21 +129,21 @@ const saveProfile = async () => {
   isLoading.value = true
 
   try {
-    // Chuẩn hóa ngày sinh về dạng YYYY-MM-DD
-    const formattedDob = user.value.dob ? user.value.dob.slice(0, 10) : null
 
+    const dobFormatted = user.value.dob ? new Date(user.value.dob).toISOString().slice(0, 19) : null;
+
+    console.log('DOB Formatted:', dobFormatted)
     const payload = {
       fullName: user.value.fullName,
       phone: user.value.phone,
       address: user.value.address,
-      dob: formattedDob,
+      dob: dobFormatted,
+      email: user.value.email,
+      avatar: user.value.avatar || null
     }
 
-    const response = await axios.put('/api/user/profile', payload, {
-      headers: {
-        Authorization: `Bearer ${userStore.user.token}`
-      }
-    })
+
+    const response = await axios.put(`http://localhost:8080/api/users/${userStore.user.userId}`, payload)
 
     // Cập nhật lại store nếu cần
     userStore.setUser({

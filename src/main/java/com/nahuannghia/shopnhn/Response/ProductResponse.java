@@ -7,8 +7,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nahuannghia.shopnhn.model.ProductCategory;
+
 public class ProductResponse {
     private Integer productId;
+    public Integer getProductId() {
+        return productId;
+    }
+
     private String productName;
     private String productDescription;
     private String brand;
@@ -19,27 +25,32 @@ public class ProductResponse {
     private LocalDateTime updatedAt;
     private List<ProductInventoryResponse> sizeColorList;
     private List<ProductImageResponse> imageList;
-    //
+    private ProductCategory category;
     public ProductResponse() {
     }
-    public ProductResponse(Integer productId, String productName, String productDescription,
-                       String brand, BigDecimal price, Boolean isActive,
-                       LocalDateTime createdAt, LocalDateTime updatedAt) {
-    this.productId = productId;
-    this.productName = productName;
-    this.productDescription = productDescription;
-    this.brand = brand;
-    this.price = price;
-    this.isActive = isActive;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.sizeColorList  = new ArrayList<>();
-    this.imageList  = new ArrayList<>();
-}
-
+   public ProductResponse(Integer productId, String productName, String productDescription, String brand,
+            BigDecimal price, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt,
+            ProductCategory category) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productDescription = productDescription;
+        this.brand = brand;
+        this.price = price;
+        this.isActive = isActive;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.category = category;
+        this.sizeColorList = new ArrayList<>();
+        this.imageList = new ArrayList<>();
+    }
+    //
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
     public ProductResponse(Integer productId, String productName, String productDescription, String brand,
             BigDecimal price, long totalInventory, Boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt,
-            List<ProductInventoryResponse> sizeColorList, List<ProductImageResponse> imageList) {
+            List<ProductInventoryResponse> sizeColorList, List<ProductImageResponse> imageList,
+            ProductCategory category) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -51,13 +62,7 @@ public class ProductResponse {
         this.updatedAt = updatedAt;
         this.sizeColorList = sizeColorList;
         this.imageList = imageList;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+        this.category = category;
     }
     public String getProductName() {
         return productName;
@@ -120,6 +125,14 @@ public class ProductResponse {
     }
     public void settotalInventory(long totalInventory) {
         this.totalInventory = totalInventory;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 }
 

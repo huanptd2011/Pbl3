@@ -15,31 +15,37 @@ public class OrderResponse {
     private BigDecimal totalPrice;
     private String orderState;
     private String note;
+    private String phone;
+    private String address;
     private List<OrderDetailResponse> orderDetails;
-    //
-public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethodResponse,
-    LocalDateTime orderDate, BigDecimal totalPrice, String orderState, String note) {
-    this.orderId = orderId;
-    this.userId = userId;
-    this.paymentMethod = paymentMethodResponse;
-    this.orderDate = orderDate;
-    this.totalPrice = totalPrice;
-    this.orderState = orderState;
-    this.note = note;
-    this.orderDetails = new ArrayList<>();
-}
-    // public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethod, LocalDateTime orderDate,
-    //         BigDecimal totalPrice, String orderState, String note) {
-    //     this.orderId = orderId;
-    //     this.userId = userId;
-    //     this.paymentMethod = paymentMethod;
-    //     this.orderDate = orderDate;
-    //     this.totalPrice = totalPrice;
-    //     this.orderState = orderState;
-    //     this.note = note;
-    // }
+
     public OrderResponse() {
     }
+
+    public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethod, LocalDateTime orderDate, BigDecimal totalPrice, String orderState, String note, String phone, String address, List<OrderDetailResponse> orderDetails) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.paymentMethod = paymentMethod;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.orderState = orderState;
+        this.note = note;
+        this.phone = phone;
+        this.address = address;
+        this.orderDetails = orderDetails;
+    }
+
+    public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paymentMethod,
+                         LocalDateTime orderDate, BigDecimal totalPrice, String orderState, String note) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.paymentMethod = paymentMethod;
+        this.orderDate = orderDate;
+        this.totalPrice = totalPrice;
+        this.orderState = orderState;
+        this.note = note;
+    }
+
     public Integer getOrderId() {
         return orderId;
     }
@@ -96,6 +102,22 @@ public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paym
         this.note = note;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public List<OrderDetailResponse> getOrderDetails() {
         return orderDetails;
     }
@@ -103,5 +125,4 @@ public OrderResponse(Integer orderId, Integer userId, PaymentMethodResponse paym
     public void setOrderDetails(List<OrderDetailResponse> orderDetails) {
         this.orderDetails = orderDetails;
     }
-    //
 }

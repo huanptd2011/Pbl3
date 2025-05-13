@@ -52,6 +52,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
         Claims claims = null;
 
+//        try {
+//            claims = Jwts.parserBuilder()
+//                    .setSigningKey(SECRET_KEY.getBytes())
+//                    .build()
+//                    .parseClaimsJws(token)
+//                    .getBody();
+//            username = claims.getSubject();
+//        } catch (JwtException e) {
+//            logger.warn("JWT Token parsing failed: {}", e.getMessage());
+//            chain.doFilter(request, response);
+//            return;
+//        }
         try {
             claims = Jwts.parserBuilder()
                     .setSigningKey(SECRET_KEY.getBytes())
@@ -60,21 +72,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .getBody();
             username = claims.getSubject();
         } catch (JwtException e) {
-            logger.warn("JWT Token parsing failed: {}", e.getMessage());
-            chain.doFilter(request, response);
+            logger.error("JWT Token parsing failed for token: {}. Error: {}", token, e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT Token");
             return;
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (isTokenValid(claims, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                logger.debug("Authenticated user: {}", username);
-            }
-        }
+//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//            if (isTokenValid(claims, userDetails)) {
+//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+//                        userDetails, null, userDetails.getAuthorities());
+//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//                logger.debug("Authenticated user: {}", username);
+//            }
+//        }
 
         chain.doFilter(request, response);
     }

@@ -1,23 +1,42 @@
 <template>
   <header class="sticky-top">
-    <div class="container">
-      <div class="d-flex align-items-center justify-content-between py-3">
-        <!-- Mobile menu toggle -->
-        <button class="btn btn-link d-lg-none me-2" @click="toggleMobileMenu">
-          <i class="fas fa-bars"></i>
-        </button>
+      <div class="container">
+          <div class="d-flex align-items-center justify-content-between py-3">
+              <!-- Mobile menu toggle -->
+              <button class="btn btn-link d-lg-none me-2" @click="toggleMobileMenu">
+                  <i class="fas fa-bars"></i>
+              </button>
 
-        <!-- Logo -->
-        <router-link to="/" class="navbar-brand me-44">
-          <img src="@/assets/logo.jpeg" alt="ShoeStore" height="50">
-        </router-link>
+              <!-- Logo -->
+              <router-link to="/" class="navbar-brand me-44">
+                  <img src="@/assets/logo.jpeg" alt="ShoeStore" height="50">
+              </router-link>
 
-        <!-- Main Navigation -->
-        <nav class="d-none d-lg-block">
-          <ul class="nav justify-content-center gap-4">
-            <li class="nav-item">
-              <router-link to="/" class="nav-link">Trang chủ</router-link>
-            </li>
+              <!-- Main Navigation -->
+              <nav class="d-none d-lg-block">
+                  <ul class="nav justify-content-center gap-4">
+                      <li class="nav-item" v-for="(item, index) in navItems" :key="index">
+                          <router-link :to="item.path" class="nav-link">{{ item.title }}</router-link>
+                      </li>
+                  </ul>
+              </nav>
+
+              <!-- Search and User Actions -->
+              <div class="d-flex ">
+                  <div class="input-group me-3 d-none d-lg-flex  bg-gray">
+                      <span class="input-group-text bg-gray border-0 rounded-start-50" @click="gotoProductView" >
+                          <i class="fas fa-search"></i>
+                      </span>
+                      <input type="text" class="form-control border-0 bg-gray rounded-end-50" placeholder="Tìm kiếm giày..." v-model="searchQuery" @keyup.enter="gotoProductView" />
+                  </div>
+
+                  <router-link to="/wishlist" class="btn btn-link position-relative me-2">
+                      <i class="fas fa-heart"></i>
+                      <span class="position-absolute top-0 start-100 translate-middle badge bg-danger"
+                          v-if="wishlistCount > 0">
+                          {{ wishlistCount }}
+                      </span>
+                  </router-link>
 
             <!-- Nút Danh mục chính -->
             <li class="nav-item dropdown"

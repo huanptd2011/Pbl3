@@ -15,8 +15,10 @@ import com.nahuannghia.shopnhn.Response.ProductImageResponse;
 import com.nahuannghia.shopnhn.Response.ProductInventoryResponse;
 import com.nahuannghia.shopnhn.Response.ProductResponse;
 import com.nahuannghia.shopnhn.model.Product;
+import com.nahuannghia.shopnhn.model.ProductCategory;
 import com.nahuannghia.shopnhn.model.ProductImage;
 import com.nahuannghia.shopnhn.model.ProductInventory;
+import com.nahuannghia.shopnhn.repository.ProductCategoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductImageRepository;
 import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
@@ -32,18 +34,9 @@ public class ProductService {
     private final ProductImageRepository productImageRepository;
     private final ProductImageService productImageService;
     private final ProductInventoryService productInventoryService;
+    private final ProductCategoryRepository productCategoryRepository;
 
-    public ProductService(ProductRepository productRepository,
-            ProductInventoryRepository productInventoryRepository,
-            ProductImageRepository productImageRepository,
-            ProductImageService productImageService,
-            ProductInventoryService productInventoryService) {
-        this.productRepository = productRepository;
-        this.productInventoryRepository = productInventoryRepository;
-        this.productImageRepository = productImageRepository;
-        this.productImageService = productImageService;
-        this.productInventoryService = productInventoryService;
-    }
+  //
 
     // Create new product
     public ProductResponse createProduct(ProductRequest productRequest) {
@@ -82,6 +75,7 @@ public class ProductService {
          Long totalInventory = inventoryList.stream()
         .mapToLong(ProductInventoryResponse::getQuantity)
         .sum();
+        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
         return new ProductResponse(
                 savedProduct.getProductId(),
                 savedProduct.getProductName(),
@@ -93,8 +87,19 @@ public class ProductService {
                 savedProduct.getCreatedAt(),
                 savedProduct.getUpdatedAt(),
                 inventoryList,
-                imageList
+                imageList,null
         );
+    }
+
+    public ProductService(ProductRepository productRepository, ProductInventoryRepository productInventoryRepository,
+            ProductImageRepository productImageRepository, ProductImageService productImageService,
+            ProductInventoryService productInventoryService, ProductCategoryRepository productCategoryRepository) {
+        this.productRepository = productRepository;
+        this.productInventoryRepository = productInventoryRepository;
+        this.productImageRepository = productImageRepository;
+        this.productImageService = productImageService;
+        this.productInventoryService = productInventoryService;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
     public ProductResponse getProductById(Integer productId) {
@@ -110,7 +115,7 @@ public class ProductService {
         if(!inventoryList.isEmpty()){
             System.out.println("Djiasudhfusdnd");
         }
-
+        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
         return new ProductResponse(
                 product.getProductId(),
                 product.getProductName(),
@@ -122,7 +127,8 @@ public class ProductService {
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 inventoryList,
-                imageList
+                imageList,
+                category
         );
     }
 
@@ -136,6 +142,8 @@ public class ProductService {
             Long totalInventory = inventoryList.stream()
         .mapToLong(ProductInventoryResponse::getQuantity)
         .sum();
+          ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
+
 
             return new ProductResponse(
                     product.getProductId(),
@@ -148,7 +156,8 @@ public class ProductService {
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,
-                    imageList
+                    imageList,
+                    category
             );
         }).collect(Collectors.toList());
     }
@@ -211,12 +220,13 @@ public class ProductService {
                 // If image exists, no update needed unless additional fields are involved
             });
         }
-
+        
         List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
         Long totalInventory = inventoryList.stream()
         .mapToLong(ProductInventoryResponse::getQuantity)
         .sum();
+       ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
 
         
         return new ProductResponse(
@@ -230,7 +240,8 @@ public class ProductService {
                 product1.getCreatedAt(),
                 product1.getUpdatedAt(),
                 inventoryList,
-                imageList
+                imageList, 
+                category
         );
     }
 
@@ -254,7 +265,7 @@ public class ProductService {
             Long totalInventory = inventoryList.stream()
         .mapToLong(ProductInventoryResponse::getQuantity)
         .sum();
-
+        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
@@ -266,7 +277,8 @@ public class ProductService {
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,
-                    imageList
+                    imageList,
+                    category
             );
         }).collect(Collectors.toList());
     }
@@ -298,8 +310,7 @@ public class ProductService {
             Long totalInventory = inventoryList.stream()
         .mapToLong(ProductInventoryResponse::getQuantity)
         .sum();
-
-
+        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
@@ -311,7 +322,7 @@ public class ProductService {
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,
-                    imageList
+                    imageList,category
             );
         }).collect(Collectors.toList());
     }
@@ -321,8 +332,13 @@ public class ProductService {
         for (ProductResponse response : responses) {
             Integer productId = response.getProductId();
 
+            // Lấy size và màu (inventory)
             List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(productId);
+
+            // Lấy danh sách hình ảnh
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(productId);
+
+            // Gán vào response
             response.setSizeColorList(inventoryList);
             response.setImageList(imageList);
         }

@@ -3,6 +3,7 @@ package com.nahuannghia.shopnhn.config.security_config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,6 +30,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for APIs
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -45,7 +47,7 @@ public class SecurityConfig {
                             "/api/product-inventory/**",
                             "/api/dashboard/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((req, res, ex1) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))

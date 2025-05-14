@@ -5,19 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.nahuannghia.shopnhn.model.*;
+import com.nahuannghia.shopnhn.repository.*;
+import com.nahuannghia.shopnhn.request.OrderDetailRequest;
+import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nahuannghia.shopnhn.Response.OrderDetailResponse;
 import com.nahuannghia.shopnhn.Response.OrderResponse;
 import com.nahuannghia.shopnhn.Response.PaymentMethodResponse;
-import com.nahuannghia.shopnhn.model.Order;
-import com.nahuannghia.shopnhn.model.PaymentMethod;
-import com.nahuannghia.shopnhn.model.User;
-import com.nahuannghia.shopnhn.repository.OrderDetailRepository;
-import com.nahuannghia.shopnhn.repository.OrderRepository;
-import com.nahuannghia.shopnhn.repository.PaymentMethodRepository;
-import com.nahuannghia.shopnhn.repository.UserRepository;
 import com.nahuannghia.shopnhn.request.OrderRequest;
 
 @Service
@@ -34,6 +31,15 @@ public class OrderService {
     private PaymentMethodRepository paymentMethodRepository;
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductInventoryRepository productInventoryRepository;
+
+    @Autowired
+    private ProductInventoryService productInventoryService;
+
 
     public OrderResponse createOrder(OrderRequest request) {
         User user = userRepository.findById(request.getUserId())
@@ -42,6 +48,7 @@ public class OrderService {
         PaymentMethod paymentMethod = paymentMethodRepository.findById(request.getPaymentMethodId())
                 .orElseThrow(() -> new RuntimeException("Payment method not found"));
 
+        // 1. Tạo đơn hàng chính
         Order order = new Order();
         order.setUser(user);
         order.setPaymentMethod(paymentMethod);
@@ -49,8 +56,43 @@ public class OrderService {
         order.setTotalPrice(request.getTotalPrice());
         order.setOrderState("Chờ xác nhận");
         order.setNote(request.getNote());
+        order.setPhone(request.getPhone());
+        order.setAddress(request.getAddress());
 
         Order savedOrder = orderRepository.save(order);
+
+        // 2. Lưu chi tiết đơn hàng
+        for (OrderDetailRequest detailRequest : request.getListOrderDetail()) {
+            Product product = productRepository.findById(detailRequest.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + detailRequest.getProductId()));
+
+            //Giam so luong ngay khi dat hang
+            var productInventory = productInventoryRepository.findByProductInventoryId_ProductIdAndProductInventoryId_ColorAndProductInventoryId_Size(product.getProductId(), detailRequest.getColor(), detailRequest.getSize());
+            productInventoryService.updateProductInventory(product.getProductId(), detailRequest.getColor(), detailRequest.getSize(),
+                    new ProductInventoryRequest(product.getProductId(),
+                            detailRequest.getColor(),
+                            detailRequest.getSize(), productInventory.get().getQuantity() - detailRequest.getQuantity()));
+
+            OrderDetailId orderDetailId = new OrderDetailId(
+                    order.getOrderId(),
+                    product.getProductId(),
+                    detailRequest.getColor(),
+                    detailRequest.getSize()
+            );
+
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrderDetailId(orderDetailId);
+            orderDetail.setOrder(savedOrder);
+            orderDetail.setProduct(product);
+            orderDetail.setQuantity(detailRequest.getQuantity());
+            orderDetail.setPrice(detailRequest.getPrice());
+            orderDetail.setColor(detailRequest.getColor());
+            orderDetail.setPrice(detailRequest.getPrice());
+
+            orderDetailRepository.save(orderDetail);
+        }
+
+        // 3. Trả về response
         return mapToResponse(savedOrder);
     }
 
@@ -78,47 +120,46 @@ public class OrderService {
     }
 
     private OrderResponse mapToResponse(Order order) {
-    PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(
-            order.getPaymentMethod().getPaymentMethodId(),
-            order.getPaymentMethod().getPaymentMethodName()
-    );
-    List<OrderDetailResponse> list = orderDetailService.getOrderDetailByOrderId(order.getOrderId());
+        PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(
+                order.getPaymentMethod().getPaymentMethodId(),
+                order.getPaymentMethod().getPaymentMethodName()
+        );
+        List<OrderDetailResponse> list = orderDetailService.getOrderDetailByOrderId(order.getOrderId());
 
-    // Khởi tạo đối tượng OrderResponse trước
-    OrderResponse response = new OrderResponse(
-            order.getOrderId(),
-            order.getUser().getUserId(),
-            paymentMethodResponse,
-            order.getOrderDate(),
-            order.getTotalPrice(),
-            order.getOrderState(),
-            order.getNote()
-    );
+        // Khởi tạo đối tượng OrderResponse trước
+        OrderResponse response = new OrderResponse(
+                order.getOrderId(),
+                order.getUser().getUserId(),
+                paymentMethodResponse,
+                order.getOrderDate(),
+                order.getTotalPrice(),
+                order.getOrderState(),
+                order.getNote(),
+                order.getPhone(),
+                order.getAddress(),
+                list
+        );
 
-    // Gán orderDetails sau khi đã có object
-    response.setOrderDetails(list);
+        // Gán orderDetails sau khi đã có object
+        response.setOrderDetails(list);
 
-    return response;
-}
+        return response;
+    }
 
     public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
-    List<OrderResponse> orders;
-    if (orderState != null && !orderState.isEmpty()) {
-        orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
-    } else {
-        orders = orderRepository.findOrdersByUserId(userId); // All states
+        List<OrderResponse> orders;
+        if (orderState != null && !orderState.isEmpty()) {
+            orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
+        } else {
+            orders = orderRepository.findOrdersByUserId(userId); // All states
+        }
+
+        for (OrderResponse order : orders) {
+            List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
+            order.setOrderDetails(details);
+        }
+
+        return orders.stream()
+                     .collect(Collectors.groupingBy(OrderResponse::getOrderState));
     }
-
-    for (OrderResponse order : orders) {
-        List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
-        order.setOrderDetails(details);
-    }
-
-    return orders.stream()
-                 .collect(Collectors.groupingBy(OrderResponse::getOrderState));
-}
-
-
-
-
 }

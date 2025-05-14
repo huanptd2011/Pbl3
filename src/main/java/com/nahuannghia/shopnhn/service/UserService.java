@@ -183,6 +183,7 @@ public class UserService {
 
             User user = optionalUser.get();
             String token = jwtTokenUtil.generateToken(user);
+
             user.setLastLogin(LocalDateTime.now());
             userRepository.save(user);
 

@@ -33,7 +33,7 @@ public class OrderDetail {
     private Integer quantity;
 
     @Column(name = "price", nullable = false)
-    private BigDecimal total_price;
+    private BigDecimal price;
 
     @Column(name = "color", insertable = false, updatable = false)
     private String color;
@@ -43,12 +43,12 @@ public class OrderDetail {
     
     public OrderDetail() {
     }
-    public OrderDetail(OrderDetailId orderDetailId, Order order, Product product, Integer quantity, BigDecimal total_price, String color, String size) {
+    public OrderDetail(OrderDetailId orderDetailId, Order order, Product product, Integer quantity, BigDecimal price, String color, String size) {
         this.orderDetailId = orderDetailId;
         this.order = order;
         this.product = product;
         this.quantity = quantity;
-        this.total_price = total_price;
+        this.price = price;
         this.color = color;
         this.size = size;
     }
@@ -85,12 +85,12 @@ public class OrderDetail {
         this.quantity = quantity;
     }
 
-    public BigDecimal getTotal_price() {
-        return total_price;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setTotal_price(BigDecimal total_price) {
-        this.total_price = total_price;
+    public void setPrice(BigDecimal total_price) {
+        this.price = total_price;
     }
 
     public String getColor() {

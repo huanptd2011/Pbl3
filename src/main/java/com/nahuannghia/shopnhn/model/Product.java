@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -48,18 +50,28 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
-    public Product() {}
-    public Product(Integer productId, String productName, String productDescription, String brand, BigDecimal price,
-                   LocalDateTime createdAt, LocalDateTime updatedAt, List<ProductImage> images) {
+
+    @ManyToOne() 
+    @JoinColumn(name = "categoryId", nullable = false) // Đảm bảo rằng productId không null
+    private ProductCategory productCategory;
+
+    public Product(String brand, LocalDateTime createdAt, BigDecimal price, ProductCategory productCategory, String productDescription, Integer productId, String productName, LocalDateTime updatedAt) {
+        this.brand = brand;
+        this.createdAt = createdAt;
+        this.price = price;
+        this.productCategory = productCategory;
+        this.productDescription = productDescription;
         this.productId = productId;
         this.productName = productName;
-        this.productDescription = productDescription;
-        this.brand = brand;
-        this.price = price;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.images = images;
     }
+    public ProductCategory getProductCategory() {
+        return productCategory;
+    }
+    public void setProductCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
+    }
+    public Product() {}
     public Integer getProductId() {
         return productId;
     }

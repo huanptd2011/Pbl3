@@ -26,22 +26,84 @@
           <h4>Thông tin giao hàng</h4>
           <div class="card mb-4">
               <div class="card-body">
-                  <p class="card-text text-muted">
-                      [Form nhập thông tin giao hàng: Tên, địa chỉ, SĐT... ]
-                  </p>
-                  </div>
+                  <form>
+                      <!-- Số điện thoại -->
+                      <div class="mb-3">
+                          <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                          <input 
+                              type="tel" 
+                              class="form-control" 
+                              id="phoneNumber" 
+                              placeholder="Số điện thoại" 
+                              required
+                              v-model="userPhone"
+                          >
+                      </div>
+
+                      <!-- Địa chỉ -->
+                      <div class="mb-3">
+                          <label for="deliveryAddress" class="form-label">Địa chỉ nhận hàng</label>
+                          <textarea class="form-control" 
+                                    id="deliveryAddress" 
+                                    rows="2" 
+                                    placeholder="Tên, Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                                    v-model="userAddress"></textarea>
+                      </div>
+
+                      <!-- Ghi chú (tuỳ chọn) -->
+                      <div class="mb-3">
+                          <label for="deliveryNotes" class="form-label">Ghi chú (nếu có)</label>
+                          <textarea class="form-control" 
+                                    id="deliveryNotes" 
+                                    rows="2" 
+                                    placeholder="Ghi chú"
+                                    v-model="userNote"></textarea>
+                      </div>
+                </form>
+              </div>
           </div>
 
-           <h4>Phương thức thanh toán</h4>
+          <h4>Phương thức thanh toán</h4>
           <div class="card mb-4">
-              <div class="card-body">
-                   <p class="card-text text-muted">
-                      [Chọn phương thức thanh toán: COD, Chuyển khoản, Cổng thanh toán...]
-                  </p>
+            <div class="card-body">
+              <div class="payment-methods">
+                <!-- Trạng thái loading -->
+                <div v-if="isLoadingPaymentMethods" class="text-center py-3 loading-spinner">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
                   </div>
+                  <p class="text-muted mt-2">Đang tải phương thức thanh toán...</p>
+                </div>
+
+                <!-- Hiển thị lỗi nếu có -->
+                <div v-else-if="paymentMethodsError" class="alert alert-danger">
+                  {{ paymentMethodsError }}
+                </div>
+
+                <!-- Hiển thị danh sách payment methods -->
+                <div v-else>
+                  <div 
+                    v-for="method in paymentMethods" 
+                    :key="method.paymentMethodId"
+                    class="payment-method"
+                    :class="{ active: selectedPaymentMethod === method.paymentMethodId }"
+                    @click="selectedPaymentMethod = Number(method.paymentMethodId)"
+                  >
+                    <div class="d-flex align-items-center">
+                      <div>
+                        <h6 class="mb-1">{{ method.paymentMethodName }}</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          </div>
+          <!-- Thêm trường ẩn để lưu phương thức thanh toán đã chọn -->
+          <input type="hidden" name="payment_method" :value="selectedPaymentMethod">
+
+        </div>
 
         <div class="col-md-4">
           <div class="card">
@@ -89,9 +151,16 @@
   import { useCartStore } from '@/stores/cartStore'; // Import cart store
   import { useRouter } from 'vue-router'; // Import useRouter
   import axios from 'axios'; // Import axios
+  import { useUserStore } from '@/stores/user'; // Import user store
 
-  const cartStore = useCartStore();
+  const cartStore = useCartStore();  
+  const userStore = useUserStore();
   const router = useRouter();
+
+  const userPhone = userStore.user.phone; // Lấy số điện thoại từ store
+  const userAddress = userStore.user.fullName + ", " + userStore.user.address; // Lấy địa chỉ từ store
+  const userNote = '';
+
 
   const isProcessingOrder = ref(false); // State để hiển thị loading trên nút
 
@@ -109,13 +178,10 @@
           return;
       }
 
-      // Kiểm tra xem người dùng đã điền đủ thông tin giao hàng/thanh toán chưa (Placeholder)
-      // Đây là nơi bạn sẽ validate các form nhập liệu.
-      // Hiện tại bỏ qua bước này cho đơn giản.
-      // if (!isShippingInfoValid || !isPaymentMethodSelected) {
-      //     alert('Vui lòng điền đầy đủ thông tin giao hàng và chọn phương thức thanh toán.');
-      //     return;
-      // }
+      if (!selectedPaymentMethod.value) {
+          alert('Vui lòng điền đầy đủ thông tin giao hàng và chọn phương thức thanh toán.');
+          return;
+      }
 
       // Bắt đầu quá trình xử lý đặt hàng
       isProcessingOrder.value = true;
@@ -123,47 +189,51 @@
       // Chuẩn bị dữ liệu đơn hàng để gửi lên backend
       const orderPayload = {
           // Lấy danh sách các item đã chọn từ store
-          items: cartStore.selectedItems.map(item => ({
+          listOrderDetail: cartStore.selectedItems.map(item => ({
               productId: item.productId,
               color: item.color,
               size: item.size,
               quantity: item.quantity,
-              priceAtPurchase: item.price, // Nên lưu giá tại thời điểm mua để tránh thay đổi giá sau này
-              // Có thể thêm các thông tin khác nếu backend cần (tên sản phẩm, ảnh...)
-              name: item.name,
-              imageUrl: item.imageUrl,
-              brand: item.brand
+              price: item.price
           })),
-          // Thêm thông tin người dùng, địa chỉ giao hàng, phương thức thanh toán... vào đây
-          // userId: ...,
-          // shippingAddress: {...},
-          // paymentMethod: ...,
-          // notes: ...,
-          // totalPrice: cartStore.totalSelectedPrice // Backend nên tính toán lại giá cuối cùng
+          //Thong tin nguoi dung
+          userId: userStore.user.userId, // Lấy userId từ store
+          address: userAddress, // Địa chỉ từ người dùng
+          phone: userPhone,
+          paymentMethodId: selectedPaymentMethod.value, // Lấy phương thức thanh toán đã chọn
+          notes: userNote || '', // Ghi chú từ người dùng
+          totalPrice: cartStore.totalSelectedPrice // Tổng giá trị đơn hàng
       };
 
       console.log("Dữ liệu gửi đi để tạo đơn hàng:", orderPayload); // Log dữ liệu gửi đi
 
       try {
-          // <-- GỬI YÊU CẦU ĐẾN ENDPOINT TẠO ĐƠN HÀNG CỦA BACKEND -->
-          // Endpoint này cần được bạn xây dựng ở backend (ví dụ: POST /api/orders hoặc POST /checkout)
-          // Endpoint này sẽ nhận orderPayload, kiểm tra tồn kho lần cuối, trừ tồn kho, tạo đơn hàng trong DB, v.v.
-          const response = await axios.post('http://localhost:8080/orders', orderPayload); // <-- Thay thế URL này bằng endpoint backend thực tế của bạn
+          const token = userStore.user.token; // Hoặc từ Vuex nếu dùng Vuex
 
-          console.log("Kết quả từ backend:", response.data);
+          console.log("Token:", token); // Log token để kiểm tra
 
-          // Giả định backend trả về thông tin đơn hàng sau khi thành công
-          const createdOrder = response.data;
+        if (!token) {
+            alert('Bạn cần đăng nhập để thực hiện đơn hàng!');
+            router.push({ name: 'Login' }); // Chuyển hướng đến trang đăng nhập
+            return;
+        }
+        console.log("token:", token); // Log token để kiểm tra
+        // Gửi yêu cầu POST đến backend với token trong header
+        const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true // Nếu cần thiết
+        });
+        console.log("token:", token); // Log token để kiểm tra
+        console.log("Kết quả từ backend:", response.data);
 
-          // <-- SAU KHI ĐẶT HÀNG THÀNH CÔNG -->
-          // 1. Xóa các sản phẩm vừa checkout khỏi giỏ hàng frontend
-          cartStore.removeSelectedItems();
+        const createdOrder = response.data;
 
-          // 2. Chuyển hướng người dùng đến trang xác nhận đơn hàng hoặc trang cảm ơn
-          // Truyền ID đơn hàng nếu có để hiển thị chi tiết trên trang xác nhận
-          alert('Đặt hàng thành công!'); // Thông báo thành công đơn giản
-          router.push({ name: 'OrderConfirmation', params: { orderId: createdOrder.orderId } }); // <-- Cần có route 'OrderConfirmation'
-
+        // Sau khi đặt hàng thành công
+        cartStore.removeSelectedItems(); // Xóa các sản phẩm khỏi giỏ hàng
+        alert('Đặt hàng thành công!');
+        // router.push({ name: 'OrderConfirmation', params: { orderId: createdOrder.orderId } });
       } catch (error) {
           console.error('Lỗi khi đặt hàng:', error);
           alert('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.'); // Thông báo lỗi đơn giản
@@ -174,8 +244,36 @@
       }
   };
 
+
+
+    // <-- TẢI DANH SÁCH PHƯƠNG THỨC THANH TOÁN -->
+    // Thêm state cho payment methods
+    const paymentMethods = ref([]);
+    const selectedPaymentMethod = ref(null);
+    const isLoadingPaymentMethods = ref(false);
+    const paymentMethodsError = ref(null);
+
+    // Hàm load payment methods
+    const loadPaymentMethods = async () => {
+      try {
+        isLoadingPaymentMethods.value = true;
+        paymentMethodsError.value = null;
+        
+        const response = await axios.get('http://localhost:8080/api/payment-methods');
+        paymentMethods.value = response.data;
+        
+      } catch (error) {
+        console.error('Error loading payment methods:', error);
+        paymentMethodsError.value = 'Không thể tải phương thức thanh toán. Vui lòng thử lại sau.';
+      } finally {
+        isLoadingPaymentMethods.value = false;
+      }
+    };
+
+
   // Kiểm tra khi component được mount: nếu không có item nào được chọn, chuyển hướng về giỏ hàng
   onMounted(() => {
+      loadPaymentMethods();
       if (cartStore.selectedItems.length === 0) {
           console.warn("Checkout page loaded with no selected items. Redirecting to cart.");
           router.replace({ name: 'Cart' }); // Sử dụng replace để người dùng không thể quay lại trang checkout trống bằng nút back
@@ -186,6 +284,9 @@
 
   // Bạn sẽ cần một component OrderConfirmationView.vue và route '/order-confirmation/:orderId'
   // để hiển thị trang xác nhận đơn hàng.
+
+
+
   </script>
 
   <style scoped>
@@ -193,4 +294,26 @@
   .list-group-item img {
       flex-shrink: 0; /* Ngăn ảnh bị co */
   }
-  </style>
+
+
+    .payment-method {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .payment-method:hover {
+        border-color: #0d6efd;
+        background-color: #f8f9fa;
+    }
+    .payment-method.active {
+        border-color: #0d6efd;
+        background-color: #e7f1ff;
+    }
+    .payment-method img {
+        height: 30px;
+        margin-right: 15px;
+    }
+ </style>

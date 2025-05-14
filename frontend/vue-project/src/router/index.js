@@ -87,6 +87,17 @@ const routes = [
         component: () => import('@/views/admin/AdminProducts.vue'),
         meta: { requiresAuth: true, requiredRole: 'ADMIN' },
       },
+      { path: 'product/create', 
+            name: 'AdminCreateProduct', 
+            component: () => import('@/views/admin/product/AdminCreateProduct.vue'), 
+            meta: { requiresAuth: true, requiredRole: 'ADMIN' } 
+      },
+      {
+            path:'product/edit/:iid',
+            name: 'AdminEditProduct',
+            component: () => import('@/views/admin/product/AdminEditProduct.vue'),
+            meta: { requiresAuth: true, requiredRole: 'ADMIN' }
+      }
       // {
       //   path: 'orders',
       //   name: 'AdminOrders',

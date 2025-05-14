@@ -40,9 +40,13 @@
             Không chỉ đẹp mắt, mà còn vượt trội trong hiệu năng.</span>
           <!-- <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link> -->
         </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="section-title">Sản phẩm bán chạy</h2>
+          <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link>
+        </div>
         <div v-if="isLoading" class="text-center text-muted">Đang tải sản phẩm...</div>
         <div v-else class="row g-4">
-          <div class="col-md-3" v-for="product in newArrivals" :key="product.productId">
+          <div class="col-md-3" v-for="product in recentlyUpdated" :key="product.productId">
             <ProductCard :product="product" />
           </div>
         </div>
@@ -58,7 +62,7 @@
         </div>
         <div v-if="isLoading" class="text-center text-muted">Đang tải sản phẩm...</div>
         <div v-else class="row g-4">
-          <div class="col-md-3" v-for="product in recentlyUpdated" :key="product.productId">
+          <div class="col-md-3" v-for="product in newArrivals" :key="product.productId">
             <ProductCard :product="product" />
           </div>
         </div>
@@ -90,13 +94,15 @@ const isLoading = ref(true)
 
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/products/new')
-    const allProducts = response.data
+    const responseNew = await axios.get('http://localhost:8080/api/products/new')
+    const newProducts = responseNew.data
+    const responseSelling = await axios.get('http://localhost:8080/api/products/best-selling')
+    const sellingProducts = responseSelling.data
 
-    // Gán dữ liệu
-    newArrivals.value = [...allProducts]
-
-    recentlyUpdated.value = [...allProducts]
+    // san pham moi
+    newArrivals.value = [...newProducts]
+    //San pham ban chay
+    recentlyUpdated.value = [...sellingProducts]
 
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)

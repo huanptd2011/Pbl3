@@ -64,6 +64,11 @@ public class ProductController {
          return productService.getNewProduct();
      }
 
+     @GetMapping("/best-selling")
+     public List<ProductResponse> getBestSellingProducts(){
+        return productService.getTop4BestSellingProducts();
+     }
+
     @PutMapping("/edit/{productId}")
     public ProductResponse updateProduct(@PathVariable Integer productId, @RequestBody ProductRequest productRequest) {
         return productService.updateProduct(productId, productRequest);

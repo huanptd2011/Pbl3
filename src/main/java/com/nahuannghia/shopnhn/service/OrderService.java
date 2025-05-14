@@ -3,6 +3,7 @@ package com.nahuannghia.shopnhn.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.nahuannghia.shopnhn.model.*;
@@ -111,7 +112,12 @@ public class OrderService {
     public OrderResponse updateOrderStatus(Integer orderId, String newStatus) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-        order.setOrderState(newStatus);
+        if(Objects.equals(newStatus, "cancel")){
+            order.setOrderState("Đã hủy");
+        }
+        if(Objects.equals(newStatus, "complete")){
+            order.setOrderState("Đã giao");
+        }
         return mapToResponse(orderRepository.save(order));
     }
 
@@ -144,6 +150,17 @@ public class OrderService {
         response.setOrderDetails(list);
 
         return response;
+    }
+
+    public List<OrderResponse> getAllOrderByUserId(Integer userId){
+        try{
+            List<Order> list = orderRepository.getAllOrderByUserId(userId);
+            return list.stream()
+                    .map(this::mapToResponse)
+                    .collect(Collectors.toList());
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {

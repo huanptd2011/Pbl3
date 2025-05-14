@@ -223,6 +223,18 @@
         console.log("token:", token); // Log token để kiểm tra
         console.log("Kết quả từ backend:", response.data);
 
+        if (selectedPaymentMethod.value === 2) {
+          const vnPayResponse = await axios.get('http://localhost:8080/api/vn-pay/create');
+          
+          if (vnPayResponse.data && vnPayResponse.data.url) {
+            window.location.href = vnPayResponse.data.url; // Chuyển người dùng tới VNPay
+            return;
+          } else {
+            alert('Không thể tạo link thanh toán VNPay.');
+            return;
+          }
+        }
+
         const createdOrder = response.data;
 
         // Sau khi đặt hàng thành công

@@ -45,7 +45,7 @@
                             <th>Số lượng tồn</th>
                             <th>Danh mục</th>
                             <th>Trạng thái</th>
-                            <th>Action</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,18 +58,18 @@
                                 </td>
                                 <td>{{ product.productName }}</td>
                                 <td>{{ formatCurrency(product.price) }}</td>
-                                <td>{{ product.stockQuantity }}</td>
+                                <td>{{ product.totalInventory}}</td>
                                 <td>{{ product.productCategory }}</td>
                                 <td>
                                     <span
-                                        :class="['status-badge', product.isActive ? 'status-active' : 'status-inactive']">
+                                        :class="['status-badge', product.isActive  ? 'status-active' : 'status-inactive']">
                                         {{ product.isActive ? 'Đang bán' : 'Ngừng bán' }}
                                     </span>
                                 </td>
                                 <td>
-                                    <i class="fas fa-edit text-info me-2" style="cursor: pointer;"
+                                    <i class="fas fa-edit text-info me-3 icon " 
                                         @click="editProduct(product.productId)"></i>
-                                    <i class="fas fa-trash-alt text-danger" style="cursor: pointer;"
+                                    <i class="fas fa-trash-alt text-danger icon" 
                                         @click="deleteProduct(product.productId)"></i>
                                 </td>
                             </tr>
@@ -221,12 +221,12 @@ function formatCurrency(value) {
 
 // Hàm điều hướng sang trang thêm sản phẩm (sẽ cần route '/products/add')
 function goToAddProduct() {
-    router.push('/products/add');
+    router.push(`/admin/product/create`);
 }
 
 // Hàm điều hướng sang trang sửa sản phẩm (sẽ cần route '/products/edit/:id')
 function editProduct(productId) {
-    router.push(`/products/edit/${productId}`);
+    router.push(`/admin/product/edit/${productId}`);
 }
 
 // Hàm xóa sản phẩm
@@ -332,15 +332,15 @@ watch([searchKeyword, filterCategory, filterStatus], () => {
 
 /* Màu cho trạng thái sản phẩm */
 .status-badge.status-active {
-    background-color: #10b98132;
-    /* Xanh lá cây cho Đang bán */
-    color: #0b1739;
+    background-color: #10b9812e;
+    color: #139f81;
+    border: 0.2px solid  #139f81;
 }
 
 .status-badge.status-inactive {
     background-color: #e2232330;
     color: #ef4444;
-    /* Đỏ cho Ngừng bán */
+    border: 0.2px solid  #ef4444;
 }
 
 /* Action Icons */

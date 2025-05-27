@@ -16,6 +16,9 @@ import com.nahuannghia.shopnhn.model.Order;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
+    @Query("SELECT o FROM Order o WHERE o.user.userId = :userId")
+            List<Order> getAllOrderByUserId(@Param("userId") Integer userId);
+
     // Có thể thêm các phương thức tùy chỉnh nếu cần
     boolean existsByPaymentMethod_PaymentMethodId(Integer paymentMethodId);
 

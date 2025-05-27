@@ -57,6 +57,7 @@
                                 <td>{{ formatCurrency(product.price) }}</td>
                                 <td>{{ product.totalInventory}}</td>
                                 <td>{{ product.category.categoryName }}</td>
+
                                 <td>
                                     <span
                                         :class="['status-badge', product.isActive  ? 'status-active' : 'status-inactive']">

@@ -6,7 +6,6 @@ package com.nahuannghia.shopnhn.controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +36,7 @@ import com.nahuannghia.shopnhn.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-//@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = {"http://localhost:5173"})
 @RequestMapping("/api/users")
 public class UserController {
     
@@ -88,18 +87,18 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<UpdateUserResponse> updateUserInfo(
-            @PathVariable Integer accountId,
+            @PathVariable("userId") Integer userId,
             @RequestBody @Valid UpdateUserRequest request,
             Principal principal) throws UserNotFoundException {
         
         try {
-            UserInfoResponse currentUser = userService.getUserInfo(accountId);
-            
-            if (!currentUser.getUsername().equals(principal.getName()) && !hasAdminRole()) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+//            UserInfoResponse currentUser = userService.getUserInfo(userId);
+//
+//            if (!currentUser.getUsername().equals(principal.getName()) && !hasAdminRole()) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//            }
     
-            UpdateUserResponse response = userService.updateUserInfo(accountId, request);
+            UpdateUserResponse response = userService.updateUserInfo(userId, request);
             return ResponseEntity.ok(response);
             
         } catch (UserNotFoundException e) {

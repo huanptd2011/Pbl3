@@ -39,8 +39,13 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public OrderResponse getOrderById(@PathVariable Integer orderId) {
+    public OrderResponse getOrderById(@PathVariable("orderId") Integer orderId) {
         return orderService.getOrderById(orderId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<OrderResponse> getAllOrderByUserId(@PathVariable("userId") Integer userId){
+        return orderService.getAllOrderByUserId(userId);
     }
 
     @DeleteMapping("/{orderId}")
@@ -51,12 +56,13 @@ public class OrderController {
 
 
     //chưa xu li duoc tren api
-    @PutMapping("/{orderId}/status")
+    @PutMapping("/{orderId}/{status}")
     public OrderResponse updateOrderStatus(@PathVariable("orderId") Integer orderId,
-                                           @RequestParam String status) {
+                                           @PathVariable("status") String status) {
         return orderService.updateOrderStatus(orderId, status);
     }
-     @GetMapping("/group-by-status")
+
+    @GetMapping("/group-by-status")
     public ResponseEntity<Map<String, List<OrderResponse>>> getOrdersGroupedByStatus(@RequestParam Integer userId,
     @RequestParam(required = false, defaultValue = "") String orderState) {
         Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId,orderState);

@@ -35,7 +35,9 @@
            <div class="mb-3">
             <label for="totalInventory" class="form-label">Tổng số lượng tồn</label>
             <input type="number" class="form-control calenda" id="totalInventory" v-model="product.totalInventory" min="0">
+
              <small class="form-text cl-note">Tổng số lượng tồn có thể được tự động tính từ các biến thể.</small>
+
           </div>
 
 
@@ -43,8 +45,9 @@
             <label for="category" class="form-label">Danh mục <span class="text-danger">*</span></label>
             <select class="form-select calenda" id="category" v-model="product.categoryId" required> 
               <option value="">-- Chọn danh mục --</option>
+
               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
-                  {{ category.categoryName }}
+                  {{ category.categoryName }
               </option>
             </select>
           </div>
@@ -69,6 +72,7 @@
                   <div v-for="(variant, index) in product.sizeColorList" :key="index" class="row g-2 mb-2 align-items-center">
                      <div class="col">
                          <input type="text" class="form-control form-control-sm calenda cl-note" v-model="variant.color" placeholder="Màu sắc">
+
                      </div>
                       <div class="col">
                          <input type="text" class="form-control form-control-sm calenda" v-model="variant.size" placeholder="Kích thước">
@@ -246,7 +250,6 @@ onMounted(() => {
 }
 
 .card-body {
-}
 
 /* Style cho input, select, textarea */
 .form-control.calenda,
@@ -282,11 +285,12 @@ onMounted(() => {
 }
 
 /* Style cho nút quay lại */
-
-.btn-secondary:hover {
-    background-color: #666;
-    border-color: #666;
+.btn-secondary {
+   background-color: #555;
+   border-color: #555;
+   color: #fff;
 }
+
 
 .fixed-onright{
     position: fixed;

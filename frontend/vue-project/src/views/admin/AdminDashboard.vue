@@ -90,6 +90,7 @@
 
             </div>
             <!-- <input type="month" id="orderMonthPicker" v-model="selectedOrderMonth" @change="fetchOrdersChartDataByMonth" class="form-control form-control-sm calenda" style="width: 120px;"> -->
+
           </div>
           <div class="card-body">
             <div v-if="!salesChartData"
@@ -466,7 +467,7 @@ function renderOrdersChart(data) {
         legend: {
           display:false, // Hiển thị legend
           position: 'bottom',
-          
+
           labels: {
             color: '#aeb9e1',
             usePointStyle: true,

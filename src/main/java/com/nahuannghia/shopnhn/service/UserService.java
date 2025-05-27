@@ -222,18 +222,18 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
 
 // ✅ Kiểm tra quyền truy cập (nếu có Spring Security)
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        User currentUser = userRepository.findByUsername(currentUsername)
-                .orElseThrow(() -> new AccessDeniedException("Not authenticated"));
-
-        if (!currentUser.getRole().equals("ADMIN") && !currentUser.getUserId().equals(userId)) {
-            throw new AccessDeniedException("Bạn không có quyền sửa thông tin người dùng này");
-        }
+//        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+//        User currentUser = userRepository.findByUsername(currentUsername)
+//                .orElseThrow(() -> new AccessDeniedException("Not authenticated"));
+//
+//        if (!currentUser.getRole().equals("ADMIN") && !currentUser.getUserId().equals(userId)) {
+//            throw new AccessDeniedException("Bạn không có quyền sửa thông tin người dùng này");
+//        }
 
 // ✅ Cập nhật các trường nếu có
-        if (userInfo.getPassword() != null && !userInfo.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-        }
+//        if (userInfo.getPassword() != null && !userInfo.getPassword().isEmpty()) {
+//            user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+//        }
         if (userInfo.getEmail() != null) {
             user.setEmail(userInfo.getEmail());
         }
@@ -245,6 +245,10 @@ public class UserService {
         }
         if (userInfo.getFullName() != null) {
             user.setFullName(userInfo.getFullName());
+        }
+        if(userInfo.getDob() != null){
+            user.setDob(userInfo.getDob());
+            System.out.println(userInfo.getDob());
         }
 
         user.setUpdatedDate(LocalDateTime.now());
@@ -270,7 +274,7 @@ public class UserService {
                 user.getFullName(),
                 user.getStatus() != null ? user.getStatus().toString() : null,
                 user.getCreatedDate() != null ? user.getCreatedDate().toString() : null,
-                user.getUpdatedDate() != null ? user.getUpdatedDate().toString() : null,
+                user.getUpdatedDate() != null ? user.getUpdatedDate() : null,
                 user.getLastLogin() != null ? user.getLastLogin().toString() : null,
                 userInfoResponse,
                 LocalDateTime.now()

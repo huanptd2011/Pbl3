@@ -78,7 +78,7 @@
       </div>
     </div>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu
     <div class="mobile-menu" :class="{ 'show': mobileMenuOpen }">
       <div class="mobile-menu-header">
         <button class="btn btn-close" @click="toggleMobileMenu"></button>
@@ -109,7 +109,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
 
     <!-- Auth Modal -->
     <AuthModal v-if="showAuthModal" @close="toggleAuthModal" />

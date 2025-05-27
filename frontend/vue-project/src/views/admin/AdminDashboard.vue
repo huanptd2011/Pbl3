@@ -442,7 +442,7 @@ function renderOrdersChart(data) {
   console.log(labels, counts);
 
   ctx.chart = new Chart(ctx, { // Lưu instance biểu đồ
-    type: 'doughnut', // Hoặc 'doughnut', 'pie'
+    type: 'bar', // Hoặc 'doughnut', 'pie'
     data: {
       labels: labels,
       datasets: [{
@@ -451,7 +451,8 @@ function renderOrdersChart(data) {
         backgroundColor: [ // Màu nền cho các cột/lát cắt
           'rgba(0,194,255)',
           'rgba(14,67,251)',
-          'rgba(203,60,255)'
+          'rgba(203,60,255)',
+          'rgba(255,0,450)',
 
         ],
 
@@ -463,6 +464,7 @@ function renderOrdersChart(data) {
       maintainAspectRatio: false,
       plugins: {
         legend: {
+          display:false, // Hiển thị legend
           position: 'bottom',
           
           labels: {

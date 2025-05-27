@@ -6,7 +6,7 @@
                 <div class="d-flex align-items-center">
                      <select v-model="filterCategory" class="form-select form-select-sm me-2 calenda" style="width: 150px;">
                <option value="">Tất cả Danh mục</option>
-               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryName" >
+               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId" >
                 {{ category.categoryName }}
             </option>
               
@@ -39,7 +39,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Ảnh</th>
+                            
                             <th>Tên Sản phẩm</th>
                             <th>Giá</th>
                             <th>Số lượng tồn</th>
@@ -52,14 +52,11 @@
                         <template v-if="paginatedProducts.length > 0">
                             <tr v-for="product in paginatedProducts" :key="product.id">
                                 <td>{{ product.productId }}</td>
-                                <td>
-                                    <img :src="product.imageUrl" alt="Product Image"
-                                        style="width: 50px; height: 50px; object-fit: cover;">
-                                </td>
+                                
                                 <td>{{ product.productName }}</td>
                                 <td>{{ formatCurrency(product.price) }}</td>
                                 <td>{{ product.totalInventory}}</td>
-                                <td>{{ product.productCategory }}</td>
+                                <td>{{ product.category.categoryName }}</td>
                                 <td>
                                     <span
                                         :class="['status-badge', product.isActive  ? 'status-active' : 'status-inactive']">
@@ -75,7 +72,7 @@
                             </tr>
                         </template>
                         <tr v-else-if="paginatedProducts.length === 0">
-                            <td colspan="8" class="text-center text-muted">Không tìm thấy sản phẩm nào.</td>
+                            <td colspan="8" class="text-center  cl-note">Không tìm thấy sản phẩm nào.</td>
                         </tr>
 
                         <template v-else>
@@ -165,7 +162,7 @@ const filterProduct = computed(() => {
 
     // Lọc theo danh mục
     if (filterCategory.value) {
-        filteredProducts = filteredProducts.filter(product => product.productCategory === filterCategory.value);
+        filteredProducts = filteredProducts.filter(product => product.category?.categoryId === filterCategory.value);
     }
 
     // Lọc theo trạng thái

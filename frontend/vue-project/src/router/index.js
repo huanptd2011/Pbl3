@@ -93,7 +93,7 @@ const routes = [
             meta: { requiresAuth: true, requiredRole: 'ADMIN' } 
       },
       {
-            path:'product/edit/:iid',
+            path:'product/edit/:id',
             name: 'AdminEditProduct',
             component: () => import('@/views/admin/product/AdminEditProduct.vue'),
             meta: { requiresAuth: true, requiredRole: 'ADMIN' }

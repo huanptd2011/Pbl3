@@ -121,7 +121,7 @@ async function fetchUsers() {
         // Gọi API backend để lấy danh sách người dùng
         // Sử dụng endpoint đã thống nhất: GET /api/admin/users
         // Thêm header Authorization với token để xác thực
-        const response = await axios.get('http://localhost:8080/api/admin/users', {
+        const response = await axios.get('http://localhost:8080/api/users/all-customer', {
            
             params: {
                 // Thêm tham số keyword nếu searchKeyword có giá trị
@@ -134,9 +134,11 @@ async function fetchUsers() {
             }
         });
 
+        console.log('Response from API:', response.data);
+
         // Giả định backend trả về dữ liệu người dùng trong response.data.content (theo cấu trúc phân trang)
         // Nếu backend trả về trực tiếp mảng người dùng trong response.data, hãy sửa lại dòng dưới
-        users.value = response.data.content;
+        users.value = response.data;
 
     } catch (error) {
         console.error('Error fetching users:', error);

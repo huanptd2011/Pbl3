@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Thêm Sản phẩm Mới</span>
-        <button class="btn btn-secondary btn-sm" @click="goBack">
+        <button class="btn bg-main bor-main btn-sm fixed-onright" @click="goBack">
            <i class="fas fa-arrow-left me-1"></i>
            Quay lại
         </button>
@@ -35,7 +35,7 @@
            <div class="mb-3">
             <label for="totalInventory" class="form-label">Tổng số lượng tồn</label>
             <input type="number" class="form-control calenda" id="totalInventory" v-model="product.totalInventory" min="0">
-             <small class="form-text text-muted">Tổng số lượng tồn có thể được tự động tính từ các biến thể.</small>
+             <small class="form-text cl-note">Tổng số lượng tồn có thể được tự động tính từ các biến thể.</small>
           </div>
 
 
@@ -43,8 +43,8 @@
             <label for="category" class="form-label">Danh mục <span class="text-danger">*</span></label>
             <select class="form-select calenda" id="category" v-model="product.categoryId" required> 
               <option value="">-- Chọn danh mục --</option>
-              <option v-for="category in categories" :key="category.id" :value="category.id">
-                  {{ category.name }}
+              <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
+                  {{ category.categoryName }}
               </option>
             </select>
           </div>
@@ -68,7 +68,7 @@
 
                   <div v-for="(variant, index) in product.sizeColorList" :key="index" class="row g-2 mb-2 align-items-center">
                      <div class="col">
-                         <input type="text" class="form-control form-control-sm calenda" v-model="variant.color" placeholder="Màu sắc">
+                         <input type="text" class="form-control form-control-sm calenda cl-note" v-model="variant.color" placeholder="Màu sắc">
                      </div>
                       <div class="col">
                          <input type="text" class="form-control form-control-sm calenda" v-model="variant.size" placeholder="Kích thước">
@@ -246,7 +246,6 @@ onMounted(() => {
 }
 
 .card-body {
-    /* ... */
 }
 
 /* Style cho input, select, textarea */
@@ -254,7 +253,7 @@ onMounted(() => {
 .form-select.calenda {
   background-color: #161e39;
   color: #9FB9E1;
-  border-color: #1e293b; /* Màu viền */
+  border-color: #435168; /* Màu viền */
 }
 
 /* Style cho label */
@@ -283,14 +282,16 @@ onMounted(() => {
 }
 
 /* Style cho nút quay lại */
-.btn-secondary {
-   background-color: #555;
-   border-color: #555;
-   color: #fff;
-}
+
 .btn-secondary:hover {
     background-color: #666;
     border-color: #666;
+}
+
+.fixed-onright{
+    position: fixed;
+    right: 45px;
+    top: 30px;
 }
 
 /* Style cho nút xóa biến thể */

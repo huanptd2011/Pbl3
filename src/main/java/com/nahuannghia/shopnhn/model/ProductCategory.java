@@ -42,6 +42,10 @@ public class ProductCategory {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
+    public ProductCategory orElseThrow(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
+    }
 
 //    @ManyToMany(mappedBy = "categories")
 //    private Set<Product> products;

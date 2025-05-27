@@ -16,7 +16,6 @@ public class ProductImageRequest {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-
     public ProductImageRequest(Integer productId, String imageUrl) {
         this.productId = productId;
         this.imageUrl = imageUrl;

@@ -140,8 +140,6 @@ let searchTimer = null;
 // Hàm mô phỏng gọi API lấy danh sách người dùng
 async function fetchUsers() {
     loadingUsers.value = true; // Bắt đầu loading
-    // error.value = null;
-
     try {
         const response = await axios.get('http://localhost:8080/api/users/all-customer');
         const allUsers = response.data;

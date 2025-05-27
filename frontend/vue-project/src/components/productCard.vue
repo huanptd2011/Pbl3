@@ -3,7 +3,7 @@
     <img :src="product?.imageList[0].imageUrl || 'fallback-image.png'" alt="Product Image" class="card-img-top" />
     <div class="card-body d-flex flex-column">
       <h5 class="card-title">{{ product?.productName }}</h5>
-      <p class="card-text text-muted mb-2">{{ product?.category }}</p>
+     <!-- <p class="card-text text-muted mb-2">{{ product?.category }}</p> -->
       <p class="card-text fw-bold text-danger mb-3">{{ formatPrice(product?.price) }}₫</p>
       <router-link
         :to="`/products/${product?.productId}`"

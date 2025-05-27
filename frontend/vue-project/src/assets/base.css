@@ -24,13 +24,14 @@ body {
       color: #fff;
   }
   .text-cl{
-    color: #3B4360;
+    color: #57638c;
   }
   .cl-main{
     color: #CB3CFF !important;;
   }
   .bg-main{
     background-color: #CB3CFF !important;
+    color: #fff;
   }
   .bor-main{
     border-color: #CB3CFF !important;;
@@ -94,3 +95,83 @@ body {
 .icon{
   color: #DAF2FE !important;
 }
+
+.cl-note{
+  color: #476879;
+}
+
+input.calenda::placeholder {
+  color:#476879 ; /* hoặc màu bạn muốn, ví dụ: #999, blue, etc. */
+}
+
+/* Sử dụng lại các style chung cho card từ dashboard nếu muốn */
+.card {
+  background-color: #0b1739;
+  border-radius: 12px;
+  box-shadow: #0105114d 0px 8px 28px 0px;
+  color: #fff;
+  /* ... các style khác của card */
+}
+
+.card-header {
+     background-color: #0b1739;
+     border-bottom: 1px solid #1e293b;
+     color: #aeb9e1; /* Màu chữ header */
+     /* ... */
+}
+
+.card-body {
+}
+
+/* Style cho input, select, textarea */
+.form-control.calenda,
+.form-select.calenda {
+  background-color: #161e39;
+  color: #9FB9E1;
+  border-color: #435168; /* Màu viền */
+}
+
+/* Style cho label */
+.form-label {
+    color: #aeb9e1;
+}
+
+/* Style cho checkbox/switch */
+.form-check-input:checked {
+    background-color: #8b5cf6; /* Màu khi checked */
+    border-color: #8b5cf6;
+}
+
+.form-check-label {
+    color: #aeb9e1;
+}
+
+/* Style cho nút submit */
+.btn-primary {
+   background-color: #8b5cf6;
+   border-color: #8b5cf6;
+}
+.btn-primary:hover {
+     background-color: #7c3aed;
+     border-color: #7c3aed;
+}
+
+/* Style cho nút quay lại */
+
+.btn-secondary:hover {
+    background-color: #666;
+    border-color: #666;
+}
+
+.fixed-onright{
+    position: fixed;
+    right: 40px;
+    top: 30px;
+}
+
+.text-muted {
+
+    color: rgb(85 133 182 / 75%) !important;
+}
+
+

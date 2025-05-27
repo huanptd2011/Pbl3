@@ -36,7 +36,7 @@ public class ProductService {
     private final ProductInventoryService productInventoryService;
     private final ProductCategoryRepository productCategoryRepository;
 
-  //
+    //
 
     // Create new product
     public ProductResponse createProduct(ProductRequest productRequest) {
@@ -64,17 +64,24 @@ public class ProductService {
             productRequest.getImageList().forEach(image -> {
                 ProductImage productImage = new ProductImage(
                         savedProduct,
-                        image.getImageUrl()
-                );
+                        image.getImageUrl());
                 productImageRepository.save(productImage);
             });
         }
+        // Set category
+        if (productRequest.getCategory() != null && productRequest.getCategory().getCategoryId() != null) {
+            Integer categoryId = productRequest.getCategory().getCategoryId();
+            ProductCategory category = productCategoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Category not found with id: " + categoryId));
+            product.setProductCategory(category);
+        }
 
-        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(savedProduct.getProductId());
+        List<ProductInventoryResponse> inventoryList = productInventoryService
+                .getProductInventoryById(savedProduct.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(savedProduct.getProductId());
-         Long totalInventory = inventoryList.stream()
-        .mapToLong(ProductInventoryResponse::getQuantity)
-        .sum();
+        Long totalInventory = inventoryList.stream()
+                .mapToLong(ProductInventoryResponse::getQuantity)
+                .sum();
         ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
         return new ProductResponse(
                 savedProduct.getProductId(),
@@ -87,9 +94,9 @@ public class ProductService {
                 savedProduct.getCreatedAt(),
                 savedProduct.getUpdatedAt(),
                 inventoryList,
-                imageList,category
-        );
+                imageList, category);
     }
+
 
     public ProductService(ProductRepository productRepository, ProductInventoryRepository productInventoryRepository,
             ProductImageRepository productImageRepository, ProductImageService productImageService,
@@ -106,13 +113,14 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+        List<ProductInventoryResponse> inventoryList = productInventoryService
+                .getProductInventoryById(product.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
         Long totalInventory = inventoryList.stream()
-        .mapToLong(ProductInventoryResponse::getQuantity)
-        .sum();
+                .mapToLong(ProductInventoryResponse::getQuantity)
+                .sum();
 
-        if(!inventoryList.isEmpty()){
+        if (!inventoryList.isEmpty()) {
             System.out.println("Djiasudhfusdnd");
         }
         ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
@@ -128,8 +136,7 @@ public class ProductService {
                 product.getUpdatedAt(),
                 inventoryList,
                 imageList,
-                category
-        );
+                category);
     }
 
     // Get all products
@@ -137,13 +144,13 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
 
         return products.stream().map(product -> {
-            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+            List<ProductInventoryResponse> inventoryList = productInventoryService
+                    .getProductInventoryById(product.getProductId());
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
             Long totalInventory = inventoryList.stream()
-        .mapToLong(ProductInventoryResponse::getQuantity)
-        .sum();
-          ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
-
+                    .mapToLong(ProductInventoryResponse::getQuantity)
+                    .sum();
+            ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
 
             return new ProductResponse(
                     product.getProductId(),
@@ -157,8 +164,7 @@ public class ProductService {
                     product.getUpdatedAt(),
                     inventoryList,
                     imageList,
-                    category
-            );
+                    category);
         }).collect(Collectors.toList());
     }
 
@@ -213,22 +219,21 @@ public class ProductService {
                     // Create new image if it doesn't exist
                     ProductImage productImage = new ProductImage(
                             product1,
-                            image.getImageUrl()
-                    );
+                            image.getImageUrl());
                     productImageRepository.save(productImage);
                 }
                 // If image exists, no update needed unless additional fields are involved
             });
         }
-        
-        List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product1.getProductId());
+
+        List<ProductInventoryResponse> inventoryList = productInventoryService
+                .getProductInventoryById(product1.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
         Long totalInventory = inventoryList.stream()
-        .mapToLong(ProductInventoryResponse::getQuantity)
-        .sum();
-       ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
+                .mapToLong(ProductInventoryResponse::getQuantity)
+                .sum();
+        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
 
-        
         return new ProductResponse(
                 product1.getProductId(),
                 product1.getProductName(),
@@ -240,9 +245,8 @@ public class ProductService {
                 product1.getCreatedAt(),
                 product1.getUpdatedAt(),
                 inventoryList,
-                imageList, 
-                category
-        );
+                imageList,
+                category);
     }
 
     @Transactional
@@ -260,12 +264,13 @@ public class ProductService {
         List<Product> products = productRepository.searchByNameOrBrand(keyword);
 
         return products.stream().map(product -> {
-            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+            List<ProductInventoryResponse> inventoryList = productInventoryService
+                    .getProductInventoryById(product.getProductId());
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
             Long totalInventory = inventoryList.stream()
-        .mapToLong(ProductInventoryResponse::getQuantity)
-        .sum();
-        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
+                    .mapToLong(ProductInventoryResponse::getQuantity)
+                    .sum();
+            ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
@@ -278,8 +283,7 @@ public class ProductService {
                     product.getUpdatedAt(),
                     inventoryList,
                     imageList,
-                    category
-            );
+                    category);
         }).collect(Collectors.toList());
     }
 
@@ -302,15 +306,16 @@ public class ProductService {
         return new PageImpl<>(paginatedList, pageable, total);
     }
 
-    public List<ProductResponse> getNewProduct(){
+    public List<ProductResponse> getNewProduct() {
         List<Product> products = productRepository.findTop4ByOrderByCreatedDateDesc();
         return products.stream().map(product -> {
-            List<ProductInventoryResponse> inventoryList = productInventoryService.getProductInventoryById(product.getProductId());
+            List<ProductInventoryResponse> inventoryList = productInventoryService
+                    .getProductInventoryById(product.getProductId());
             List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
             Long totalInventory = inventoryList.stream()
-        .mapToLong(ProductInventoryResponse::getQuantity)
-        .sum();
-        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
+                    .mapToLong(ProductInventoryResponse::getQuantity)
+                    .sum();
+            ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
             return new ProductResponse(
                     product.getProductId(),
                     product.getProductName(),
@@ -322,8 +327,7 @@ public class ProductService {
                     product.getCreatedAt(),
                     product.getUpdatedAt(),
                     inventoryList,
-                    imageList,category
-            );
+                    imageList, category);
         }).collect(Collectors.toList());
     }
 

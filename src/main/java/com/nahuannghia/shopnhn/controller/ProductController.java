@@ -1,6 +1,5 @@
 package com.nahuannghia.shopnhn.controller;
 
-
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -20,11 +19,12 @@ import com.nahuannghia.shopnhn.request.ProductRequest;
 import com.nahuannghia.shopnhn.service.ProductService;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:5173"})
+@CrossOrigin(origins = { "http://localhost:5173" })
 @RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
+
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
@@ -34,35 +34,36 @@ public class ProductController {
         return productService.createProduct(productRequest);
     }
 
-    //ham tim theo thu khoa nam voi brand
-//    @GetMapping("/search")
-//    public List<ProductResponse> searchProducts(@RequestParam("keyword") String keyword) {
-//        return productService.searchProducts(keyword);
-//    }
+    // ham tim theo thu khoa nam voi brand
+    // @GetMapping("/search")
+    // public List<ProductResponse> searchProducts(@RequestParam("keyword") String
+    // keyword) {
+    // return productService.searchProducts(keyword);
+    // }
 
-    //phan trang san pham
+    // phan trang san pham
     @GetMapping("/search")
     public Page<ProductResponse> searchProducts(
             @RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+            @RequestParam(defaultValue = "10") int size) {
         return productService.searchProductsWithPagination(keyword, page, size);
     }
+
     @GetMapping("/{productId}")
-    public ProductResponse getProductById(@PathVariable Integer productId) {
+    public ProductResponse getProductById(@PathVariable("productId") Integer productId) {
         return productService.getProductById(productId);
     }
 
     @GetMapping
     public List<ProductResponse> getAllProducts() {
-                return productService.getAllProducts();
+        return productService.getAllProducts();
     }
 
-     @GetMapping("/new")
-     public List<ProductResponse> getNewProduct(){
-         return productService.getNewProduct();
-     }
+    @GetMapping("/new")
+    public List<ProductResponse> getNewProduct() {
+        return productService.getNewProduct();
+    }
 
      @GetMapping("/best-selling")
      public List<ProductResponse> getBestSellingProducts(){
@@ -70,14 +71,16 @@ public class ProductController {
      }
 
     @PutMapping("/edit/{productId}")
-    public ProductResponse updateProduct(@PathVariable Integer productId, @RequestBody ProductRequest productRequest) {
+    public ProductResponse updateProduct(@PathVariable("productId") Integer productId,
+            @RequestBody ProductRequest productRequest) {
         return productService.updateProduct(productId, productRequest);
     }
 
     @DeleteMapping("/delete/{productId}")
-    public void deleteProduct(@PathVariable Integer productId) {
+    public void deleteProduct(@PathVariable("productId") Integer productId) {
         productService.deleteProduct(productId);
     }
+
     @GetMapping("/by-category")
     public List<ProductResponse> getProductsByCategory(@RequestParam("categoryName") String categoryName) {
         return productService.getProductsByCategory(categoryName);

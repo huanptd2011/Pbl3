@@ -78,4 +78,3 @@ public class Cart {
     // You can add any methods or logic you need for this entity
 
 }
-

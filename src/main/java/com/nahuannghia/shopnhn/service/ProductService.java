@@ -47,6 +47,7 @@ public class ProductService {
         product.setPrice(productRequest.getPrice());
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
+        product.setProductCategory(new ProductCategory(productRequest.getCategoryId(), productRequest.getProductName()));
         Product savedProduct = productRepository.save(product);
 
         if (productRequest.getSizeColorList() != null) {

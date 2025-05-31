@@ -43,11 +43,10 @@
 
           <div class="mb-3">
             <label for="category" class="form-label">Danh mục <span class="text-danger">*</span></label>
-            <select class="form-select calenda" id="category" v-model="product.categoryId" required> 
+            <select v-model="selectedCategoryId" class="form-select calenda" id="category" required>
               <option value="">-- Chọn danh mục --</option>
-
               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
-                  {{ category.categoryName }}
+                {{ category.categoryName }}
               </option>
             </select>
           </div>
@@ -61,6 +60,23 @@
 
            <div class="mb-3">
              <label for="productImages" class="form-label">Hình ảnh Sản phẩm</label>
+             <div v-if="product.imageList && product.imageList.length > 0" class="mb-2">
+                  <span class="text-muted me-2">Ảnh hiện có:</span>
+                  <div class="d-flex flex-nowrap overflow-auto py-2" style="gap: 10px;">
+                    <div v-for="(image, index) in product.imageList" :key="index" 
+                        class="position-relative flex-shrink-0">
+                        <img :src="image.imageUrl" alt="Product Image" 
+                            style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #dee2e6;">
+                        <button type="button" 
+                                class="position-absolute btn btn-danger btn-sm p-0"
+                                style="width: 20px; height: 20px; top: -5px; right: -5px;"
+                                @click="deleteImage(index)"
+                                title="Xóa ảnh">
+                            ×
+                        </button>
+                    </div>
+                  </div>
+                </div>
 
               <input type="file" class="form-control calenda" id="productImages" multiple @change="handleImageUpload">
 
@@ -109,6 +125,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const selectedCategoryId = ref('');
 
 // --- State lưu dữ liệu form sản phẩm mới ---
 const product = ref({
@@ -117,9 +134,12 @@ const product = ref({
   brand: '',
   price: 0,
   totalInventory: 0, // Có thể được tính tự động
-  categoryId: null, // Lưu ID danh mục được chọn
+  category: {
+    categoryId: null, // Sẽ được cập nhật khi chọn danh mục
+    categoryName: '' // Có thể để trống hoặc lấy từ danh mục đã chọn
+  }, // Lưu ID danh mục được chọn
   isActive: true,   // Mặc định là true
-  // imageList: [], // Sẽ xử lý upload file
+  imageList: [], // Sẽ xử lý upload file
   sizeColorList: [], // Mảng các biến thể size/color/quantity
 });
 
@@ -141,13 +161,49 @@ async function fetchCategories() {
 
 
 // --- Hàm xử lý Upload Hình ảnh (Placeholder) ---
-function handleImageUpload(event) {
-  // Đây là nơi bạn sẽ xử lý file được chọn
-  // Có thể dùng FileReader để hiển thị preview
-  // Hoặc lưu file để gửi lên API sau này
+async function handleImageUpload(event) {
   const files = event.target.files;
-  console.log('Selected files:', files);
-  // Logic xử lý file upload sẽ phức tạp hơn, cần cân nhắc gửi riêng hay gửi cùng form
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      const imageUrl = data.url;
+      product.value.imageList.push({ imageUrl, file }); // Lưu URL tạm thời và file gốc
+  
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  }
+  console.log('Uploaded images:', product.value.imageList);
+  event.target.value = ''; // Cho phép chọn lại cùng file
+}
+// --- Hàm xử lý Xóa Hình ảnh ---
+async function deleteImage(index) {
+    if (!confirm('Bạn có chắc chắn muốn xóa ảnh này?')) {
+        return;
+    }
+    try {  
+        // Xóa ảnh khỏi danh sách hiển thị
+        product.value.imageList.splice(index, 1);
+    } catch (error) {
+        console.error('Error deleting image:', error);
+        alert('Có lỗi xảy ra khi xóa ảnh');
+    }
 }
 
 // --- Hàm xử lý Biến thể (Size/Color/Quantity) ---
@@ -164,57 +220,51 @@ function removeVariant(index) {
 
 // --- Hàm xử lý Submit Form ---
 async function handleSubmit() {
-  // Kiểm tra trạng thái submitting để tránh gửi nhiều lần
   if (isSubmitting.value) return;
 
-  // Basic validation (có thể cải thiện sau)
-  if (!product.value.productName || !product.value.price || product.value.categoryId === null || product.value.categoryId === '') {
+  if (!product.value.productName || !product.value.price || selectedCategoryId.value === null) {
     alert('Vui lòng điền đầy đủ các trường bắt buộc (Tên, Giá, Danh mục).');
     return;
   }
 
-  isSubmitting.value = true; // Bắt đầu submit
+  isSubmitting.value = true; 
 
-  try {
-    // Chuẩn bị dữ liệu gửi đi. totalInventory có thể tính lại ở BE.
-    // imageList cần xử lý file upload.
-    // Giả định API add nhận body là một object với cấu trúc tương tự product ref
-    // (không bao gồm các trường như imageList nếu gửi riêng)
+  try {    
+    const selectedCategory = categories.value.find(c => c.categoryId === parseInt(selectedCategoryId.value));
+    console.log('Selected Category:', selectedCategory);
 
     const productData = {
         productName: product.value.productName,
         productDescription: product.value.productDescription,
         brand: product.value.brand,
         price: product.value.price,
-        // totalInventory: product.value.totalInventory, // Có thể bỏ nếu BE tự tính
         isActive: product.value.isActive,
-        categoryId: product.value.categoryId, // Gửi ID danh mục
-        sizeColorList: product.value.sizeColorList.map(v => ({ // Format sizeColorList nếu cần
+        category: {
+            categoryId: parseInt(selectedCategory.categoryId),
+            categoryName: selectedCategory.categoryName 
+        },
+        sizeColorList: product.value.sizeColorList.map(v => ({ 
             color: v.color,
             size: v.size,
-            quantity: v.quantity ? parseInt(v.quantity) : 0 // Chắc chắn quantity là số
+            quantity: v.quantity ? parseInt(v.quantity) : 0 
         })),
-        // imageList: ... (Xử lý file upload riêng hoặc gửi base64 nếu API nhận)
+        imageList: product.value.imageList
     };
+    console.log('Product Data to Submit:', productData.category);
 
-
-    // GỌI API backend để thêm sản phẩm
     const response = await axios.post('http://localhost:8080/api/products/add', productData);
 
     console.log('Product added successfully:', response.data);
 
-    // Hiển thị thông báo thành công (có thể dùng thư viện toast notification)
     alert('Sản phẩm đã được thêm thành công!');
 
-    // Điều hướng về trang danh sách sản phẩm sau khi thêm thành công
-    router.push('/admin/products'); // Đảm bảo khớp với route danh sách sản phẩm
+    router.push('/admin/products');
 
   } catch (error) {
     console.error('Error adding product:', error);
-     // Xử lý lỗi từ API (ví dụ: hiển thị thông báo lỗi cụ thể)
     alert('Có lỗi xảy ra khi thêm sản phẩm.');
   } finally {
-    isSubmitting.value = false; // Kết thúc submit
+    isSubmitting.value = false;
   }
 }
 
@@ -312,6 +362,20 @@ onMounted(() => {
 .btn-outline-secondary:hover {
     background-color: rgba(174, 185, 225, 0.1);
     color: #fff;
+}
+
+
+.position-relative {
+    position: relative;
+}
+.position-absolute {
+    position: absolute;
+}
+.top-0 {
+    top: 0;
+}
+.end-0 {
+    right: 0;
 }
 
 </style>

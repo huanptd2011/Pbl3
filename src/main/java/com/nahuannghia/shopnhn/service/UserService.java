@@ -248,7 +248,9 @@ public class UserService {
         }
         if(userInfo.getDob() != null){
             user.setDob(userInfo.getDob());
-            System.out.println(userInfo.getDob());
+        }
+        if(userInfo.getAvatarUrl() != null){
+            user.setAvatar(userInfo.getAvatarUrl());
         }
 
         user.setUpdatedDate(LocalDateTime.now());

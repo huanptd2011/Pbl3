@@ -110,17 +110,36 @@ const user = ref({
     dob: userStore.user.dob || null
 })
 
+const handleAvatarChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
 
-const handleAvatarChange = (event) => {
-  const file = event.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      user.value.avatar = e.target.result
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    user.value.avatar = e.target.result; // Ảnh preview tạm
+  };
+  reader.readAsDataURL(file);
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch("http://localhost:8080/api/upload-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Upload failed");
     }
-    reader.readAsDataURL(file)
+
+    const data = await response.json();
+    user.value.avatar = data.url; // dùng ảnh Cloudinary trả về
+  } catch (error) {
+    console.error("Error uploading image:", error);
   }
-}
+};
+
 
 
 
@@ -139,7 +158,7 @@ const saveProfile = async () => {
       address: user.value.address,
       dob: dobFormatted,
       email: user.value.email,
-      avatar: user.value.avatar || null
+      avatarUrl: user.value.avatar || null
     }
 
     console.log('Payload:', payload)

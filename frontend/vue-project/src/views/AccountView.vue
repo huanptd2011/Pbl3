@@ -114,11 +114,6 @@ const handleAvatarChange = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    user.value.avatar = e.target.result; // Ảnh preview tạm
-  };
-  reader.readAsDataURL(file);
 
   const formData = new FormData();
   formData.append("file", file);
@@ -134,7 +129,12 @@ const handleAvatarChange = async (event) => {
     }
 
     const data = await response.json();
+    console.log("Image uploaded successfully:", data);
     user.value.avatar = data.url; // dùng ảnh Cloudinary trả về
+    userStore.setUser({
+      ...userStore.user,
+      avatar: data.url,
+    });
   } catch (error) {
     console.error("Error uploading image:", error);
   }

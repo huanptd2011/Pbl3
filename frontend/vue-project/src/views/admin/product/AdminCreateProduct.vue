@@ -47,7 +47,7 @@
               <option value="">-- Chọn danh mục --</option>
 
               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
-                  {{ category.categoryName }
+                  {{ category.categoryName }}
               </option>
             </select>
           </div>
@@ -250,6 +250,7 @@ onMounted(() => {
 }
 
 .card-body {
+}
 
 /* Style cho input, select, textarea */
 .form-control.calenda,

@@ -163,20 +163,20 @@ public class OrderService {
         }
     }
 
-    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
-        List<OrderResponse> orders;
-        if (orderState != null && !orderState.isEmpty()) {
-            orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
-        } else {
-            orders = orderRepository.findOrdersByUserId(userId); // All states
-        }
-
-        for (OrderResponse order : orders) {
-            List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
-            order.setOrderDetails(details);
-        }
-
-        return orders.stream()
-                     .collect(Collectors.groupingBy(OrderResponse::getOrderState));
-    }
+//    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
+//        List<OrderResponse> orders;
+//        if (orderState != null && !orderState.isEmpty()) {
+//            orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
+//        } else {
+//            orders = orderRepository.findOrdersByUserId(userId); // All states
+//        }
+//
+//        for (OrderResponse order : orders) {
+//            List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
+//            order.setOrderDetails(details);
+//        }
+//
+//        return orders.stream()
+//                     .collect(Collectors.groupingBy(OrderResponse::getOrderState));
+//    }
 }

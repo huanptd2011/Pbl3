@@ -62,10 +62,10 @@ public class OrderController {
         return orderService.updateOrderStatus(orderId, status);
     }
 
-    @GetMapping("/group-by-status")
-    public ResponseEntity<Map<String, List<OrderResponse>>> getOrdersGroupedByStatus(@RequestParam Integer userId,
-    @RequestParam(required = false, defaultValue = "") String orderState) {
-        Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId,orderState);
-        return ResponseEntity.ok(groupedOrders);
-    }
+//    @GetMapping("/group-by-status")
+//    public ResponseEntity<Map<String, List<OrderResponse>>> getOrdersGroupedByStatus(@RequestParam Integer userId,
+//    @RequestParam(required = false, defaultValue = "") String orderState) {
+//        Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId,orderState);
+//        return ResponseEntity.ok(groupedOrders);
+//    }
 }

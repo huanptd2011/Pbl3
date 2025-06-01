@@ -45,14 +45,14 @@
         <!-- Search + Wishlist + Cart + Auth -->
         <ul class="nav align-items-center m-0">
           <!-- Search box -->
-          <li class="nav-item me-3 d-none d-lg-flex bg-gray">
+          <li class="nav-item me-3 d-none d-lg-flex bg-gray border-search">
             <div class="input-group">
-              <span class="input-group-text bg-gray border-0 rounded-start-50" @click="gotoProductView">
+              <span class="input-group-text bg-gray border-0 border-look" @click="gotoProductView">
                 <i class="fas fa-search"></i>
               </span>
               <input
                 type="text"
-                class="form-control border-0 bg-gray rounded-end-50"
+                class="form-control border-0 bg-gray border-input"
                 placeholder="Tìm kiếm giày..."
                 v-model="searchQuery"
                 @keyup.enter="gotoProductView"
@@ -60,16 +60,7 @@
             </div>
           </li>
 
-          <!-- Wishlist -->
-          <li class="nav-item me-2">
-            <router-link to="/wishlist" class="btn btn-link position-relative">
-              <i class="fas fa-heart"></i>
-              <span v-if="wishlistCount > 0" class="position-absolute top-0 start-100 translate-middle badge bg-danger">
-                {{ wishlistCount }}
-              </span>
-            </router-link>
-          </li>
-
+        
           <!-- Cart -->
           <li class="nav-item me-2">
             <router-link to="/cart" class="btn btn-link position-relative bg-gray rounded-5">
@@ -138,14 +129,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useCartStore } from '@/stores/cartStore';
-import { useWishlistStore } from '@/stores/wishlist';
+
 import AuthModal from '@/components/AuthModal.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
 const cartStore = useCartStore();
-const wishlistStore = useWishlistStore();
+
 
 const mobileMenuOpen = ref(false);
 const showAuthModal = ref(false);
@@ -202,7 +193,7 @@ const gotoProductView = () => {
 
 // Computed properties
 const cartCount = computed(() => cartStore.totalItemsCount);
-const wishlistCount = computed(() => wishlistStore.items.length);
+
 </script>
 
 <style scoped>
@@ -251,6 +242,7 @@ const wishlistCount = computed(() => wishlistStore.items.length);
 .bg-gray {
   background-color: #f8f9fa;
 }
+
 
 .mobile-menu {
   max-height: 0;

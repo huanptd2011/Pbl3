@@ -46,7 +46,7 @@
         </div>
         <div v-if="isLoading" class="text-center text-muted">Đang tải sản phẩm...</div>
         <div v-else class="row g-4">
-          <div class="col-md-3" v-for="product in recentlyUpdated" :key="product.productId">
+          <div class="col-md-3" v-for="product in bestSale" :key="product.productId">
             <ProductCard :product="product" />
           </div>
         </div>
@@ -62,7 +62,7 @@
         </div>
         <div v-if="isLoading" class="text-center text-muted">Đang tải sản phẩm...</div>
         <div v-else class="row g-4">
-          <div class="col-md-3" v-for="product in newArrivals" :key="product.productId">
+          <div class="col-md-3" v-for="product in recentlyUpdated " :key="product.productId">
             <ProductCard :product="product" />
           </div>
         </div>
@@ -89,7 +89,7 @@ import axios from 'axios'
 import ProductCard from '../components/productCard.vue'
 
 const newArrivals = ref([])
-const recentlyUpdated = ref([])
+const bestSale = ref([])
 const isLoading = ref(true)
 
 const fetchData = async () => {
@@ -102,7 +102,7 @@ const fetchData = async () => {
     // san pham moi
     newArrivals.value = [...newProducts]
     //San pham ban chay
-    recentlyUpdated.value = [...sellingProducts]
+    bestSale.value = [...sellingProducts]
 
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)

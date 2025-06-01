@@ -24,7 +24,7 @@
           </ul>
 
           <h4>Thông tin giao hàng</h4>
-          <div class="card mb-4">
+          <div class="card  mb-4">
               <div class="card-body">
                   <form>
                       <!-- Số điện thoại -->
@@ -326,4 +326,48 @@
         height: 30px;
         margin-right: 15px;
     }
+
+
+    .card {
+    background-color: #fff ;
+    border-radius: 12px;
+    box-shadow: none;
+    color: #212529;
+}
+
+.form-check-label {
+    color: #131418;
+}
+
+.form-check-input:checked {
+    background-color: #19181b;
+    border-color: #1f1e22;
+}
+
+.form-label {
+    color: #15171f;
+}
+
+/* Style cho nút submit */
+.btn-primary {
+  background-color: #2945e2;
+  border-color: #3447f5;
+}
+
+.btn-primary:hover {
+  background-color: #1725e6;
+  border-color: #101dcf;
+}
+
+.card-header {
+  background-color: #cacfcb;
+  border-bottom: 1px solid #9b9ea3;
+  color: #131416;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
+
+  /* Màu chữ header */
+  /* ... */
+}
+
  </style>

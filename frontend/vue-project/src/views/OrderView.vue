@@ -1,12 +1,12 @@
 <template>
   <div class="order-history">
     <h1>Đơn Hàng Của Tôi</h1>
-    
+
     <!-- Tab trạng thái đơn hàng -->
     <div class="status-tabs">
-      <button 
-        v-for="tab in tabs" 
-        :key="tab.value" 
+      <button
+        v-for="tab in tabs"
+        :key="tab.value"
         @click="activeTab = tab.value"
         :class="{ active: activeTab === tab.value }"
       >
@@ -14,82 +14,63 @@
         <span class="badge">{{ getOrderCount(tab.value) }}</span>
       </button>
     </div>
-    
+
     <!-- Nội dung đơn hàng -->
     <div v-if="loading" class="loading">
       <p>Đang tải đơn hàng...</p>
     </div>
-    
+
     <div v-else-if="error" class="error">
       <p>{{ error }}</p>
       <button @click="fetchOrders">Thử lại</button>
     </div>
-    
+
     <div v-else>
       <div v-if="filteredOrders.length === 0" class="empty-orders">
         <p>{{ getEmptyMessage(activeTab) }}</p>
         <router-link to="/products" class="shop-btn">Mua sắm ngay</router-link>
       </div>
-      
+
       <div v-else class="orders-list">
         <div v-for="order in filteredOrders" :key="order.orderId" class="order-card">
           <!-- Phần header đơn hàng -->
           <div class="order-header">
             <div class="order-info">
-              <p class="order-date">Ngày đặt: {{ formatDate(order.orderDate) }}</p>
-              <p class="order-status-text" :class="getStatusClass(order.orderState)">
+              <p class="order-date"><strong>Ngày đặt: {{ formatDate(order.orderDate) }}</strong></p>
+            </div>
+            <p class="order-status-text" :class="getStatusClass(order.orderState)"><strong>
                 {{ order.orderState }}
-              </p>
-            </div>
-            <div class="payment-method">
-              <span>Phương thức: {{ order.paymentMethod.paymentMethodName }}</span>
-            </div>
+              </strong></p>
           </div>
-          
+
           <!-- Phần thân đơn hàng -->
           <div class="order-body">
             <div class="shipping-info">
               <p><strong>Địa chỉ giao hàng:</strong> {{ order.address }}</p>
               <p><strong>SĐT nhận hàng:</strong> {{ order.phone }}</p>
-            </div>
-            
-            <div class="products-list">
-              <div v-for="(item, index) in order.orderDetails" :key="index" class="product-item">
-                <div class="product-image-placeholder">
-                  <img :src="item.imageUrl" alt="Ảnh sản phẩm" />
-                </div>
-                <div class="product-details">
-                  <div class="product-attributes">
-                    <span>Màu: {{ item.color }}</span>
-                    <span>Size: {{ item.size }}</span>
-                    <span>Số lượng: {{ item.quantity }}</span>
-                  </div>
-                  <p class="price">{{ formatPrice(item.total_price) }}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="order-summary">
+              <p><strong>Sản phẩm:</strong></p>
+              <p v-for="(item, index) in order.orderDetails" :key="index" class="product-item" >
+                <span>{{ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + item.productName }} - Số lượng: {{ item.quantity }}</span>
+              </p>
               <div class="summary-row total">
-                <span>Tổng cộng:</span>
-                <span>{{ formatPrice(order.totalPrice) }}</span>
+                <span>Tổng cộng: {{ formatPrice(order.totalPrice) }}</span>
               </div>
             </div>
           </div>
-          
+
           <!-- Phần footer đơn hàng -->
           <div class="order-footer">
             <button @click="viewOrderDetail(order.orderId)" class="detail-btn">Xem chi tiết</button>
-            <button 
-              v-if="order.orderState === 'Chờ xác nhận'" 
-              @click="cancelOrder(order.orderId)" 
+            <button
+              v-if="order.orderState === 'Chờ xác nhận'"
+              @click="cancelOrder(order.orderId)"
               class="cancel-btn"
             >
               Hủy đơn hàng
             </button>
-            <button 
-              v-if="order.orderState === 'Đang giao'" 
-              @click="confirmReceived(order.orderId)" 
+            <button
+              v-if="order.orderState === 'Đang giao'"
+              @click="confirmReceived(order.orderId)"
               class="confirm-btn"
             >
               Đã nhận hàng
@@ -99,9 +80,19 @@
       </div>
     </div>
   </div>
+
+
+  <div v-if="showDetailModal" class="modal-overlay">
+      <div class="modal-content">
+        <button class="close-button" @click="closeModal">×</button>
+        <OrderDetail :order="selectedOrder" v-if="selectedOrder" />
+        <div v-else class="loading">Loading order details...</div>
+      </div>
+  </div>
 </template>
 
 <script setup>
+import OrderDetail from '../components/orderDetail.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -110,6 +101,11 @@ import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
 
 const router = useRouter()
+
+// Modal state
+const showDetailModal = ref(false)
+const selectedOrder = ref(null)
+const detailLoading = ref(false)
 
 const cancel = 'cancel'
 const complete = 'complete'
@@ -211,18 +207,35 @@ const confirmReceived = async (orderId) => {
 }
 
 // Xem chi tiết đơn hàng
-const viewOrderDetail = (orderId) => {
-  router.push(`/orders/${orderId}`)
+// View order details in modal
+const viewOrderDetail = async (orderId) => {
+  showDetailModal.value = true
+  detailLoading.value = true
+  try {
+    const response = await axios.get(`http://localhost:8080/api/orders/${orderId}`)
+    selectedOrder.value = response.data
+  } catch (err) {
+    console.error('Error fetching order details:', err)
+    alert('Không thể tải chi tiết đơn hàng')
+  } finally {
+    detailLoading.value = false
+  }
+}
+
+const closeModal = () => {
+  showDetailModal.value = false
+  selectedOrder.value = null
 }
 
 // Lấy danh sách đơn hàng từ API
 const fetchOrders = async () => {
   loading.value = true
   error.value = null
-  
+
   try {
     const response = await axios.get(`http://localhost:8080/api/orders/user/${userStore.user.userId}`)
     orders.value = response.data
+    console.log('Orders fetched:', orders.value)
   } catch (err) {
     error.value = 'Đã xảy ra lỗi khi tải đơn hàng'
     console.error('Error fetching orders:', err)
@@ -328,9 +341,7 @@ onMounted(() => {
 }
 
 .shipping-info {
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
+
 }
 
 .shipping-info p {
@@ -344,9 +355,6 @@ onMounted(() => {
 .product-item {
   display: flex;
   gap: 15px;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
 }
 
 .product-item:last-child {
@@ -392,27 +400,21 @@ onMounted(() => {
 .order-summary {
   margin-top: 20px;
   padding-top: 15px;
-  border-top: 1px solid #eee;
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
 }
 
 .summary-row.total {
   font-weight: bold;
   font-size: 1.1rem;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #eee;
 }
 
 .order-footer {
   padding: 15px;
   background: #f8f9fa;
-  border-top: 1px solid #eee;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -500,14 +502,65 @@ onMounted(() => {
   .order-header {
     flex-direction: column;
   }
-  
+
   .product-item {
     flex-direction: column;
   }
-  
+
   .product-image-placeholder {
     width: 100%;
     height: 120px;
   }
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  position: relative;
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.loading {
+  padding: 20px;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+.fa-spinner {
+  margin-right: 8px;
 }
 </style>

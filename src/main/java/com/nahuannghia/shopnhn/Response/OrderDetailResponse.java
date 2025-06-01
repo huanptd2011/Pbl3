@@ -6,19 +6,42 @@ import java.math.BigDecimal;
 
 public class OrderDetailResponse {
     private Integer productId;
+    private String productName;
+    private String imageUrl;
     private Integer quantity;
     private BigDecimal total_price;
     private String color;
     private String size;
-    public OrderDetailResponse(Integer productId, Integer quantity, BigDecimal totalPrice, String color, String size) {
+
+    public OrderDetailResponse(Integer productId, String productName, String imageUrl, Integer quantity, BigDecimal total_price, String color, String size) {
         this.productId = productId;
+        this.productName = productName;
+        this.imageUrl = imageUrl;
         this.quantity = quantity;
-        this.total_price = totalPrice;
+        this.total_price = total_price;
         this.color = color;
         this.size = size;
     }
+
     public OrderDetailResponse() {
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public Integer getProductId() {
         return productId;
     }

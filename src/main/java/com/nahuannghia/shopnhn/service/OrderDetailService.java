@@ -2,10 +2,7 @@ package com.nahuannghia.shopnhn.service;
 
 
 import com.nahuannghia.shopnhn.Response.OrderDetailResponse;
-import com.nahuannghia.shopnhn.model.Order;
-import com.nahuannghia.shopnhn.model.OrderDetail;
-import com.nahuannghia.shopnhn.model.OrderDetailId;
-import com.nahuannghia.shopnhn.model.Product;
+import com.nahuannghia.shopnhn.model.*;
 import com.nahuannghia.shopnhn.repository.OrderDetailRepository;
 import com.nahuannghia.shopnhn.repository.OrderRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
@@ -13,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,8 +53,14 @@ public class OrderDetailService {
     public List<OrderDetailResponse> getOrderDetailByOrderId(Integer orderId){
         List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(orderId);
         return orderDetails.stream().map(orderDetail -> {
+            Product product = orderDetail.getProduct();
+            List<ProductImage> images = product.getImages();
+            String imageUrl = images != null && !images.isEmpty() ? images.get(0).getImageUrl() : null;
+
             return new OrderDetailResponse(
-                    orderDetail.getProduct().getProductId(),
+                    product.getProductId(),
+                    product.getProductName(),
+                    imageUrl,
                     orderDetail.getQuantity(),
                     orderDetail.getPrice(),
                     orderDetail.getColor(),

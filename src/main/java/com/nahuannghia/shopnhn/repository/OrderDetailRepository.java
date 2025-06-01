@@ -2,6 +2,7 @@ package com.nahuannghia.shopnhn.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,12 +16,13 @@ import com.nahuannghia.shopnhn.model.OrderDetailId;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailId> {
 //    List<OrderDetail> findByOrderDetailIdOrderId(Integer orderId);
+    @EntityGraph(attributePaths = {"product", "product.images"})
     List<OrderDetail> findByOrder_OrderId(Integer orderId);
 
-    @Query("SELECT new com.nahuannghia.shopnhn.Response.OrderDetailResponse(" +
-       "od.product.productId, od.quantity, od.price, od.color, od.size) " +
-       "FROM OrderDetail od WHERE od.order.orderId = :orderId")
-    List<OrderDetailResponse> findOrderDetailsByOrderId(@Param("orderId") Integer orderId);
+//    @Query("SELECT new com.nahuannghia.shopnhn.Response.OrderDetailResponse(" +
+//       "od.product.productId, od.product.productName, od.product.images, od.quantity, od.price, od.color, od.size) " +
+//       "FROM OrderDetail od WHERE od.order.orderId = :orderId")
+//    List<OrderDetailResponse> findOrderDetailsByOrderId(@Param("orderId") Integer orderId);
 
 }
 

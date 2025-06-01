@@ -6,17 +6,29 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.nahuannghia.shopnhn.model.*;
-import com.nahuannghia.shopnhn.repository.*;
-import com.nahuannghia.shopnhn.request.OrderDetailRequest;
-import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nahuannghia.shopnhn.Response.OrderDetailResponse;
 import com.nahuannghia.shopnhn.Response.OrderResponse;
+import com.nahuannghia.shopnhn.Response.OrderStatusResponse;
 import com.nahuannghia.shopnhn.Response.PaymentMethodResponse;
+import com.nahuannghia.shopnhn.model.Order;
+import com.nahuannghia.shopnhn.model.OrderDetail;
+import com.nahuannghia.shopnhn.model.OrderDetailId;
+import com.nahuannghia.shopnhn.model.PaymentMethod;
+import com.nahuannghia.shopnhn.model.Product;
+import com.nahuannghia.shopnhn.model.User;
+import com.nahuannghia.shopnhn.repository.OrderDetailRepository;
+import com.nahuannghia.shopnhn.repository.OrderRepository;
+import com.nahuannghia.shopnhn.repository.PaymentMethodRepository;
+import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
+import com.nahuannghia.shopnhn.repository.ProductRepository;
+import com.nahuannghia.shopnhn.repository.UserRepository;
+import com.nahuannghia.shopnhn.request.OrderDetailRequest;
 import com.nahuannghia.shopnhn.request.OrderRequest;
+import com.nahuannghia.shopnhn.request.OrderStatusRequest;
+import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
 
 @Service
 public class OrderService {
@@ -120,11 +132,6 @@ public class OrderService {
         }
         return mapToResponse(orderRepository.save(order));
     }
-
-    public void deleteOrder(Integer orderId) {
-        orderRepository.deleteById(orderId);
-    }
-
     private OrderResponse mapToResponse(Order order) {
         PaymentMethodResponse paymentMethodResponse = new PaymentMethodResponse(
                 order.getPaymentMethod().getPaymentMethodId(),
@@ -136,10 +143,12 @@ public class OrderService {
         OrderResponse response = new OrderResponse(
                 order.getOrderId(),
                 order.getUser().getUserId(),
+                order.getUser().getUsername(),
                 paymentMethodResponse,
                 order.getOrderDate(),
                 order.getTotalPrice(),
                 order.getOrderState(),
+                order.getPaymentState(),
                 order.getNote(),
                 order.getPhone(),
                 order.getAddress(),
@@ -179,4 +188,22 @@ public class OrderService {
         return orders.stream()
                      .collect(Collectors.groupingBy(OrderResponse::getOrderState));
     }
+ public OrderStatusResponse updateOrder(OrderStatusRequest orderRequest) {
+    Integer orderId = orderRequest.getOrderId();
+
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId));
+
+    // Cập nhật trạng thái đơn hàng
+    order.setOrderState(orderRequest.getOrderState());
+    order.setPaymentState(orderRequest.getPaymentState());
+
+    // Lưu lại vào DB
+    order = orderRepository.save(order);
+
+    // Trả về phản hồi
+    return new OrderStatusResponse(order.getOrderId(), order.getOrderState(), order.getPaymentState());
+}
+
+    
 }

@@ -43,6 +43,10 @@ public class Order {
     @Column(name = "order_state", nullable = false, length = 20)
     private String orderState = "Chờ xác nhận";
 
+    @Column(name = "payment_status", nullable = false, length = 20)
+    private String paymentState = "Chưa thanh toán";
+
+
     @Column(name = "note", length = 2000)
     private String note;
 
@@ -54,18 +58,25 @@ public class Order {
     public Order() {
     }
 
-    public Order(Integer orderId, User user, PaymentMethod paymentMethod, LocalDateTime orderDate, BigDecimal totalPrice, String orderState, String note, String phone, String address) {
+    public Order(Integer orderId, User user, PaymentMethod paymentMethod, LocalDateTime orderDate, BigDecimal totalPrice, String orderState,String paymentState, String note, String phone, String address) {
         this.orderId = orderId;
         this.user = user;
         this.paymentMethod = paymentMethod;
         this.orderDate = orderDate;
         this.totalPrice = totalPrice;
         this.orderState = orderState;
+        this.paymentState = paymentState;
         this.note = note;
         this.phone = phone;
         this.address = address;
     }
+        public String getPaymentState() {
+        return paymentState;
+    }
 
+    public void setPaymentState(String paymentState) {
+        this.paymentState = paymentState;
+    }
     public Integer getOrderId() {
         return orderId;
     }

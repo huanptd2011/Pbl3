@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nahuannghia.shopnhn.Response.OrderResponse;
+import com.nahuannghia.shopnhn.Response.OrderStatusResponse;
 import com.nahuannghia.shopnhn.request.OrderRequest;
+import com.nahuannghia.shopnhn.request.OrderStatusRequest;
 import com.nahuannghia.shopnhn.service.OrderService;
 
 @RestController
@@ -48,24 +48,16 @@ public class OrderController {
         return orderService.getAllOrderByUserId(userId);
     }
 
-    @DeleteMapping("/{orderId}")
-    public void deleteOrder(@PathVariable Integer orderId) {
-        orderService.deleteOrder(orderId);
+    @PutMapping("/status")
+    public ResponseEntity<OrderStatusResponse> updateOrderStatus(@RequestBody OrderStatusRequest request) {
+        OrderStatusResponse response = orderService.updateOrder(request);
+        return ResponseEntity.ok(response);
     }
-
-
-
-    //chưa xu li duoc tren api
-    @PutMapping("/{orderId}/{status}")
-    public OrderResponse updateOrderStatus(@PathVariable("orderId") Integer orderId,
-                                           @PathVariable("status") String status) {
-        return orderService.updateOrderStatus(orderId, status);
-    }
-
     @GetMapping("/group-by-status")
     public ResponseEntity<Map<String, List<OrderResponse>>> getOrdersGroupedByStatus(@RequestParam Integer userId,
     @RequestParam(required = false, defaultValue = "") String orderState) {
         Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId,orderState);
         return ResponseEntity.ok(groupedOrders);
     }
+
 }

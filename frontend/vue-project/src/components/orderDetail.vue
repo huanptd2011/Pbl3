@@ -102,6 +102,10 @@ const getStatusClass = (status) => {
             <span class="item-label">Đơn giá: &nbsp;</span>
             <span class="item-value price">{{ formatPrice(item.total_price) }}</span>
           </div>
+          <div class="item-row">
+            <span class="item-label">Thành tiền: &nbsp;</span>
+            <span class="item-value price">{{ formatPrice(item.total_price * item.quantity) }}</span>
+          </div>
         </div>
       </div>
     </div>

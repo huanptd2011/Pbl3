@@ -2,7 +2,9 @@ package com.nahuannghia.shopnhn.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -18,10 +20,13 @@ import com.nahuannghia.shopnhn.model.Product;
 import com.nahuannghia.shopnhn.model.ProductCategory;
 import com.nahuannghia.shopnhn.model.ProductImage;
 import com.nahuannghia.shopnhn.model.ProductInventory;
+import com.nahuannghia.shopnhn.model.ProductInventoryId;
 import com.nahuannghia.shopnhn.repository.ProductCategoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductImageRepository;
 import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
+import com.nahuannghia.shopnhn.request.ProductImageRequest;
+import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
 import com.nahuannghia.shopnhn.request.ProductRequest;
 
 import jakarta.transaction.Transactional;
@@ -37,7 +42,6 @@ public class ProductService {
     private final ProductCategoryRepository productCategoryRepository;
 
     //
-
     // Create new product
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product product = new Product();
@@ -81,8 +85,10 @@ public class ProductService {
                 .getProductInventoryById(savedProduct.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(savedProduct.getProductId());
         Long totalInventory = inventoryList.stream()
-                .mapToLong(ProductInventoryResponse::getQuantity)
+                .filter(ProductInventoryResponse::getIsActive) // Lọc chỉ những phần tử isActive = true
+                .mapToLong(ProductInventory -> ProductInventory.getQuantity() != null ? ProductInventory.getQuantity() : 0) // Tránh NullPointerException nếu quantity null
                 .sum();
+
         ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
         return new ProductResponse(
                 savedProduct.getProductId(),
@@ -97,7 +103,6 @@ public class ProductService {
                 inventoryList,
                 imageList, category);
     }
-
 
     public ProductService(ProductRepository productRepository, ProductInventoryRepository productInventoryRepository,
             ProductImageRepository productImageRepository, ProductImageService productImageService,
@@ -118,7 +123,8 @@ public class ProductService {
                 .getProductInventoryById(product.getProductId());
         List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product.getProductId());
         Long totalInventory = inventoryList.stream()
-                .mapToLong(ProductInventoryResponse::getQuantity)
+                .filter(ProductInventoryResponse::getIsActive) // Lọc chỉ những phần tử isActive = true
+                .mapToLong(ProductInventory -> ProductInventory.getQuantity() != null ? ProductInventory.getQuantity() : 0) // Tránh NullPointerException nếu quantity null
                 .sum();
 
         if (!inventoryList.isEmpty()) {
@@ -171,83 +177,123 @@ public class ProductService {
 
     @Transactional
     public ProductResponse updateProduct(Integer productId, ProductRequest productRequest) {
+        // 1. Tìm sản phẩm
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
+        // 2. Cập nhật thông tin sản phẩm
         product.setProductName(productRequest.getProductName());
         product.setProductDescription(productRequest.getProductDescription());
         product.setBrand(productRequest.getBrand());
+        product.setStatus(productRequest.getIsActive());
         product.setPrice(productRequest.getPrice());
         productRepository.save(product);
-        Product product1 = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        // Update or create product inventory
+        // 3. Xử lý danh sách biến thể (inventory)
+        Map<ProductInventoryId, ProductInventoryRequest> requestMap = new HashMap<>();
         if (productRequest.getSizeColorList() != null) {
-            productRequest.getSizeColorList().forEach(inventory -> {
-                // Check if inventory exists for this product, size, and color
-                ProductInventory existingInventory = productInventoryRepository
-                        .findByProductProductIdAndProductInventoryId_SizeAndProductInventoryId_Color(
-                                product1.getProductId(), inventory.getSize(), inventory.getColor())
-                        .orElse(null);
+            for (ProductInventoryRequest inventory : productRequest.getSizeColorList()) {
+                if (inventory.getColor() == null || inventory.getSize() == null) {
+                    continue;
+                }
 
-                if (existingInventory != null) {
-                    // Update existing inventory
-                    existingInventory.setQuantity(inventory.getQuantity());
+                ProductInventoryId inventoryId = new ProductInventoryId(
+                        product.getProductId(), inventory.getColor(), inventory.getSize());
+                requestMap.put(inventoryId, inventory);
+            }
+
+            List<ProductInventory> existingInventories = productInventoryRepository.findByProductProductId(productId);
+            // Cập nhật hoặc vô hiệu hóa
+            for (ProductInventory existingInventory : existingInventories) {
+                ProductInventoryId id = existingInventory.getProductInventoryId();
+                if (requestMap.containsKey(id)) {
+                    ProductInventoryRequest req = requestMap.get(id);
+                    existingInventory.setQuantity(req.getQuantity());
+                    existingInventory.setIsActive(req.getIsActive() != null ? req.getIsActive() : true);
                     productInventoryRepository.save(existingInventory);
+                    requestMap.remove(id);
                 } else {
-                    // Create new inventory
-                    ProductInventory productInventory = new ProductInventory(
-                            product1,
-                            inventory.getColor(),
-                            inventory.getSize(),
-                            inventory.getQuantity());
-                    productInventoryRepository.save(productInventory);
+                    existingInventory.setIsActive(false);
+                    productInventoryRepository.save(existingInventory);
                 }
-            });
+            }
+
+            // Thêm mới các inventory chưa tồn tại
+            for (Map.Entry<ProductInventoryId, ProductInventoryRequest> entry : requestMap.entrySet()) {
+                ProductInventoryRequest req = entry.getValue();
+                ProductInventory newInventory = new ProductInventory(
+                        product, req.getColor(), req.getSize(), req.getQuantity());
+                newInventory.setIsActive(req.getIsActive() != null ? req.getIsActive() : true);
+                productInventoryRepository.save(newInventory);
+            }
         }
 
-        // Update or create product images
+        // 4. Cập nhật ảnh sản phẩm
         if (productRequest.getImageList() != null) {
-            productRequest.getImageList().forEach(image -> {
-                // Check if image exists for this product and URL
-                ProductImage existingImage = productImageRepository
-                        .findByProductProductIdAndImageUrl(
-                                product1.getProductId(), image.getImageUrl())
-                        .orElse(null);
+            List<String> newImageUrls = productRequest.getImageList().stream()
+                    .map(ProductImageRequest::getImageUrl)
+                    .collect(Collectors.toList());
 
-                if (existingImage == null) {
-                    // Create new image if it doesn't exist
-                    ProductImage productImage = new ProductImage(
-                            product1,
-                            image.getImageUrl());
-                    productImageRepository.save(productImage);
+            // Tạo ảnh mới nếu chưa có
+            for (String imageUrl : newImageUrls) {
+                productImageRepository.findByProductProductIdAndImageUrl(productId, imageUrl)
+                        .orElseGet(() -> productImageRepository.save(new ProductImage(product, imageUrl)));
+            }
+
+            // Xoá ảnh không còn
+            List<ProductImage> existingImages = productImageRepository.findByProductProductId(productId);
+            for (ProductImage image : existingImages) {
+                if (!newImageUrls.contains(image.getImageUrl())) {
+                    productImageRepository.delete(image);
                 }
-                // If image exists, no update needed unless additional fields are involved
-            });
+            }
         }
 
-        List<ProductInventoryResponse> inventoryList = productInventoryService
-                .getProductInventoryById(product1.getProductId());
-        List<ProductImageResponse> imageList = productImageService.getImagesByProductId(product1.getProductId());
-        Long totalInventory = inventoryList.stream()
-                .mapToLong(ProductInventoryResponse::getQuantity)
+        // 5. Lấy lại dữ liệu để trả về
+        List<ProductInventory> inventoryList = productInventoryRepository.findByProductProductId(productId);
+        List<ProductImage> imageList = productImageRepository.findByProductProductId(productId);
+        ProductCategory category = productCategoryRepository.findCategoryByProductId(productId);
+        if (productRequest.getCategoryId() != null) {
+        ProductCategory newCategory = productCategoryRepository.findById(productRequest.getCategoryId())
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+
+         product.setProductCategory(newCategory);
+        productRepository.save(product);
+    
+        category = newCategory;  // cập nhật lại biến category để trả về
+}
+        
+        int totalInventory = inventoryList.stream()
+                .filter(ProductInventory::getIsActive)
+                .mapToInt(ProductInventory::getQuantity)
                 .sum();
-        ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
+
+        List<ProductInventoryResponse> inventoryResponseList = inventoryList.stream()
+                .map(inv -> new ProductInventoryResponse(
+                inv.getProductInventoryId().getSize(),
+                inv.getProductInventoryId().getColor(),
+                inv.getQuantity(),
+                inv.getIsActive()))
+                .collect(Collectors.toList());
+
+        List<ProductImageResponse> imageResponseList = imageList.stream()
+                .map(img -> new ProductImageResponse(img.getImageUrl()))
+                .collect(Collectors.toList());
 
         return new ProductResponse(
-                product1.getProductId(),
-                product1.getProductName(),
-                product1.getProductDescription(),
-                product1.getBrand(),
-                product1.getPrice(),
+                product.getProductId(),
+                product.getProductName(),
+                product.getProductDescription(),
+                product.getBrand(),
+                product.getPrice(),
                 totalInventory,
                 product.getStatus(),
-                product1.getCreatedAt(),
-                product1.getUpdatedAt(),
-                inventoryList,
-                imageList,
-                category);
+                product.getCreatedAt(),
+                product.getUpdatedAt(),
+                inventoryResponseList,
+                imageResponseList,
+                category
+        );
     }
 
     @Transactional
@@ -332,7 +378,7 @@ public class ProductService {
         }).collect(Collectors.toList());
     }
 
-    public List<ProductResponse> getTop4BestSellingProducts(){
+    public List<ProductResponse> getTop4BestSellingProducts() {
         try {
             List<Product> products = productRepository.findTop4BestSellingProducts();
             return products.stream().map(product -> {
@@ -341,7 +387,7 @@ public class ProductService {
                 Long totalInventory = inventoryList.stream()
                         .mapToLong(ProductInventoryResponse::getQuantity)
                         .sum();
-                 ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
+                ProductCategory category = productCategoryRepository.findCategoryByProductId(product.getProductId());
 
                 return new ProductResponse(
                         product.getProductId(),
@@ -358,13 +404,12 @@ public class ProductService {
                         category
                 );
             }).collect(Collectors.toList());
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-
- public List<ProductResponse> getProductsByCategory(String categoryName) {
+    public List<ProductResponse> getProductsByCategory(String categoryName) {
         List<ProductResponse> responses = productRepository.searchByProductCategory(categoryName);
 
         for (ProductResponse response : responses) {

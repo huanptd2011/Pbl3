@@ -1,7 +1,5 @@
 package com.nahuannghia.shopnhn.request;
 
-import jdk.jfr.Category;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -11,6 +9,7 @@ public class ProductRequest {
     private String productName;
     private String productDescription;
     private String brand;
+    private Boolean isActive;
     private BigDecimal price;
     private List<ProductInventoryRequest> sizeColorList;
     private List<ProductImageRequest> imageList;
@@ -85,18 +84,26 @@ public class ProductRequest {
     public ProductRequest() {
     }
 
-    public ProductRequest(String productName, String productDescription, String brand, BigDecimal price,
-            List<ProductInventoryRequest> sizeColorList, List<ProductImageRequest> imageList,
+    public ProductRequest(String productName, String productDescription, String brand, Boolean isActive,
+            BigDecimal price, List<ProductInventoryRequest> sizeColorList, List<ProductImageRequest> imageList,
             ProductCategory category) {
         this.productName = productName;
         this.productDescription = productDescription;
         this.brand = brand;
+        this.isActive = isActive;
         this.price = price;
         this.sizeColorList = sizeColorList;
         this.imageList = imageList;
         this.category = category;
     }
 
-    //
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
 
 }

@@ -33,7 +33,7 @@ public class ProductInventoryService {
                 request.getSize(),
                 request.getQuantity());
         productInventoryRepository.save(productInventory1);
-        return new ProductInventoryResponse(productInventory1.getColor(),productInventory1.getSize(), productInventory1.getQuantity());
+        return new ProductInventoryResponse(productInventory1.getColor(),productInventory1.getSize(), productInventory1.getQuantity(), productInventory1.getIsActive());
     }
 
     // READ: Lấy tất cả thông tin tồn kho
@@ -43,7 +43,8 @@ public class ProductInventoryService {
         return productInventoryList.stream().map(inventory -> new ProductInventoryResponse(
                         inventory.getColor(),
                         inventory.getSize(),
-                        inventory.getQuantity()))
+                        inventory.getQuantity(),
+                        inventory.getIsActive()))
                 .collect(Collectors.toList());
     }
 
@@ -52,7 +53,7 @@ public class ProductInventoryService {
         List<ProductInventory> productInventory = productInventoryRepository.findByProductProductId(productId);
 
         return productInventory.stream()
-                .map(inventory -> new ProductInventoryResponse(inventory.getColor(), inventory.getSize(), inventory.getQuantity())).collect(Collectors.toList());
+                .map(inventory -> new ProductInventoryResponse(inventory.getColor(), inventory.getSize(), inventory.getQuantity(),inventory.getIsActive())).collect(Collectors.toList());
     }
 
     // UPDATE
@@ -65,7 +66,7 @@ public class ProductInventoryService {
         productInventory.setQuantity(request.getQuantity());
         productInventoryRepository.save(productInventory);
 
-        return new ProductInventoryResponse(productInventory.getColor(), productInventory.getSize(), productInventory.getQuantity());
+        return new ProductInventoryResponse(productInventory.getColor(), productInventory.getSize(), productInventory.getQuantity(), productInventory.getIsActive());
     }
 
     // DELETE

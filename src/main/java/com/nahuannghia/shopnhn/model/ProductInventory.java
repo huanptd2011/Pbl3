@@ -24,12 +24,14 @@ public class ProductInventory {
 
     @Column(name = "quantity", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int quantity;
+    private Boolean isActive = true;
 
-    public ProductInventory(Product product, String color, String size, int quantity) {
+   public ProductInventory(Product product, String color, String size, int quantity) {
         this.product = product;
+        this.productInventoryId = new ProductInventoryId(product.getProductId(), color, size);
         this.quantity = quantity;
-        this.productInventoryId = new ProductInventoryId(product.getProductId() , color, size);
     }
+    
     public ProductInventory() {
     }
 
@@ -62,6 +64,12 @@ public class ProductInventory {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    public Boolean getIsActive() {
+        return isActive;
+    }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
     //
 }

@@ -6,6 +6,7 @@ public class ProductInventoryRequest {
     private String color;
     private String size;
     private Integer quantity;
+    private Boolean isActive;
     public Integer getProductId() {
         return productId;
     }
@@ -38,6 +39,14 @@ public class ProductInventoryRequest {
         this.quantity = quantity;
     }
     public ProductInventoryRequest() {
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 }
 

@@ -5,10 +5,18 @@ public class ProductInventoryResponse {
     private String color;
     private String size;
     private Integer quantity;
-    public ProductInventoryResponse(String color, String size, int quantity) {
+    private Boolean isActive;
+    public ProductInventoryResponse(String color, String size, Integer quantity, Boolean isActive) {
         this.color = color;
         this.size = size;
         this.quantity = quantity;
+        this.isActive = isActive;
+    }
+    public Boolean getIsActive() {
+        return isActive;
+    }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
     public ProductInventoryResponse() {
     }

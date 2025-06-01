@@ -12,7 +12,7 @@
         <div v-if="loadingProduct" class="text-center text-muted">Đang tải thông tin sản phẩm...</div>
         <div v-else-if="!product || !product.productId" class="text-center text-danger">Không tìm thấy thông tin sản phẩm.</div>
         <form v-else @submit.prevent="handleSubmit">
- 
+
 
           <div class="mb-3">
             <label for="productName" class="form-label">Tên Sản phẩm <span class="text-danger">*</span></label>
@@ -36,14 +36,14 @@
 
            <div class="mb-3">
             <label for="totalInventory" class="form-label">Tổng số lượng tồn</label>
-            <input type="number" class="form-control calenda" id="totalInventory" v-model="product.totalInventory" min="0">
+            <input type="number" class="form-control calenda" id="totalInventory" v-model="product.totalInventory" min="0" readonly>
              <small class="form-text text-muted">Tổng số lượng tồn có thể được tự động tính từ các biến thể.</small>
           </div>
 
 
           <div class="mb-3">
             <label for="category" class="form-label">Danh mục <span class="text-danger">*</span></label>
-            <select class="form-select calenda" id="category" v-model="product.categoryId" required>           
+            <select class="form-select calenda" id="category" v-model="product.categoryId" required>
               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
                   {{ category.categoryName }}
               </option>
@@ -51,23 +51,22 @@
           </div>
 
 
-       
+
           <div class="mb-3 form-check form-switch">
-             <input class="form-check-input" type="checkbox" id="isActive" v-model="product.isActive"> 
+             <input class="form-check-input" type="checkbox" id="isActive" :checked="product.isActive"   @change="changeActiveProduct(product)">
              <label class="form-check-label" for="isActive">Đang bán</label>
           </div>
-
 
            <div class="mb-3">
              <label for="productImages" class="form-label">Hình ảnh Sản phẩm</label>
                <div v-if="product.imageList && product.imageList.length > 0" class="mb-2">
                   <span class="text-muted me-2">Ảnh hiện có:</span>
                   <div class="d-flex flex-nowrap overflow-auto py-2" style="gap: 10px;">
-                    <div v-for="(image, index) in product.imageList" :key="index" 
+                    <div v-for="(image, index) in product.imageList" :key="index"
                         class="position-relative flex-shrink-0">
-                        <img :src="image.imageUrl" alt="Product Image" 
+                        <img :src="image.imageUrl" alt="Product Image"
                             style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #dee2e6;">
-                        <button type="button" 
+                        <button type="button"
                                 class="position-absolute btn btn-danger btn-sm p-0"
                                 style="width: 20px; height: 20px; top: -5px; right: -5px;"
                                 @click="deleteImage(index)"
@@ -82,8 +81,8 @@
 
             <div class="mb-3">
                  <label class="form-label">Biến thể (Kích thước/Màu sắc/Số lượng)</label>
-               
-                  <div v-for="(variant, index) in product.sizeColorList" :key="index" class="row g-2 mb-2 align-items-center">
+
+                  <div v-for="(variant, index) in product.sizeColorList.filter(v => v.isActive !== false)" :key="index" class="row g-2 mb-2 align-items-center">
                      <div class="col">
                          <input type="text" class="form-control form-control-sm calenda" v-model="variant.color" placeholder="Màu sắc">
                      </div>
@@ -106,7 +105,7 @@
             </div>
 
 
-   
+
           <button type="submit" class="btn btn-primary" :disabled="isSubmitting" style="background-color: #8b5cf6; border-color: #8b5cf6;">
             <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             {{ isSubmitting ? 'Đang lưu...' : 'Lưu Thay đổi' }}
@@ -128,18 +127,19 @@ const route = useRoute(); // Sử dụng useRoute để truy cập route hiện 
 // --- State lưu dữ liệu form sản phẩm cần sửa ---
 // Khởi tạo với cấu trúc dự kiến từ API response
 const product = ref({
-  productId: null, // Lưu ID sản phẩm từ route
+  productId: null,
   productName: '',
   productDescription: '',
   brand: '',
   price: 0,
   totalInventory: 0,
-  categoryId: null, // Lưu ID danh mục
+  category: null, // object category
+  categoryId: '', // chỉ dùng để binding vào <select>
   isActive: true,
   sizeColorList: [],
   imageList: [],
-  // ... các trường khác nếu có trong ProductResponse
 });
+
 
 const loadingProduct = ref(true); // Trạng thái tải dữ liệu sản phẩm hiện tại
 const isSubmitting = ref(false); // Trạng thái khi đang submit form lưu
@@ -180,8 +180,18 @@ async function fetchProductData(productId) {
                   quantity: variant.quantity ? parseInt(variant.quantity) : 0
              }));
          }
+         // Gán categoryId để dùng cho v-model trong select
+        product.value.categoryId = product.value.category?.categoryId || '';
 
-
+        // (Tùy chọn) Đồng bộ tên danh mục nếu cần
+          if (product.value.categoryId) {
+              const category = categories.value.find(c => c.categoryId === product.value.categoryId);
+              if (category) {
+                  product.value.category.categoryName = category.categoryName;
+              } else {
+                  console.warn(`Category ID ${product.value.categoryId} not found in categories list.`);
+              }
+          }
         console.log('Fetched product data for editing:', product.value);
 
     } catch (error) {
@@ -199,11 +209,11 @@ async function deleteImage(index) {
     if (!confirm('Bạn có chắc chắn muốn xóa ảnh này?')) {
         return;
     }
-    
+
     try {
         // Nếu cần gọi API để xóa ảnh trên server
         // await axios.delete(`http://localhost:8080/api/products/${product.value.productId}/images/${product.value.imageList[index].imageId}`);
-        
+
         // Xóa ảnh khỏi danh sách hiển thị
         product.value.imageList.splice(index, 1);
     } catch (error) {
@@ -227,14 +237,20 @@ function handleImageUpload(event) {
 
 // --- Hàm xử lý Biến thể (Size/Color/Quantity) ---
 // Các hàm này tương tự AddProduct.vue
+function changeActiveProduct() {
+  product.value.isActive = !product.value.isActive;
+  console.log('Product active status changed to:', product.value.isActive);
+}
 function addVariant() {
   product.value.sizeColorList.push({ color: '', size: '', quantity: 0 });
 }
 
 function removeVariant(index) {
-  product.value.sizeColorList.splice(index, 1);
-  console.log('Removed variant at index:', index);
-  console.log('Current sizeColorList:', product.value.sizeColorList);
+  const variant = product.value.sizeColorList[index];
+  if (variant) {
+    variant.isActive = false; // "Xóa mềm"
+    console.log('Marked variant inactive at index:', index);
+  }
 }
 
 
@@ -247,7 +263,7 @@ async function handleSubmit() {
     alert('Vui lòng điền đầy đủ các trường bắt buộc (Tên, Giá, Danh mục).');
     return;
   }
-  
+
   console.log('truoc', product.value.sizeColorList)
 
   isSubmitting.value = true; // Bắt đầu submit
@@ -271,13 +287,14 @@ async function handleSubmit() {
         sizeColorList: product.value.sizeColorList.map(v => ({
             color: v.color,
             size: v.size,
-            quantity: v.quantity ? parseInt(v.quantity) : 0
+            quantity: v.quantity ? parseInt(v.quantity) : 0,
+            isActive: v.isActive !== false // Chỉ gửi nếu isActive là true hoặc không có trường này
         })),
         // imageList: ... (Xử lý ảnh)
     };
 
     console.log('category size:', productData.sizeColorList)
-  
+
 
 
     // GỌI API backend để CẬP NHẬT sản phẩm (PUT request)
@@ -308,7 +325,7 @@ function goBack() {
 
 // --- Lấy ID sản phẩm từ route và fetch dữ liệu khi component mount ---
 onMounted(() => {
-  
+
   // Lấy ID sản phẩm từ tham số route
   // Đảm bảo tên tham số khớp với cấu hình router (:id)
   const productId = route.params.id;

@@ -1,10 +1,10 @@
 package com.nahuannghia.shopnhn.model;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
-
-import java.io.Serializable;
 
 @Embeddable
 
@@ -29,20 +29,21 @@ public class ProductInventoryId implements Serializable {
     }
 
     // equals and hashCode should be overridden to ensure correct behavior of composite keys
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductInventoryId that = (ProductInventoryId) o;
-        return productId.equals(that.productId) &&
-                color.equals(that.color) &&
-                size.equals(that.size);
-    }
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ProductInventoryId that = (ProductInventoryId) o;
+    return Objects.equals(productId, that.productId) &&
+           Objects.equals(color, that.color) &&
+           Objects.equals(size, that.size);
+}
 
-    @Override
-    public int hashCode() {
-        return 31 * productId.hashCode() + 31 * color.hashCode() + 31 * size.hashCode();
-    }
+@Override
+public int hashCode() {
+    return Objects.hash(productId, color, size);
+}
+
     //
 
     public Integer getProductId() {

@@ -15,14 +15,7 @@ import com.nahuannghia.shopnhn.model.OrderDetailId;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderDetailId> {
-//    List<OrderDetail> findByOrderDetailIdOrderId(Integer orderId);
     @EntityGraph(attributePaths = {"product", "product.images"})
     List<OrderDetail> findByOrder_OrderId(Integer orderId);
-
-//    @Query("SELECT new com.nahuannghia.shopnhn.Response.OrderDetailResponse(" +
-//       "od.product.productId, od.product.productName, od.product.images, od.quantity, od.price, od.color, od.size) " +
-//       "FROM OrderDetail od WHERE od.order.orderId = :orderId")
-//    List<OrderDetailResponse> findOrderDetailsByOrderId(@Param("orderId") Integer orderId);
-
 }
 

@@ -134,7 +134,12 @@ const routes = [
   path: '/order',
   name: 'Order',
   component: () => import('@/views/OrderView.vue')
-},
+  },
+  {
+    path: '/change-password',
+    name: 'ChangePassword',
+    component: () => import('@/views/ChangePassView.vue')
+  }
 
 ];
 

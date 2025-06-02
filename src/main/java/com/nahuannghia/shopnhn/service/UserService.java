@@ -73,9 +73,9 @@ public class UserService {
     }
 
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(request.getUserId())
                 .orElseThrow(UserNotFoundException::new);
+
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             return new ChangePasswordResponse(400, "Mật khẩu hiện tại không đúng", null, LocalDateTime.now());
         }
@@ -215,8 +215,7 @@ public class UserService {
         return new LogoutResponse(200, "Logout successful", LocalDateTime.now());
     }
 
-    public UpdateUserResponse updateUserInfo(Integer userId, UpdateUserRequest userInfo)
-            throws UserNotFoundException {
+    public UpdateUserResponse updateUserInfo(Integer userId, UpdateUserRequest userInfo) throws UserNotFoundException {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);

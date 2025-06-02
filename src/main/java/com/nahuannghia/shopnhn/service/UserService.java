@@ -53,13 +53,15 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
 
         return new UserInfoResponse(
+                user.getUserId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPhone(),
                 user.getAddress(),
                 user.getRole().toString(),
                 user.getFullName(),
-                user.getDob()
+                user.getDob(),
+                user.getStatus()
         );
     }
 
@@ -257,13 +259,15 @@ public class UserService {
         userRepository.save(user);
 
         UserInfoResponse userInfoResponse = new UserInfoResponse(
+                user.getUserId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPhone(),
                 user.getAddress(),
                 user.getRole().toString(),
                 user.getFullName(),
-                user.getDob()
+                user.getDob(),
+                user.getStatus()
         );
 
         return new UpdateUserResponse(
@@ -291,5 +295,11 @@ public class UserService {
     private String createUsername(String email) {
         return email.substring(0, email.indexOf("@"));
     }
-
+    public Boolean changeUserStatus(Integer userId, Boolean status) throws UserNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        user.setStatus(status);
+        userRepository.save(user);
+        return true;
+    }
 }

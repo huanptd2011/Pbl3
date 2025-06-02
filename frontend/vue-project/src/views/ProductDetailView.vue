@@ -515,7 +515,6 @@ onMounted(() => {
     object-fit: cover;
 }
 
-
 /* Style cho nút submit */
 .btn-primary {
   background-color: #2945e2;

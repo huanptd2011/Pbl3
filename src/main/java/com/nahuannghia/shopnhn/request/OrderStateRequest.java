@@ -1,14 +1,14 @@
 package com.nahuannghia.shopnhn.request;
 
-public class OrderStatusRequest {
+public class OrderStateRequest {
     private Integer orderId;
     private String orderState;
-    private String paymentState;
 
-    public OrderStatusRequest(Integer orderId, String orderState, String paymentState) {
+
+    public OrderStateRequest(Integer orderId, String orderState) {
         this.orderId = orderId;
         this.orderState = orderState;
-        this.paymentState = paymentState;
+
     }
 
     public Integer getOrderId() {
@@ -26,13 +26,4 @@ public class OrderStatusRequest {
     public void setOrderState(String orderState) {
         this.orderState = orderState;
     }
-
-    public String getPaymentState() {
-        return paymentState;
-    }
-
-    public void setPaymentState(String paymentState) {
-        this.paymentState = paymentState;
-    }   
-
 }

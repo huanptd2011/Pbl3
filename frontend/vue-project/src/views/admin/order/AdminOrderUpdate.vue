@@ -35,14 +35,14 @@
               <div class="mb-2">
                 <strong>Phương thức thanh toán:</strong> {{ order.paymentMethod.paymentMethodName }}
               </div>
-              <!-- <div class="mb-2">
+              <div class="mb-2">
                 <strong>Trạng thái đơn hàng:</strong>
                 <span :class="getOrderStateClass(order.orderState)">{{ order.orderState }}</span>
               </div>
               <div class="mb-2">
                 <strong>Trạng thái thanh toán:</strong>
                 <span :class="getPaymentStateClass(order.paymentState)">{{ order.paymentState }}</span>
-              </div> -->
+              </div>
               <div class="mb-2" v-if="order.note">
                 <strong>Ghi chú:</strong> {{ order.note }}
               </div>
@@ -116,7 +116,14 @@
               @click="showUpdateOrderModal = true"
               style="background-color: #8b5cf6; border-color: #8b5cf6;">
               <i class="fas fa-edit me-1"></i>
-              Cập nhật trạng thái
+              Cập nhật trạng thái đơn hàng
+            </button>
+            <button
+              v-if="canUpdatePaymentState()"
+              class="btn btn-success"
+              @click="showUpdatePaymentModal = true">
+              <i class="fas fa-credit-card me-1"></i>
+              Cập nhật trạng thái thanh toán
             </button>
             <button class="btn btn-outline-primary" @click="printOrder">
               <i class="fas fa-print me-1"></i>
@@ -127,7 +134,7 @@
       </div>
     </div>
 
-    <!-- Modal cập nhật trạng thái -->
+    <!-- Modal cập nhật trạng thái đơn hàng -->
     <div v-if="showUpdateOrderModal" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -137,41 +144,72 @@
           </div>
           <div class="modal-body">
             <div class="mb-3">
-              <label for="orderState" class="form-label">Trạng thái đơn hàng</label>
-              <select class="form-select" id="orderState" v-model="updateForm.orderState">
-                <option value="Chờ xác nhận">Chờ xác nhận</option>
-                <option value="Đã xác nhận">Đã xác nhận</option>
-                <option value="Đang chuẩn bị">Đang chuẩn bị</option>
-                <option value="Đang giao">Đang giao</option>
-                <option value="Đã giao">Đã giao</option>
-                <option value="Đã hủy">Đã hủy</option>
-              </select>
+              <label for="orderState" class="form-label">Trạng thái đơn hàng hiện tại</label>
+              <div class="alert alert-info">
+                <strong>{{ order.orderState }}</strong>
+              </div>
             </div>
             <div class="mb-3">
-              <label for="paymentState" class="form-label">Trạng thái thanh toán</label>
-              <select class="form-select" id="paymentState" v-model="updateForm.paymentState">
-                <option value="Chưa thanh toán">Chưa thanh toán</option>
-                <option value="Đã thanh toán">Đã thanh toán</option>
-                <option value="Hoàn tiền">Hoàn tiền</option>
+              <label for="newOrderState" class="form-label">Trạng thái mới</label>
+              <select class="form-select" id="newOrderState" v-model="updateOrderForm.orderState">
+                <option v-for="state in availableOrderStates" :key="state" :value="state">
+                  {{ state }}
+                </option>
               </select>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="showUpdateOrderModal = false">Hủy</button>
-            <button type="button" class="btn btn-primary" @click="updateOrderStatus" :disabled="isUpdating">
-              <span v-if="isUpdating" class="spinner-border spinner-border-sm me-2"></span>
-              {{ isUpdating ? 'Đang cập nhật...' : 'Cập nhật' }}
+            <button type="button" class="btn btn-primary" @click="updateOrderStatus" :disabled="isUpdatingOrder">
+              <span v-if="isUpdatingOrder" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isUpdatingOrder ? 'Đang cập nhật...' : 'Cập nhật trạng thái' }}
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal cập nhật trạng thái thanh toán -->
+    <div v-if="showUpdatePaymentModal" class="modal d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Cập nhật trạng thái thanh toán</h5>
+            <button type="button" class="btn-close" @click="showUpdatePaymentModal = false"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="paymentState" class="form-label">Trạng thái thanh toán hiện tại</label>
+              <div class="alert alert-warning">
+                <strong>{{ order.paymentState }}</strong>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="newPaymentState" class="form-label">Trạng thái mới</label>
+              <select class="form-select" id="newPaymentState" v-model="updatePaymentForm.paymentState">
+                <option v-for="state in availablePaymentStates" :key="state" :value="state">
+                  {{ state }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="showUpdatePaymentModal = false">Hủy</button>
+            <button type="button" class="btn btn-success" @click="updatePaymentStatus" :disabled="isUpdatingPayment">
+              <span v-if="isUpdatingPayment" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isUpdatingPayment ? 'Đang cập nhật...' : 'Cập nhật thanh toán' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
 
@@ -197,32 +235,68 @@ const order = ref({
   orderDetails: []
 });
 
-const productDetails = ref({}); // Cache thông tin sản phẩm
+const productDetails = ref({});
 const loadingOrder = ref(true);
-const showUpdateOrderModal = ref(false);
-const isUpdating = ref(false);
 
-// Form cập nhật trạng thái
-const updateForm = ref({
-  orderState: '',
-  paymentState: ''
+// Modal states
+const showUpdateOrderModal = ref(false);
+const showUpdatePaymentModal = ref(false);
+const isUpdatingOrder = ref(false);
+const isUpdatingPayment = ref(false);
+
+// Form cập nhật trạng thái đơn hàng
+const updateOrderForm = ref({
+  orderState: ''
 });
 
-// Fetch thông tin đơn hàng
+// Form cập nhật trạng thái thanh toán
+const updatePaymentForm = ref({
+  paymentState: '',
+});
+
+// Danh sách trạng thái đơn hàng có thể cập nhật
+const availableOrderStates = computed(() => {
+  const currentState = order.value.orderState;
+  // const allStates = ["Chờ xác nhận", "Đã xác nhận", "Đang giao", "Đã giao", "Đã hủy"];
+
+  switch (currentState) {
+    case "Chờ xác nhận":
+      return ["Đã xác nhận","Đang giao", "Đã hủy"];
+    case "Đã xác nhận":
+      return ["Đang giao", "Đã hủy"];
+    case "Đang giao":
+      return ["Đã giao","Đã hủy"];
+    case "Đã giao":
+      return ["Đã hủy"];
+    default:
+      return [];
+  }
+});
+
+// Danh sách trạng thái thanh toán có thể cập nhật dựa trên trạng thái đơn hàng
+const availablePaymentStates = computed(() => {
+  const orderState = order.value.orderState;
+  const currentPaymentState = order.value.paymentState;
+
+  switch (orderState) {
+    case "Đã hủy":
+      return currentPaymentState === "Đã thanh toán" ? ["Đã hoàn tiền"] : ["Chưa thanh toán"];
+    case "Đã giao":
+      return ["Đã thanh toán"];
+    default:
+      return ["Chưa thanh toán", "Đã thanh toán"];
+  }
+});
+
+// Fetch dữ liệu đơn hàng
 async function fetchOrderData(orderId) {
   loadingOrder.value = true;
   try {
     const response = await axios.get(`http://localhost:8080/api/orders/${orderId}`);
     order.value = response.data;
-
-    // Khởi tạo form cập nhật với dữ liệu hiện tại
-    updateForm.value.orderState = order.value.orderState;
-    updateForm.value.paymentState = order.value.paymentState;
-
-    // Fetch thông tin sản phẩm cho từng order detail
+    updateOrderForm.value.orderState = order.value.orderState;
+    updatePaymentForm.value.paymentState = order.value.paymentState;
     await fetchProductDetails();
-
-    console.log('Fetched order data:', order.value);
   } catch (error) {
     console.error('Error fetching order data:', error);
     alert('Không thể tải thông tin đơn hàng.');
@@ -231,10 +305,9 @@ async function fetchOrderData(orderId) {
   }
 }
 
-// Fetch thông tin chi tiết sản phẩm
+// Lấy thông tin chi tiết sản phẩm
 async function fetchProductDetails() {
   const productIds = [...new Set(order.value.orderDetails.map(detail => detail.productId))];
-
   for (const productId of productIds) {
     try {
       const response = await axios.get(`http://localhost:8080/api/products/${productId}`);
@@ -248,35 +321,59 @@ async function fetchProductDetails() {
 
 // Cập nhật trạng thái đơn hàng
 async function updateOrderStatus() {
-  if (isUpdating.value) return;
+  if (isUpdatingOrder.value) return;
 
-  isUpdating.value = true;
+  if (updateOrderForm.value.orderState === order.value.orderState) {
+    alert('Vui lòng chọn trạng thái khác với trạng thái hiện tại.');
+    return;
+  }
 
+  isUpdatingOrder.value = true;
   try {
     const updateData = {
-      orderId: order.value.orderId, // Bổ sung để phù hợp với backend nhận trong body
-      orderState: updateForm.value.orderState,
-      paymentState: updateForm.value.paymentState
+      orderId: order.value.orderId,
+      orderState: updateOrderForm.value.orderState
     };
-
-    await axios.put(`http://localhost:8080/api/orders/status`, updateData); // endpoint đúng với controller
-
-    // Cập nhật dữ liệu local
-    order.value.orderState = updateForm.value.orderState;
-    order.value.paymentState = updateForm.value.paymentState;
-
+    await axios.put(`http://localhost:8080/api/orders/status`, updateData);
+    order.value.orderState = updateOrderForm.value.orderState;
     showUpdateOrderModal.value = false;
-    alert(' Cập nhật trạng thái đơn hàng thành công!');
+    alert('Cập nhật trạng thái đơn hàng thành công!');
   } catch (error) {
-    console.error(' Lỗi khi cập nhật trạng thái đơn hàng:', error);
-    alert(' Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.');
+    console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
+    alert('Có lỗi xảy ra khi cập nhật trạng thái đơn hàng.');
   } finally {
-    isUpdating.value = false;
+    isUpdatingOrder.value = false;
   }
 }
 
+// Cập nhật trạng thái thanh toán
+async function updatePaymentStatus() {
+  if (isUpdatingPayment.value) return;
 
-// Utility functions
+  if (updatePaymentForm.value.paymentState === order.value.paymentState) {
+    alert('Vui lòng chọn trạng thái thanh toán khác với trạng thái hiện tại.');
+    return;
+  }
+
+  isUpdatingPayment.value = true;
+  try {
+    const updateData = {
+      orderId: order.value.orderId,
+      paymentState: updatePaymentForm.value.paymentState,
+    };
+    await axios.put(`http://localhost:8080/api/orders/payment-status`, updateData);
+    order.value.paymentState = updatePaymentForm.value.paymentState;
+    showUpdatePaymentModal.value = false;
+    alert('Cập nhật trạng thái thanh toán thành công!');
+  } catch (error) {
+    console.error('Lỗi khi cập nhật trạng thái thanh toán:', error);
+    alert('Có lỗi xảy ra khi cập nhật trạng thái thanh toán.');
+  } finally {
+    isUpdatingPayment.value = false;
+  }
+}
+
+// Các hàm tiện ích
 function formatDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleString('vi-VN');
@@ -294,7 +391,38 @@ function calculateSubtotal() {
 }
 
 function canUpdateOrderState() {
-  return ['Chờ xác nhận', 'Đã xác nhận', 'Đang chuẩn bị', 'Đang giao'].includes(order.value.orderState);
+  return ['Chờ xác nhận', 'Đã xác nhận', 'Đang giao','Đã giao'].includes(order.value.orderState);
+}
+
+function canUpdatePaymentState() {
+  const paymentState = order.value.paymentState;
+  // Không cho phép cập nhật nếu đã hoàn tiền
+  if (paymentState === 'Đã hoàn tiền') {
+    return false;
+  }
+
+  return true;
+}
+
+function getOrderStateClass(state) {
+  switch (state) {
+    case 'Chờ xác nhận': return 'badge bg-warning text-dark';
+    case 'Đã xác nhận': return 'badge bg-info';
+    case 'Đang chuẩn bị': return 'badge bg-primary';
+    case 'Đang giao': return 'badge bg-secondary';
+    case 'Đã giao': return 'badge bg-success';
+    case 'Đã hủy': return 'badge bg-danger';
+    default: return 'badge bg-light text-dark';
+  }
+}
+
+function getPaymentStateClass(state) {
+  switch (state) {
+    case 'Chưa thanh toán': return 'badge bg-warning text-dark';
+    case 'Đã thanh toán': return 'badge bg-success';
+    case 'Đã hoàn tiền': return 'badge bg-info';
+    default: return 'badge bg-light text-dark';
+  }
 }
 
 function printOrder() {
@@ -305,20 +433,18 @@ function goBack() {
   router.back();
 }
 
-// Khởi tạo component
 onMounted(() => {
   const orderId = route.params.orderId;
-
   if (orderId) {
     order.value.orderId = orderId;
     fetchOrderData(orderId);
   } else {
-    console.error("Order ID is missing from route parameters.");
     alert("Không tìm thấy ID đơn hàng.");
     router.push('/admin/orders');
   }
 });
 </script>
+
 
 <style scoped>
 .order-detail-container {

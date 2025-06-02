@@ -513,6 +513,7 @@ onMounted(() => {
 .carousel-inner img {
     height: 450px;
     object-fit: cover;
+    border: #ddd 1px solid;
 }
 
 /* Style cho nút submit */

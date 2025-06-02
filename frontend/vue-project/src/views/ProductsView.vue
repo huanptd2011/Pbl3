@@ -90,7 +90,11 @@
               <div class="row row-cols-1 row-cols-md-3 g-4">
                   <div class="col" v-for="product in filteredProducts" :key="product.productId">
                       <div class="card h-100 product-card" @click="goToProductDetail(product.productId)">
-                          <img :src="product?.imageList?.[0]?.imageUrl || 'fallback-image.png'" class="card-img-top" alt="Product Image">
+                        <div class="product-image-container">
+                            <img :src="product?.imageList?.[0]?.imageUrl || 'fallback-image.png'" class=".product-image" alt="Product Image">
+                        </div>
+
+                          
                           <div class="card-body">
                               <h6 class="card-title">{{ product.productName }}</h6>
                               <p class="card-text fw-bold">{{ formatPrice(product.price) }}</p>
@@ -423,4 +427,28 @@ onMounted(() => {
 .page-link {
     color: #131418;
 }
+
+.product-image-container {
+    width: 100%;
+    height: 180px; /* Chiều cao cố định cho vùng ảnh */
+    overflow: hidden;
+    background-color: #ffffff; /* Nền nhẹ cho vùng ảnh */
+    display: flex; /* Dùng flexbox để căn giữa ảnh */
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #eee; /* Đường kẻ dưới ảnh */
+    padding: 10px 0;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo ảnh hiển thị đầy đủ mà không bị cắt */
+    margin: 10px; /* Khoảng cách giữa ảnh và viền container */
+    /* Remove any default Bootstrap `card-img-top` rounded corners if they conflict */
+    border: #dfdada solid 1px; /* Thêm viền xung quanh ảnh */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
 </style>

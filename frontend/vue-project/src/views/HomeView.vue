@@ -69,16 +69,7 @@
       </div>
     </section>
 
-    <!-- Promo Banner -->
-    <section class="promo-banner mb-5">
-      <div class="container">
-        <div class="promo-content text-center p-5 rounded">
-          <h2 class="text-white mb-3">Miễn phí vận chuyển cho đơn hàng từ 500K</h2>
-          <p class="text-white mb-4">Áp dụng từ ngày 01/06 đến 30/06</p>
-          <router-link to="/products" class="btn btn-light">Mua sắm ngay</router-link>
-        </div>
-      </div>
-    </section>
+    
 
   </div>
 </template>

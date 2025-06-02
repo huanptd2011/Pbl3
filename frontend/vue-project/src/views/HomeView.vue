@@ -62,7 +62,7 @@
         </div>
         <div v-if="isLoading" class="text-center text-muted">Đang tải sản phẩm...</div>
         <div v-else class="row g-4">
-          <div class="col-md-3" v-for="product in recentlyUpdated " :key="product.productId">
+          <div class="col-md-3" v-for="product in newArrivals " :key="product.productId">
             <ProductCard :product="product" />
           </div>
         </div>

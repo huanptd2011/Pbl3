@@ -94,7 +94,7 @@
                           <div class="card-body">
                               <h6 class="card-title">{{ product.productName }}</h6>
                               <p class="card-text fw-bold">{{ formatPrice(product.price) }}</p>
-                              <p class="card-text text-muted small">{{ product.brand }}</p>
+                              <p class="card-text text-muted-product small">{{ product.brand }}</p>
                           </div>
                           <div class="card-footer bg-transparent" v-if="product.comingSoon">
                               <small class="text-muted">Coming soon</small>
@@ -380,25 +380,18 @@ onMounted(() => {
 
 <style scoped>
 .sort-options .btn.active {
-    background-color: #0d6efd;
+    background-color: #32445e;
     color: white;
 }
 
-.card-img-top {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+
+.form-check-label {
+    color: #131418;
 }
 
-.product-card {
-    cursor: pointer;
-    transition: transform 0.2s;
-    border: 1px solid #eee;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.form-check-input:checked {
+    background-color: #19181b;
+    border-color: #1f1e22;
 }
 
 .page-info {
@@ -415,5 +408,19 @@ onMounted(() => {
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 0.8rem;
+}
+
+
+.active>.page-link, .page-link.active{
+    background-color: #32445e;
+    border: none;
+}
+
+.page-link:focus{
+    color:#cfd4db
+}
+
+.page-link {
+    color: #131418;
 }
 </style>

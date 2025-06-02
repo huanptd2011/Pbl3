@@ -24,13 +24,13 @@
             <!-- Thông tin sản phẩm -->
             <div class="col-md-6">
                 <h2 class="mb-2">{{ product.productName }}</h2>
-                <p class="text-muted">Thương hiệu: {{ product.brand }}</p>
+                <p class="text-muted-product">Thương hiệu: {{ product.brand }}</p>
                 <h4 class="text-danger fw-bold">{{ formatPrice(product.price) }}₫</h4>
                 <p class="mt-3">{{ product.productDescription }}</p>
 
                 <!-- Lựa chọn màu sắc -->
                 <div class="mb-3" v-if="availableColors.length > 0 ">
-                    <label class="form-label fw-semibold">Chọn màu:</label>
+                    <label class="form-label-product fw-semibold">Chọn màu:</label>
                     <div class="d-flex gap-2 flex-wrap">
                         <button v-for="color in availableColors" :key="color" class="btn"
                             :class="color === selectedColor ? 'btn-dark' : 'btn-outline-secondary'"
@@ -42,7 +42,7 @@
 
                 <!-- Lựa chọn size -->
                 <div class="mb-3" v-if="selectedColor && availableSizes.length > 0">
-                    <label class="form-label fw-semibold">Chọn size:</label>
+                    <label class="form-label-product fw-semibold">Chọn size:</label>
                     <div class="d-flex gap-2 flex-wrap">
                         <button v-for="size in availableSizes" :key="size" class="btn"
                             :class="size === selectedSize ? 'btn-dark' : 'btn-outline-secondary'"
@@ -513,6 +513,16 @@ onMounted(() => {
 .carousel-inner img {
     height: 450px;
     object-fit: cover;
+}
+/* Style cho nút submit */
+.btn-primary {
+  background-color: #2945e2;
+  border-color: #3447f5;
+}
+
+.btn-primary:hover {
+  background-color: #1725e6;
+  border-color: #101dcf;
 }
 /* Avatar styles */
 .avatar-circle {

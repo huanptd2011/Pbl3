@@ -64,7 +64,7 @@
           </li>
         </ul>
 
-        <div class="card mt-4">
+        <div class="card product-card mt-4">
             <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
                 <h4 class="mb-2 mb-md-0">Tổng tiền đã chọn: <span class="text-success">{{ formatPrice(cartStore.totalSelectedPrice) }}₫</span></h4>
 
@@ -181,4 +181,26 @@
           width: 60px !important; /* Adjust input width on small screens */
       }
   }
+
+
+  .form-check-label {
+    color: #131418;
+}
+
+.form-check-input:checked {
+    background-color: #19181b;
+    border-color: #1f1e22;
+}
+
+.page-info {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.product-card:hover{
+    transform: none;
+    
+}
+
+
   </style>

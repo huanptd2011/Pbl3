@@ -45,24 +45,19 @@
         <!-- Search + Wishlist + Cart + Auth -->
         <div class="d-flex">
           <div class="input-group me-3 d-none d-lg-flex bg-gray">
-            <span class="input-group-text bg-gray border-0 rounded-start-50" @click="gotoProductView">
+            <span class="input-group-text bg-gray border-0 border-look" @click="gotoProductView">
               <i class="fas fa-search"></i>
             </span>
             <input
               type="text"
-              class="form-control border-0 bg-gray rounded-end-50"
+              class="form-control border-0 bg-gray border-input"
               placeholder="Tìm kiếm giày..."
               v-model="searchQuery"
               @keyup.enter="gotoProductView"
             />
           </div>
 
-          <router-link to="/wishlist" class="btn btn-link position-relative me-2">
-            <i class="fas fa-heart"></i>
-            <span v-if="wishlistCount > 0" class="position-absolute top-0 start-100 translate-middle badge bg-danger">
-              {{ wishlistCount }}
-            </span>
-          </router-link>
+         
 
           <router-link to="/cart" class="btn btn-link position-relative me-2 bg-gray rounded-5">
             <i class="fas fa-shopping-cart text-dark"></i>
@@ -78,7 +73,7 @@
       </div>
     </div>
 
-    <!-- Mobile Menu
+    <!-- Mobile Menu -->
     <div class="mobile-menu" :class="{ 'show': mobileMenuOpen }">
       <div class="mobile-menu-header">
         <button class="btn btn-close" @click="toggleMobileMenu"></button>
@@ -109,7 +104,7 @@
           </li>
         </ul>
       </div>
-    </div> -->
+    </div>
 
     <!-- Auth Modal -->
     <AuthModal v-if="showAuthModal" @close="toggleAuthModal" />
@@ -119,14 +114,12 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useCartStore } from '@/stores/cartStore';
-import { useWishlistStore } from '@/stores/wishlist';
 import AuthModal from '@/components/AuthModal.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
 const cartStore = useCartStore();
-const wishlistStore = useWishlistStore();
 
 const mobileMenuOpen = ref(false);
 const showAuthModal = ref(false);
@@ -178,7 +171,6 @@ const gotoProductView = () => {
 
 // Computed properties
 const cartCount = computed(() => cartStore.totalItemsCount);
-const wishlistCount = computed(() => wishlistStore.items.length);
 </script>
 
 <style scoped>

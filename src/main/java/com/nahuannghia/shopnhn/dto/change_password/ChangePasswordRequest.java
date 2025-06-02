@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class ChangePasswordRequest {
+    private Integer userId;
     @NotBlank(message = "Current password is required")
     private String currentPassword;
 
@@ -15,13 +16,21 @@ public class ChangePasswordRequest {
     private String confirmNewPassword;
     public ChangePasswordRequest() {
     }
-    public ChangePasswordRequest(String currentPassword, String newPassword, String confirmNewPassword) {
+    public ChangePasswordRequest(Integer userId, String currentPassword, String newPassword, String confirmNewPassword) {
+        this.userId = userId;
         this.currentPassword = currentPassword;
         this.newPassword = newPassword;
         this.confirmNewPassword = confirmNewPassword;
     }
-    
 
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getCurrentPassword() {
         return currentPassword;

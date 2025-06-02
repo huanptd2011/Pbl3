@@ -103,8 +103,7 @@
           router.push('/');
         }
       } else {
-        // Trường hợp backend trả về status 200 nhưng dữ liệu không đầy đủ
-        alert('Đăng nhập thành công nhưng thiếu thông tin người dùng.');
+        alert('Sai tài khoản hoặc mật khẩu!');
         router.push('/login');
       }
     } catch (error) {

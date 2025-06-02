@@ -45,8 +45,8 @@ public class ProductImageController {
     }
 
     // Xóa ảnh theo URL
-    @DeleteMapping("/delete")
-    public void deleteImage(@RequestParam Integer productId, @RequestParam String imageUrl) {
+    @DeleteMapping("/delete/{productId}")
+    public void deleteImage(@PathVariable Integer productId, @RequestParam String imageUrl) {
         productImageService.deleteProductImage(productId, imageUrl);
     }
 }

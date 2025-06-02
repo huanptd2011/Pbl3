@@ -452,7 +452,7 @@ function renderOrdersChart(data) {
         backgroundColor: [ // Màu nền cho các cột/lát cắt
           'rgba(0,194,255)',
           'rgba(14,67,251)',
-          'rgba(203,60,255)',
+          'rgba(146,60,255)',
           'rgba(255,0,450)',
 
         ],

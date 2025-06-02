@@ -128,7 +128,7 @@ const filterPaymentStatus = ref('');
 const loadingOrders = ref(true);
 const searchKeyword = ref('');
 const currentPage = ref(1);
-const pageSize = 10; // Số lượng đơn hàng trên mỗi trang
+const pageSize = 6; // Số lượng đơn hàng trên mỗi trang
 
 const router = useRouter();
 

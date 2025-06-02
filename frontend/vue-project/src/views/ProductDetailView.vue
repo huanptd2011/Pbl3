@@ -92,7 +92,7 @@
         <div class="row">
             <div class="col-12">
                 <h3 class="mb-4 fw-bold">Đánh giá sản phẩm</h3>
-                
+
                 <!-- Rating overview -->
                 <div class="rating-overview p-4 mb-4 rounded-3 shadow-sm">
                     <div class="row align-items-center">
@@ -102,7 +102,7 @@
                                 <span class="fs-4 text-muted">/5</span>
                             </div>
                             <div class="star-rating mb-2">
-                                <span v-for="star in 5" :key="star" 
+                                <span v-for="star in 5" :key="star"
                                     :class="['star', { 'filled': star <= Math.round(averageRating) }]">
                                     ★
                                 </span>
@@ -114,7 +114,7 @@
                                 <div class="d-flex align-items-center">
                                     <span class="me-2 text-nowrap">{{ 6-i }} ★</span>
                                     <div class="progress flex-grow-1" style="height: 8px;">
-                                        <div class="progress-bar bg-warning" 
+                                        <div class="progress-bar bg-warning"
                                             :style="{ width: getRatingPercentage(6-i) + '%' }"></div>
                                     </div>
                                     <span class="ms-2 text-muted small">{{ getRatingCount(6-i) }}</span>
@@ -123,20 +123,20 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Review form -->
-                <div class="review-form card border-0 shadow-sm mb-4" v-if="userStore.isLoggedIn">
+                <div class="review-form   card-fix border-0 shadow-sm mb-4" v-if="userStore.isLoggedIn">
                     <div class="card-body p-4">
                         <h5 class="card-title fw-semibold mb-3">Viết đánh giá của bạn</h5>
                         <form @submit.prevent="submitReview">
                             <div class="mb-3">
                                 <label class="form-label d-block mb-2">Đánh giá của bạn</label>
                                 <div class="rating-input">
-                                    <span v-for="star in 5" :key="star" 
+                                    <span v-for="star in 5" :key="star"
                                         @click="setRating(star)"
                                         @mouseover="hoverRating = star"
                                         @mouseleave="hoverRating = 0"
-                                        :class="['star', { 
+                                        :class="['star', {
                                             'filled': star <= (hoverRating || newReview.rating),
                                             'selected': star <= newReview.rating
                                         }]">
@@ -145,8 +145,8 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <textarea class="form-control" v-model="newReview.content" 
-                                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..." 
+                                <textarea class="form-control" v-model="newReview.content"
+                                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
                                     rows="4" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary px-4 py-2">
@@ -155,29 +155,29 @@
                         </form>
                     </div>
                 </div>
-                <div v-else class="card border-0 shadow-sm mb-4">
+                <div v-else class="card-fix border-0 shadow-sm mb-4">
                     <div class="card-body p-4 text-center">
                         <p class="mb-0">Vui lòng <a href="#" @click.prevent="redirectToLogin" class="text-primary">đăng nhập</a> để viết đánh giá.</p>
                     </div>
                 </div>
-                
+
                 <!-- Reviews list -->
                 <div class="reviews-list">
-                    <div v-if="reviews.length === 0" class="card border-0 shadow-sm">
+                    <div v-if="reviews.length === 0" class="card-fix border-0 shadow-sm">
                         <div class="card-body p-4 text-center text-muted">
                             <i class="bi bi-chat-square-text fs-1 mb-3"></i>
                             <p class="mb-0">Sản phẩm chưa có đánh giá nào.</p>
                         </div>
                     </div>
-                    
-                    <div v-for="review in visibleReviews" :key="review.reviewId" class="card border-0 shadow-sm mb-3">
+
+                    <div v-for="review in visibleReviews" :key="review.reviewId" class="card-fix border-0 shadow-sm mb-3">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
                                     <div style="display: flex;">
                                         <div class="avatar-circle me-2">
-                                            <img v-if="review.user.avatar" 
-                                                :src="review.user.avatar || 'fallback-avatar.png'" 
+                                            <img v-if="review.user.avatar"
+                                                :src="review.user.avatar || 'fallback-avatar.png'"
                                                 :alt="review.user.username"
                                                 @error="handleImageError"
                                                 class="avatar-image">
@@ -188,7 +188,7 @@
                                         </div>
                                     </div>
                                     <div class="star-rating small mb-2">
-                                        <span v-for="star in 5" :key="star" 
+                                        <span v-for="star in 5" :key="star"
                                             :class="['star', { 'filled': star <= review.rating }]">
                                             ★
                                         </span>
@@ -212,8 +212,8 @@
     </div>
 
     <!-- Nút quay lại đầu trang -->
-    <button 
-    v-show="showBackToTop" 
+    <button
+    v-show="showBackToTop"
     @click="scrollToTop"
     class="back-to-top-btn rounded-circle shadow"
     aria-label="Quay lại đầu trang">
@@ -434,7 +434,7 @@ const submitReview = async () => {
         // Thêm đánh giá mới vào đầu danh sách
         reviews.value.unshift(response.data)
         visibleReviews.value = reviews.value.slice(0, reviewsPerPage)
-        
+
         // Reset form
         newReview.value = { rating: 0, content: '' }
         alert('Đánh giá của bạn đã được gửi thành công!')
@@ -514,6 +514,7 @@ onMounted(() => {
     height: 450px;
     object-fit: cover;
 }
+
 /* Style cho nút submit */
 .btn-primary {
   background-color: #2945e2;
@@ -545,7 +546,7 @@ onMounted(() => {
 
 .review-section {
     background-color: #fafafa;
-    padding: 2rem 0;
+    padding: 2rem 2rem;
     border-radius: 12px;
 }
 
@@ -641,5 +642,6 @@ onMounted(() => {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 0.8; transform: translateY(0); }
+
 }
 </style>

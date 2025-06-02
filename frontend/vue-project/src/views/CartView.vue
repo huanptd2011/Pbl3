@@ -64,7 +64,7 @@
           </li>
         </ul>
 
-        <div class="card product-card mt-4">
+        <div class="card card-fix mt-4">
             <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
                 <h4 class="mb-2 mb-md-0">Tổng tiền đã chọn: <span class="text-success">{{ formatPrice(cartStore.totalSelectedPrice) }}₫</span></h4>
 

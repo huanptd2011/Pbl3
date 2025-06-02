@@ -1,7 +1,6 @@
 package com.nahuannghia.shopnhn.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +10,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nahuannghia.shopnhn.Response.OrderPaymentStateResponse;
 import com.nahuannghia.shopnhn.Response.OrderResponse;
-import com.nahuannghia.shopnhn.Response.OrderStatusResponse;
+import com.nahuannghia.shopnhn.Response.OrderStateResponse;
+import com.nahuannghia.shopnhn.request.OrderPaymentStateRequest;
 import com.nahuannghia.shopnhn.request.OrderRequest;
-import com.nahuannghia.shopnhn.request.OrderStatusRequest;
+import com.nahuannghia.shopnhn.request.OrderStateRequest;
 import com.nahuannghia.shopnhn.service.OrderService;
 
 @RestController
 @RequestMapping("/api/orders")
-//@CrossOrigin(origins = {"http://localhost:5173"})
 public class OrderController {
 
     @Autowired
@@ -49,19 +48,14 @@ public class OrderController {
     }
 
     @PutMapping("/status")
-    public ResponseEntity<OrderStatusResponse> updateOrderStatus(@RequestBody OrderStatusRequest request) {
-        OrderStatusResponse response = orderService.updateOrder(request);
+    public ResponseEntity<OrderStateResponse> updateOrderState(@RequestBody OrderStateRequest request) {
+        OrderStateResponse response = orderService.updateStateOrder(request);
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/group-by-status")
-    public ResponseEntity<Map<String, List<OrderResponse>>> getOrdersGroupedByStatus(@RequestParam Integer userId,
-    @RequestParam(required = false, defaultValue = "") String orderState) {
-        Map<String, List<OrderResponse>> groupedOrders = orderService.getOrdersGroupedByStatus(userId,orderState);
-        return ResponseEntity.ok(groupedOrders);
+    @PutMapping("/payment-status")
+    public ResponseEntity<OrderPaymentStateResponse> updateOrderPaymentState(@RequestBody OrderPaymentStateRequest request) {
+        OrderPaymentStateResponse response = orderService.updatePaymentStateOrder(request);
+        return ResponseEntity.ok(response);
     }
-
-
-
 
 }

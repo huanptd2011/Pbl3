@@ -89,6 +89,15 @@
         <div v-else class="loading">Loading order details...</div>
       </div>
   </div>
+
+  <!-- Nút quay lại đầu trang -->
+    <button 
+    v-show="showBackToTop" 
+    @click="scrollToTop"
+    class="back-to-top-btn rounded-circle shadow"
+    aria-label="Quay lại đầu trang">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 </template>
 
 <script setup>
@@ -244,7 +253,24 @@ const fetchOrders = async () => {
   }
 }
 
+// Scroll to top functionality
+const showBackToTop = ref(false)
+
+// Hàm xử lý scroll
+const handleScroll = () => {
+  showBackToTop.value = window.scrollY > 300
+}
+
+// Hàm cuộn lên đầu trang
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
 onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
   fetchOrders()
 })
 </script>
@@ -562,5 +588,41 @@ onMounted(() => {
 
 .fa-spinner {
   margin-right: 8px;
+}
+
+/* Style cho nút back to top */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background-color: #4e73df;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 99;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.back-to-top-btn:hover {
+  opacity: 1;
+  background-color: #2e59d9;
+  transform: translateY(-3px);
+}
+
+/* Hiệu ứng khi xuất hiện */
+.back-to-top-btn {
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 0.8; transform: translateY(0); }
 }
 </style>

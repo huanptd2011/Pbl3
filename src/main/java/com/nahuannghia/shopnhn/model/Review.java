@@ -21,9 +21,8 @@ public class Review {
     @Column(name = "reviewId")
     private Integer reviewId;
 
-    @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
-    private Product product;
+    private Integer productId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -38,9 +37,9 @@ public class Review {
     @Column(name = "rating", nullable = false)
     private Integer rating;  // Rating between 1 and 5
     public Review() {}
-    public Review(Integer reviewId, Product product, User user, String reviewContent, LocalDateTime reviewDate, Integer rating) {
+    public Review(Integer reviewId, Integer productId, User user, String reviewContent, LocalDateTime reviewDate, Integer rating) {
         this.reviewId = reviewId;
-        this.product = product;
+        this.productId = productId;
         this.user = user;
         this.reviewContent = reviewContent;
         this.reviewDate = reviewDate;
@@ -55,12 +54,12 @@ public class Review {
         this.reviewId = reviewId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Integer getProductId() {
+        return productId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
     public User getUser() {

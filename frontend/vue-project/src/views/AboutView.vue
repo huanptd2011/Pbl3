@@ -53,12 +53,7 @@
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <p class="footer-text">© 2025 NHN Shoe Shop. All rights reserved.</p>
-      </div>
-    </footer>
+    
   </div>
 </template>
 
@@ -89,7 +84,7 @@
 
 /* Header */
 .header {
-  background-color: #007bff;
+  background-color: #2e3033;
   color: white;
   padding: 2rem 0;
 }

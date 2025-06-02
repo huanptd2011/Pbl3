@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Sửa Sản phẩm</span>
-        <button class="btn btn-secondary btn-sm" @click="goBack">
+        <button class="btn btn-secondary btn-sm fixed-onright" @click="goBack">
            <i class="fas fa-arrow-left me-1"></i>
            Quay lại
         </button>
@@ -363,5 +363,12 @@ onMounted(() => {
 .end-0 {
     right: 0;
 }
+
+.fixed-onright{
+    position: fixed;
+    right: 55px;
+    top: 30px;
+}
+
 
 </style>

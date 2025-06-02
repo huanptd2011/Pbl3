@@ -125,7 +125,7 @@ const filterStatus = ref('');
 const loadingProducts = ref(true);
 const searchKeyword = ref('');
 const currentPage = ref(1);
-const pageSize = 4; // Số lượng sản phẩm trên mỗi trang
+const pageSize = 8; // Số lượng sản phẩm trên mỗi trang
 
 const router = useRouter(); // Khởi tạo router
 

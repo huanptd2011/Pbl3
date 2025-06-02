@@ -142,7 +142,7 @@
                     <th>
                       <i class="fas fa-money-bill-wave me-2 cl-main"></i>
                       <span class="">Tổng tiền</span>
-                      </th>
+                    </th>
                     <th>
                       <i class="fas fa-check-circle me-2 cl-main"></i>
                       <span class="">Trạng thái</span>
@@ -242,7 +242,14 @@ async function fetchSalesChartData() {
 
   try {
     const response = await axios.get(apiUrl, { params });
-    salesChartData.value = response.data.reverse(); // Đảo ngược dữ liệu để hiển thị từ đầu đến cuối
+    salesChartData.value = response.data.sort((a, b) => {
+      // Chuyển đổi chuỗi "YYYY-MM-DD" thành đối tượng Date để so sánh
+      const dateA = new Date(a.timeLabel);
+      const dateB = new Date(b.timeLabel);
+
+      // So sánh thời gian (milliseconds từ Epoch) để sắp xếp tăng dần
+      return dateA.getTime() - dateB.getTime();
+    })
 
     // Sau khi có dữ liệu, gọi hàm vẽ biểu đồ
     nextTick(() => {
@@ -452,7 +459,7 @@ function renderOrdersChart(data) {
         backgroundColor: [ // Màu nền cho các cột/lát cắt
           'rgba(0,194,255)',
           'rgba(14,67,251)',
-          'rgba(203,60,255)',
+          'rgba(146,60,255)',
           'rgba(255,0,450)',
 
         ],
@@ -465,7 +472,7 @@ function renderOrdersChart(data) {
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          display:false, // Hiển thị legend
+          display: false, // Hiển thị legend
           position: 'bottom',
 
           labels: {
@@ -554,7 +561,8 @@ function renderOrdersChart(data) {
 
 input[type="date"].calenda::-webkit-calendar-picker-indicator,
 input[type="month"].calenda::-webkit-calendar-picker-indicator {
-    filter: invert(0.8); /* Đảo màu icon để phù hợp với nền tối */
-    cursor: pointer;
+  filter: invert(0.8);
+  /* Đảo màu icon để phù hợp với nền tối */
+  cursor: pointer;
 }
 </style>

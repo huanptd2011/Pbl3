@@ -3,6 +3,7 @@ import { RouterView } from 'vue-router'
 import { useUserStore } from './stores/user' // Đảm bảo đường dẫn đúng đến store của bạn
 import appHeader from './components/appHeader.vue' // Đảm bảo đường dẫn đúng đến component appHeader
 import headerUser from './components/headerUser.vue' // Đảm bảo đường dẫn đúng đến component headerUser
+import AppFooter from './views/Footer.vue' // Đảm bảo đường dẫn đúng đến component Footer
 
 const userStore = useUserStore()
 
@@ -20,5 +21,9 @@ const userStore = useUserStore()
     </template>
 
     <RouterView />
+     
+    <template v-if="!userStore.isAdmin">
+      <AppFooter />
+    </template>
   </div>
 </template>

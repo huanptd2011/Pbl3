@@ -4,8 +4,8 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Chi tiết Đơn hàng #{{ order.orderId }}</span>
-        <button class="btn btn-secondary btn-sm" @click="goBack">
-           <i class="fas fa-arrow-left me-1"></i>
+        <button class="btn btn-secondary btn-sm fixed" @click="goBack">
+           <i class="fas fa-arrow-left me-1 "></i>
            Quay lại
         </button>
       </div>
@@ -53,7 +53,7 @@
           <div class="mb-4">
             <h5>Chi tiết sản phẩm</h5>
             <div class="table-responsive">
-              <table class="table table-bordered">
+              <table class="table table-striped table-bordered custom-orders-table">
                 <thead class="table-light">
                   <tr>
                     <th>Mã sản phẩm</th>
@@ -458,10 +458,10 @@ onMounted(() => {
   border: none;
 }
 
-.table th {
+/* .table th {
   background-color: #f8f9fa;
   font-weight: 600;
-}
+} */
 
 .badge {
   font-size: 0.875em;
@@ -510,6 +510,13 @@ onMounted(() => {
   .text-primary {
     color: black !important;
   }
+}
+
+.fixed{
+  position: fixed;
+  top: 49px;
+  right: 75px;
+  z-index: 1050; /* Đảm bảo nút luôn hiển thị trên cùng */
 }
 
 </style>

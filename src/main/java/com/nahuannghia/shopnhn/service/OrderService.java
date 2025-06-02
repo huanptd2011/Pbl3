@@ -2,7 +2,6 @@ package com.nahuannghia.shopnhn.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -10,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.nahuannghia.shopnhn.Response.OrderDetailResponse;
+import com.nahuannghia.shopnhn.Response.OrderPaymentStateResponse;
 import com.nahuannghia.shopnhn.Response.OrderResponse;
-import com.nahuannghia.shopnhn.Response.OrderStatusResponse;
+import com.nahuannghia.shopnhn.Response.OrderStateResponse;
 import com.nahuannghia.shopnhn.Response.PaymentMethodResponse;
 import com.nahuannghia.shopnhn.model.Order;
 import com.nahuannghia.shopnhn.model.OrderDetail;
@@ -26,8 +26,9 @@ import com.nahuannghia.shopnhn.repository.ProductInventoryRepository;
 import com.nahuannghia.shopnhn.repository.ProductRepository;
 import com.nahuannghia.shopnhn.repository.UserRepository;
 import com.nahuannghia.shopnhn.request.OrderDetailRequest;
+import com.nahuannghia.shopnhn.request.OrderPaymentStateRequest;
 import com.nahuannghia.shopnhn.request.OrderRequest;
-import com.nahuannghia.shopnhn.request.OrderStatusRequest;
+import com.nahuannghia.shopnhn.request.OrderStateRequest;
 import com.nahuannghia.shopnhn.request.ProductInventoryRequest;
 
 @Service
@@ -172,20 +173,25 @@ public class OrderService {
         }
     }
 
- public OrderStatusResponse updateOrder(OrderStatusRequest orderRequest) {
+ public OrderStateResponse updateStateOrder(OrderStateRequest orderRequest) {
     Integer orderId = orderRequest.getOrderId();
 
     Order order = orderRepository.findById(orderId)
         .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId));
 
-    // Cập nhật trạng thái đơn hàng
     order.setOrderState(orderRequest.getOrderState());
+
+    order = orderRepository.save(order);
+    return new OrderStateResponse(order.getOrderId(), order.getOrderState(), order.getPaymentState());
+}
+  public OrderPaymentStateResponse updatePaymentStateOrder(OrderPaymentStateRequest orderRequest) {
+    Integer orderId = orderRequest.getOrderId();
+
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId));
     order.setPaymentState(orderRequest.getPaymentState());
 
-    // Lưu lại vào DB
     order = orderRepository.save(order);
-
-    // Trả về phản hồi
-    return new OrderStatusResponse(order.getOrderId(), order.getOrderState(), order.getPaymentState());
+    return new OrderPaymentStateResponse(order.getOrderId(),order.getPaymentState());
 }
 }

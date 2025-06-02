@@ -21,8 +21,7 @@
                     </select>
 
                     <input type="text" class="form-control form-control-sm me-2 calenda"
-                        placeholder="Tìm kiếm đơn hàng..." style="width: 200px;" v-model="searchKeyword"
-                        @input="handleSearch">
+                        placeholder="Tìm kiếm đơn hàng..." style="width: 200px;" v-model="searchKeyword">
 
                     <button class="btn btn-success btn-sm bg-success bor-success me-2" @click="exportOrders">
                         <i class="fas fa-download me-1"></i>
@@ -154,24 +153,22 @@ const filteredOrders = computed(() => {
 
     // Lọc theo trạng thái đơn hàng
     if (filterStatus.value) {
-        filtered = filtered.filter(order => order.status === filterStatus.value);
+        filtered = filtered.filter(order => order.orderState === filterStatus.value);
     }
 
     // Lọc theo trạng thái thanh toán
     if (filterPaymentStatus.value) {
-        filtered = filtered.filter(order => order.paymentStatus === filterPaymentStatus.value);
+        filtered = filtered.filter(order => order.paymentState === filterPaymentStatus.value);
     }
 
     // Tìm kiếm theo mã đơn hàng hoặc tên khách hàng
     if (searchKeyword.value) {
         const keyword = searchKeyword.value.toLowerCase();
         filtered = filtered.filter(order =>
-            order.orderCode.toLowerCase().includes(keyword) ||
-            order.customerName.toLowerCase().includes(keyword) ||
-            order.customerPhone.includes(keyword)
+            order.username?.toLowerCase().includes(keyword) ||
+            order.phone?.toString().toLowerCase().includes(keyword)
         );
     }
-
     return filtered;
 });
 
@@ -185,16 +182,7 @@ const totalPages = computed(() => {
     return Math.ceil(filteredOrders.value.length / pageSize);
 });
 
-// Hàm xử lý search với debounce
-let searchTimeout = null;
-function handleSearch() {
-    if (searchTimeout) {
-        clearTimeout(searchTimeout);
-    }
-    searchTimeout = setTimeout(() => {
-        currentPage.value = 1;
-    }, 300);
-}
+
 
 // Hàm chuyển trang
 function changePage(page) {
@@ -222,16 +210,16 @@ function formatDate(dateString) {
     });
 }
 
- function  getStatusClass(){
-            const statusClasses = {
-                'Chờ xác nhận': 'status-pending',
-                'Đã xác nhận': 'status-confirmed',
-                'Đang giao': 'status-shipping',
-                'Đã giao': 'status-delivered',
-                'Đã hủy': 'status-cancelled'
-            };
-            return statusClasses[status] || 'status-default';
-        }
+function getStatusClass(status) {
+    const statusClasses = {
+        'Chờ xác nhận': 'status-pending',
+        'Đã xác nhận': 'status-confirmed',
+        'Đang giao': 'status-shipping',
+        'Đã giao': 'status-delivered',
+        'Đã hủy': 'status-cancelled'
+    };
+    return statusClasses[status] || 'status-default';
+}
 
  function   getPaymentStatusClass(paymentStatus) {
             const paymentClasses = {
@@ -324,6 +312,14 @@ watch([searchKeyword, filterStatus, filterPaymentStatus], () => {
     font-weight: 600;
     color: #10b981;
 }
+:root {
+    --color-pending: #f59e0b;
+    --color-confirmed: #3b82f6;
+    --color-shipping: #8b5cf6;
+    --color-delivered: #10b981;
+    --color-cancelled: #ef4444;
+    --color-default: #6b7280; /* gray-500 */
+}
 
 /* Status Badges cho trạng thái đơn hàng */
 .status-badge {
@@ -337,7 +333,6 @@ watch([searchKeyword, filterStatus, filterPaymentStatus], () => {
     vertical-align: baseline;
     border-radius: 4px;
 }
-
 .status-badge.status-pending {
     background-color: #f59e0b2e;
     color: #f59e0b;

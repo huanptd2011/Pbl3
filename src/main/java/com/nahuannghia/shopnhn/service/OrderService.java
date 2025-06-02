@@ -172,23 +172,6 @@ public class OrderService {
         }
     }
 
-
-    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
-        List<OrderResponse> orders;
-        if (orderState != null && !orderState.isEmpty()) {
-            orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
-        } else {
-            orders = orderRepository.findOrdersByUserId(userId); // All states
-        }
-
-        for (OrderResponse order : orders) {
-            List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
-            order.setOrderDetails(details);
-        }
-
-        return orders.stream()
-                     .collect(Collectors.groupingBy(OrderResponse::getOrderState));
-    }
  public OrderStatusResponse updateOrder(OrderStatusRequest orderRequest) {
     Integer orderId = orderRequest.getOrderId();
 
@@ -205,22 +188,4 @@ public class OrderService {
     // Trả về phản hồi
     return new OrderStatusResponse(order.getOrderId(), order.getOrderState(), order.getPaymentState());
 }
-
-    
-//    public Map<String, List<OrderResponse>> getOrdersGroupedByStatus(Integer userId, String orderState ) {
-//        List<OrderResponse> orders;
-//        if (orderState != null && !orderState.isEmpty()) {
-//            orders = orderRepository.findOrdersByUserIdAndOrderState(userId, orderState); // Specific state
-//        } else {
-//            orders = orderRepository.findOrdersByUserId(userId); // All states
-//        }
-//
-//        for (OrderResponse order : orders) {
-//            List<OrderDetailResponse> details = orderDetailRepository.findOrderDetailsByOrderId(order.getOrderId());
-//            order.setOrderDetails(details);
-//        }
-//
-//        return orders.stream()
-//                     .collect(Collectors.groupingBy(OrderResponse::getOrderState));
-//    }
 }

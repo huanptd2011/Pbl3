@@ -1,97 +1,91 @@
 <template>
-  <div class="admin-users-container container mt-4">
-    <h1 class="mb-4 text-center text-primary">Quản lý Người dùng</h1>
+  <div class="admin-users-container  ">
+    <div class="card ">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>
+          Danh sách Người dùng
+        </span>
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control form-control-sm calenda " style="width: 500px;"
+            placeholder="Tìm kiếm theo tên đăng nhập, họ tên hoặc email..." v-model="searchKeyword"
+            @keyup.enter="!watchEnabled ? handleSearch() : null">
 
-    <div class="row mb-4 align-items-center">
-      <div class="col-md-6">
-        <input type="text" class="form-control border-0"
-          placeholder="Tìm kiếm theo tên đăng nhập, họ tên hoặc email..." v-model="searchKeyword"
-          @keyup.enter="!watchEnabled ? handleSearch() : null">
-        <button v-if="!watchEnabled" class="btn btn-success btn-sm bg-success bor-success" type="button" @click="handleSearch">
-          <i class="fas fa-search me-1"></i> Tìm kiếm
-        </button>
-      </div>
-    </div>
 
-    <div class="card shadow-sm rounded">
-      <div class="card-header bg-light text-dark fw-bold">
-        Danh sách Người dùng
+        </div>
       </div>
       <div class="card-body">
         <div v-if="loadingUsers" class="text-center py-4">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Đang tải...</span>
           </div>
-          <p class="mt-2">Đang tải danh sách người dùng...</p>
         </div>
+        <table class="table table-striped table-bordered custom-orders-table">
+          <thead>
+            <tr>
+              <th>Tên đăng nhập</th>
+              <th>Họ tên</th>
+              <th>Email</th>
+              <th>Trạng thái</th>
+              <th>Ngày tạo</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="paginatedUsers.length > 0">
+              <tr v-for="user in paginatedUsers" :key="user.userId">
+                <td>{{ user.username }}</td>
+                <td>{{ user.fullName || 'Chưa cập nhật' }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span :class="{ 'badge bg-success': user.status, 'badge bg-danger': !user.status }">
+                    {{ user.status ? 'Hoạt động' : 'Khóa' }}
+                  </span>
+                </td>
+                <td>{{ formatDate(user.createdDate) }}</td>
+                <td>
+                  <i class="fas fa-edit text-warning me-2 icon" @click="viewUserDetail(user.userId)"
+                    title="Xem chi tiết"></i>
+                    <i v-if="user.status" class="fas fa-lock icon"   :disabled="isSubmitting"
+                    @click="toggleUserStatus(user.userId, false)" ></i>
+                    <i class="fas fa-unlock icon" v-else  :disabled="isSubmitting"
+                    @click="toggleUserStatus(user.userId, true)"></i>
+                </td>
+              </tr>
+            </template>
+            <tr v-else-if="paginatedUsers.length === 0 && !loadingOrders">
+              <td colspan="7" class="text-center cl-note">Không tìm thấy người dùng nào.</td>
+            </tr>
 
-        <div v-else-if="paginatedUsers.length === 0 && !loadingUsers" class="text-center py-4">
-          <p class="text-muted cl-note">Không tìm thấy người dùng nào.</p>
-        </div>
+            <template v-else>
+              <tr v-for="n in pageSize" :key="'placeholder-' + n">
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
 
-        <div v-else>
-          <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered">
-              <thead>
-                <tr class="bg-light">
-                  <th>Tên đăng nhập</th>
-                  <th>Họ tên</th>
-                  <th>Email</th>
-                  <th>Trạng thái</th>
-                  <th>Ngày tạo</th>
-                  <th>Hành động</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="user in paginatedUsers" :key="user.userId">
-                  <td>{{ user.username }}</td>
-                  <td>{{ user.fullName || 'Chưa cập nhật' }}</td>
-                  <td>{{ user.email }}</td>
-                  <td>
-                    <span
-                      :class="{ 'badge bg-success': user.status, 'badge bg-danger': !user.status }">
-                      {{ user.status ? 'Hoạt động' : 'Khóa' }}
-                    </span>
-                  </td>
-                  <td>{{ formatDate(user.createdDate) }}</td>
-                  <td>
-                    <i class="fas fa-edit text-warning me-2 icon"
-                      @click="viewUserDetail(user.userId)"
-                      title="Xem chi tiết"></i>
+              </tr>
+            </template>
+          </tbody>
+        </table>
 
-                    <button v-if="user.status"
-                      class="btn btn-sm btn-warning rounded-pill"
-                      :disabled="isSubmitting"
-                      @click="toggleUserStatus(user.userId, false)">
-                      <i class="fas fa-lock me-1"></i> Khóa
-                    </button>
-                    <button v-else
-                      class="btn btn-sm btn-success rounded-pill"
-                      :disabled="isSubmitting"
-                      @click="toggleUserStatus(user.userId, true)">
-                      <i class="fas fa-unlock me-1"></i> Kích hoạt
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
 
-          <nav aria-label="Page navigation mt-0">
-            <ul class="pagination justify-content-center">
-              <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
-              </li>
-              <li class="page-item" v-for="page in totalPages" :key="page"
-                :class="{ 'active': page === currentPage }">
-                <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
-              </li>
-              <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+        <nav aria-label="Page navigation mt-0">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+              <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">Previous</a>
+            </li>
+            <li class="page-item" v-for="page in totalPages" :key="page" :class="{ 'active': page === currentPage }">
+              <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+              <a class="page-link" href="#" @click.prevent="changePage(currentPage + 1)">Next</a>
+            </li>
+          </ul>
+        </nav>
+
+
       </div>
     </div>
   </div>
@@ -234,169 +228,215 @@ onMounted(() => {
 
 <style scoped>
 /* Tùy chỉnh CSS cho trang quản lý người dùng */
-.admin-users-container {
-    /* Thêm padding hoặc margin */
+
+.card {
+  background-color: #0b1739;
+  border-radius: 12px;
+  box-shadow: #0105114d 0px 8px 28px 0px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  line-height: 24px;
+  padding: 18px 18px 18px 20px;
+}
+
+.card-header {
+  background-color: #0b1739;
+  border-bottom: 1px solid #1e293b;
+}
+
+.card-body {
+  position: relative;
+  min-height: 600px;
+}
+
+.custom-orders-table tbody tr {
+  border-color: #1e293b;
+  height: 60px;
+  vertical-align: middle;
 }
 
 /* Tùy chỉnh màu tiêu đề */
-.text-primary {
-    color: #007bff !important;
-}
-
 /* Style cho badge trạng thái */
 .badge {
-    padding: 0.35em 0.65em;
-    font-size: 0.75em;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: 0.25rem;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
 }
 
 .badge.bg-success {
-    background-color: #28a745 !important;
-    color: #fff;
+  background-color: #10b9812e !important;
+  color: #139f81;
+  border: 0.2px solid #139f81;
 }
 
 .badge.bg-danger {
-    background-color: #dc3545 !important;
-    color: #fff;
+  background-color: #e2232330 !important;
+  color: #ef4444;
+  border: 0.2px solid #ef4444;
 }
 
 .badge.bg-info {
-    background-color: #17a2b8 !important;
-    color: #fff;
+  background-color: #3b82f62e !important;
+  color: #2563eb;
+  border: 0.2px solid #2563eb;
 }
 
 /* Tùy chỉnh khoảng cách giữa các nút hành động */
 .btn-sm {
-    padding: .25rem .5rem;
-    font-size: .875rem;
-    line-height: 1.5;
-    border-radius: .2rem;
+  padding: .25rem .5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .2rem;
 }
 
 .me-2 {
-    margin-right: .5rem !important;
+  margin-right: .5rem !important;
 }
 
 /* Thêm style cho input group và card */
 .shadow-sm {
-    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
 }
 
 .rounded {
-    border-radius: .25rem !important;
+  border-radius: .25rem !important;
 }
 
-.input-group .form-control.border-0 {
-    border: none !important;
-    box-shadow: none !important;
-}
+
 
 .input-group .btn {
-    border-radius: 0 .25rem .25rem 0 !important;
+  border-radius: 0 .25rem .25rem 0 !important;
 }
 
-.input-group.rounded .form-control {
-    border-top-left-radius: .25rem !important;
-    border-bottom-left-radius: .25rem !important;
+.input-group.rounded {
+  border-top-left-radius: .25rem !important;
+  border-bottom-left-radius: .25rem !important;
 }
 
 .input-group.rounded .btn {
-    border-top-right-radius: .25rem !important;
-    border-bottom-right-radius: .25rem !important;
+  border-top-right-radius: .25rem !important;
+  border-bottom-right-radius: .25rem !important;
 }
 
-/* Style cho bảng */
-.table {
-    margin-bottom: 0;
-}
 
 .table-hover tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.075);
+  background-color: rgba(0, 123, 255, 0.075);
 }
 
-/* Style cho header bảng */
-.table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
+input::placeholder {
+
+  color: #aeb9e1;
 }
 
-/* Style cho phân trang */
-.pagination .page-link {
-    color: #28a745;
+input:focus {
+  border-color: #aeb9e1;
+  box-shadow: 0 0 0 0.2rem rgba(203, 60, 255, 0.25);
+}
+
+/* Phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+}
+
+.pagination .page-item .page-link {
+  background-color: #161e39;
+  border-color: #1e293b;
+  color: #aeb9e1;
 }
 
 .pagination .page-item.active .page-link {
-    background-color: #28a745;
-    border-color: #28a745;
-    color: #fff;
+  background-color: rgba(203, 60, 255);
+  color: #fff;
 }
 
 .pagination .page-item.disabled .page-link {
-    color: #6c757d;
-    pointer-events: none;
-    background-color: #fff;
-    border-color: #dee2e6;
+  color: #555;
+  pointer-events: none;
+  background-color: #161e39;
+  border-color: #1e293b;
 }
 
-.pagination .page-link:hover {
-    color: #1e7e34;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
+.pagination .page-item .page-link:hover:not(.disabled) {
+  background-color: rgba(203, 60, 255);
 }
+
+.pagination .page-item .page-link:focus {
+  outline: none;
+}
+
 
 /* Style cho nút hành động bo tròn */
 .rounded-pill {
-    border-radius: 50rem !important;
+  border-radius: 50rem !important;
 }
 
 /* Thêm style cho icon và nút */
 .icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.btn i, .icon {
-    margin-right: 5px;
+ 
+.icon {
+  margin-right: 5px;
 }
 
 .bg-success {
-    background-color: #28a745 !important;
+  background-color: #28a745 !important;
 }
 
 .bor-success {
-    border-color: #28a745 !important;
+  border-color: #28a745 !important;
+}
+
+.btn-success{
+  background-color: #28a745 !important;
+  border-color: #28a745 !important;
 }
 
 /* Style cho modal */
 .modal-body .form-label {
-    color: #495057;
-    margin-bottom: 0.25rem;
+  color: #495057;
+  margin-bottom: 0.25rem;
 }
 
 .modal-body .form-control-plaintext {
-    padding: 0.375rem 0;
-    margin-bottom: 0;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: #212529;
-    background-color: transparent;
-    border: solid transparent;
-    border-width: 1px 0;
+  padding: 0.375rem 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #212529;
+  background-color: transparent;
+  border: solid transparent;
+  border-width: 1px 0;
 }
 
 /* Responsive cho bảng với nhiều cột */
 @media (max-width: 768px) {
-    .table-responsive {
-        font-size: 0.875rem;
-    }
+  .table-responsive {
+    font-size: 0.875rem;
+  }
 
-    .table th,
-    .table td {
-        padding: 0.5rem;
-    }
+}
+
+.custom-orders-table tbody tr {
+  border-color: #1e293b;
+  height: 70px;
+  vertical-align: middle;
+}
+
+.cl-note {
+    color: #aeb9e1;
+    font-style: italic;
 }
 </style>

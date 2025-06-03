@@ -473,5 +473,9 @@ input::placeholder {
 .icon:hover {
     transform: scale(1.1);
 }
+input:focus{
+    border-color: #aeb9e1;
+    box-shadow: 0 0 0 0.2rem rgba(203, 60, 255, 0.25);
+}
 
 </style>

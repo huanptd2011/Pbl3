@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>Thông tin Người dùng</span>
-        <button class="btn btn-secondary btn-sm" @click="goBack">
+        <button class="btn btn-secondary btn-sm fixed-onright" @click="goBack">
           <i class="fas fa-arrow-left me-1"></i> Quay lại
         </button>
       </div>
@@ -171,24 +171,8 @@ onMounted(() => {
   right: 0;
 }
 
-.edit-user-container {
-  padding: 20px;
-}
 
-.card {
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.card-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.form-control[readonly], .form-select[readonly] {
-  background-color: #e9ecef;
-  opacity: 1;
-}
 
 .form-check-input {
   cursor: pointer;

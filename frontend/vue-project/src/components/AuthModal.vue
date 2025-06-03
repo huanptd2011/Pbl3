@@ -2,6 +2,7 @@
   <div class="dropdown">
     <div class="dropdown-content">
       <div class="dropdown-item" @click="handleMyAccount">Tài Khoản Của Tôi</div>
+      <div class="dropdown-item" @click="handleChangePass">Đổi mật khẩu</div>
       <div class="dropdown-item" @click="handleMyOrder">Đơn Mua</div>
       <div class="dropdown-item" @click="handleLogout">Đăng Xuất</div>
     </div>
@@ -22,6 +23,10 @@ async function handleMyAccount(){
 }
 async function handleMyOrder(){
   router.push('/order');
+}
+
+async function handleChangePass(){
+  router.push('/change-password');
 }
 
 async function handleLogout() {

@@ -140,7 +140,8 @@ const product = ref({
   imageList: [],
 });
 
-
+const listImageDelete = ref([]);
+const listImageAdd = ref([]);
 const loadingProduct = ref(true); // Trạng thái tải dữ liệu sản phẩm hiện tại
 const isSubmitting = ref(false); // Trạng thái khi đang submit form lưu
 
@@ -211,10 +212,18 @@ async function deleteImage(index) {
     }
 
     try {
-        // Nếu cần gọi API để xóa ảnh trên server
-        // await axios.delete(`http://localhost:8080/api/products/${product.value.productId}/images/${product.value.imageList[index].imageId}`);
+        const image = product.value.imageList[index];
 
-        // Xóa ảnh khỏi danh sách hiển thị
+        if (image.isNew) {
+          // Ảnh mới upload chưa lưu DB => xóa khỏi listImageAdd
+          const idx = listImageAdd.value.indexOf(image.imageUrl);
+          if (idx !== -1) listImageAdd.value.splice(idx, 1);
+        } else {
+          // Ảnh đã lưu DB => thêm vào listImageDelete để gửi xuống backend
+          if (!listImageDelete.value.includes(image.imageUrl)) {
+            listImageDelete.value.push(image.imageUrl);
+          }
+        }
         product.value.imageList.splice(index, 1);
     } catch (error) {
         console.error('Error deleting image:', error);
@@ -224,12 +233,34 @@ async function deleteImage(index) {
 
 // --- Hàm xử lý Upload Hình ảnh (Placeholder) ---
 // Logic có thể khác so với add (ví dụ: hiển thị ảnh cũ, xóa ảnh cũ, thêm ảnh mới)
-function handleImageUpload(event) {
+async function handleImageUpload(event) {
   const files = event.target.files;
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    const imageUrl = URL.createObjectURL(file);
-    product.value.imageList.push({ imageUrl, file });
+
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/upload-image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      const imageUrl = data.url;
+      listImageAdd.value.push(imageUrl); // Lưu URL ảnh mới vào danh sách
+      product.value.imageList.push({ imageUrl, file, isNew: true }); // Lưu URL tạm thời và file gốc
+  
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   }
   event.target.value = ''; // Cho phép chọn lại cùng file
 }
@@ -264,14 +295,30 @@ async function handleSubmit() {
     return;
   }
 
-  console.log('truoc', product.value.sizeColorList)
-
   isSubmitting.value = true; // Bắt đầu submit
 
   try {
-    // Chuẩn bị dữ liệu gửi đi. Bao gồm cả productId trong URL và body nếu API yêu cầu.
-    // Giả định API edit nhận body là object với cấu trúc tương tự ProductRequest
-    // (không bao gồm các trường như imageList nếu gửi riêng)
+    if(listImageDelete.value !== null) {
+        for (const urlImage of listImageDelete.value) {
+            // Gọi API xóa ảnh nếu cần
+            await axios.delete(`http://localhost:8080/api/product-images/delete/${product.value.productId}`, {
+              params: {
+                imageUrl: urlImage
+              }
+            });
+        }
+        console.log('Deleted images:', listImageDelete.value);
+    }
+    if(listImageAdd.value !== null) {
+        for (const urlImage of listImageAdd.value) {
+            // Gọi API thêm ảnh nếu cần
+            await axios.post(`http://localhost:8080/api/product-images/add/${product.value.productId}`, 
+            { 
+                productId: product.value.productId,
+                imageUrl: urlImage
+            });
+        }
+    }
     const productData = {
         // Không gửi productId trong body nếu API chỉ lấy từ PathVariable
         productName: product.value.productName,
@@ -290,11 +337,7 @@ async function handleSubmit() {
             quantity: v.quantity ? parseInt(v.quantity) : 0,
             isActive: v.isActive !== false // Chỉ gửi nếu isActive là true hoặc không có trường này
         })),
-        // imageList: ... (Xử lý ảnh)
     };
-
-    console.log('category size:', productData.sizeColorList)
-
 
 
     // GỌI API backend để CẬP NHẬT sản phẩm (PUT request)

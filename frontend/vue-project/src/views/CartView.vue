@@ -38,7 +38,7 @@
 
                 <img :src="item.imageUrl" alt="Ảnh sản phẩm" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px; border-radius: 4px;">
                 <div class="flex-grow-1">
-                  <h5 class="mb-1">{{ item.name }}</h5>
+                  <h5 class="mb-1">{{ item.productName }}</h5>
                   <p class="mb-1 text-muted small">Màu: {{ item.color }} | Size: {{ item.size }}</p>
                   <p class="mb-0 fw-bold text-danger">{{ formatPrice(item.price) }}₫</p>
                 </div>

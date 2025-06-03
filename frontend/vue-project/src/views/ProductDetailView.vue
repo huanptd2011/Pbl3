@@ -130,7 +130,7 @@
                         <h5 class="card-title fw-semibold mb-3">Viết đánh giá của bạn</h5>
                         <form @submit.prevent="submitReview">
                             <div class="mb-3">
-                                <label class="form-label d-block mb-2">Đánh giá của bạn</label>
+                                <label class="form-label d-block mb-2" style="color: black;">Đánh giá của bạn</label>
                                 <div class="rating-input">
                                     <span v-for="star in 5" :key="star"
                                         @click="setRating(star)"
@@ -189,7 +189,8 @@
                                     </div>
                                     <div class="star-rating small mb-2">
                                         <span v-for="star in 5" :key="star"
-                                            :class="['star', { 'filled': star <= review.rating }]">
+                                            :class="['star', { 'filled': star <= review.rating }]"
+                                            style="font-size: 1.2em;">
                                             ★
                                         </span>
                                     </div>
@@ -514,6 +515,22 @@ onMounted(() => {
     height: 450px;
     object-fit: cover;
     border: #ddd 1px solid;
+}
+
+.form-control{
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #4299e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    padding-right: 2.5rem;
+}
+
+.form-control:focus{
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
 }
 
 /* Style cho nút submit */

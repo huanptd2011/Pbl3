@@ -15,8 +15,8 @@
                <div class="d-flex align-items-center">
                    <img :src="item.imageUrl" alt="Ảnh sản phẩm" style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px; border-radius: 4px;">
                    <div>
-                       <h6 class="my-0">{{ item.name }} <span class="text-muted small">({{ item.color }}, {{ item.size }})</span></h6>
-                       <small class="text-muted">Số lượng: {{ item.quantity }}</small>
+                       <h6 class="my-0">{{ item.productName }} </h6>
+                       <span class="text-muted small">{{'Màu: ' + item.color + ',  Size: ' + item.size + ',  Số lượng: ' + item.quantity}}</span>
                    </div>
                </div>
                <span class="text-success fw-bold">{{ formatPrice(item.price * item.quantity) }}₫</span>
@@ -112,18 +112,22 @@
             </div>
             <div class="card-body">
               <div class="d-flex justify-content-between">
-                   <p>Tổng giá sản phẩm:</p>
+                   <p>Tổng tiền:</p>
                    <p class="fw-bold">{{ formatPrice(cartStore.totalSelectedPrice) }}₫</p>
               </div>
+              <div class="d-flex justify-content-between">
+                   <p>Tổng số lượng sản phẩm:</p>
+                   <p class="fw-bold">{{ cartStore.totalSelectedItemsCount }}</p>
+              </div>
 
-              <div class="d-flex justify-content-between text-muted small">
+              <!-- <div class="d-flex justify-content-between text-muted small">
                    <p>Phí vận chuyển:</p>
                    <p>[Tính toán...]</p>
                </div>
                 <div class="d-flex justify-content-between text-muted small">
                    <p>Mã giảm giá:</p>
                    <p>[Áp dụng...]</p>
-               </div>
+               </div> -->
 
                <hr> <div class="d-flex justify-content-between align-items-center mb-3">
                    <h5 class="mb-0">Thành tiền:</h5>

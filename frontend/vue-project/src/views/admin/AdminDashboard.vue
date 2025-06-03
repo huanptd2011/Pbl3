@@ -208,6 +208,21 @@ async function fetchMetrics() {
     // Xử lý lỗi (ví dụ: hiển thị thông báo)
   }
 }
+function getDateFromWeekString(weekStr) {
+  const [year, week] = weekStr.split("-W").map(Number);
+  const simple = new Date(year, 0, 1 + (week - 1) * 7);
+  const dayOfWeek = simple.getDay();
+  const ISOweekStart = simple;
+
+  // Điều chỉnh về thứ Hai (ISO Week Start)
+  if (dayOfWeek <= 4) {
+    ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+  } else {
+    ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+  }
+
+  return ISOweekStart;
+}
 
 function formatDateToYMD(date) {
   if (!date) return '';
@@ -226,43 +241,44 @@ function setDefaultSalesDate() {
 }
 // Hàm gọi API lấy dữ liệu biểu đồ doanh thu
 async function fetchSalesChartData() {
-
-  // Yêu cầu backend cung cấp dữ liệu theo tháng
-
-  let apiUrl = 'http://localhost:8080/api/dashboard/sales-over-time';
+  const apiUrl = 'http://localhost:8080/api/dashboard/sales-over-time';
   const params = {
-    period: salesTimePeriod.value
+    period: salesTimePeriod.value,
   };
-  if (salesStartDate.value) {
-    params.startDate = salesStartDate.value;
-  }
-  if (salesEndDate.value) {
-    params.endDate = salesEndDate.value;
-  }
+
+  if (salesStartDate.value) params.startDate = salesStartDate.value;
+  if (salesEndDate.value) params.endDate = salesEndDate.value;
 
   try {
     const response = await axios.get(apiUrl, { params });
+
+    // Chọn cách parse date phù hợp
     salesChartData.value = response.data.sort((a, b) => {
-      // Chuyển đổi chuỗi "YYYY-MM-DD" thành đối tượng Date để so sánh
-      const dateA = new Date(a.timeLabel);
-      const dateB = new Date(b.timeLabel);
+      let dateA, dateB;
 
-      // So sánh thời gian (milliseconds từ Epoch) để sắp xếp tăng dần
-      return dateA.getTime() - dateB.getTime();
-    })
+      if (a.timeLabel.includes('W')) {
+        // Dạng tuần: "2025-W20"
+        dateA = getDateFromWeekString(a.timeLabel);
+        dateB = getDateFromWeekString(b.timeLabel);
+      } else {
+        // Dạng ngày: "2025-06-01"
+        dateA = new Date(a.timeLabel);
+        dateB = new Date(b.timeLabel);
+      }
 
-    // Sau khi có dữ liệu, gọi hàm vẽ biểu đồ
-    nextTick(() => {
-      setTimeout(() => {
-        renderSalesChart(salesChartData.value, salesTimePeriod.value);
-      }, 50); // Timeout nhỏ
+      return dateA - dateB;
     });
+
+    await nextTick();
+    setTimeout(() => {
+      renderSalesChart(salesChartData.value, salesTimePeriod.value);
+    }, 50);
 
   } catch (error) {
     console.error('Error fetching sales chart data:', error);
-    // Xử lý lỗi
   }
 }
+
 
 // Hàm gọi API lấy dữ liệu biểu đồ đơn hàng
 async function fetchOrdersChartData() {

@@ -80,6 +80,12 @@ const routes = [
         component: () => import('@/views/admin/AdminUsers.vue'), // Component Quản lý Người dùng
         meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
       },
+       {
+        path: 'user/update/:userId', // Đường dẫn con: /admin/user/update/:userId
+        name: 'AdminUserEdit',
+        component: () => import('@/views/admin/AdminUserEdit.vue'), // Component Quản lý Người dùng
+        meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
+      },
       // Thêm các route con khác cho products, orders, etc. tại đây
       {
         path: 'products',
@@ -109,7 +115,7 @@ const routes = [
         name: 'AdminOrderUpdate',
         component: () => import('@/views/admin/order/AdminOrderUpdate.vue'),
         meta: { requiresAuth: true, requiredRole: 'ADMIN' },
-      }
+      },
     ],
   },
   // -------------------------
@@ -134,7 +140,12 @@ const routes = [
   path: '/order',
   name: 'Order',
   component: () => import('@/views/OrderView.vue')
-},
+  },
+  {
+    path: '/change-password',
+    name: 'ChangePassword',
+    component: () => import('@/views/ChangePassView.vue')
+  }
 
 ];
 

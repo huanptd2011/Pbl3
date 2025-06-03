@@ -7,7 +7,7 @@ import com.nahuannghia.shopnhn.model.User;
 
 public class UserInfoResponse {
 
-    private Integer id;
+    private Integer userId;
     private String username;
     private String fullName;
     private String gender;
@@ -17,12 +17,13 @@ public class UserInfoResponse {
     private LocalDateTime dob;
     private String avatarUrl;
     private String role;
-    private Boolean isActive;
+    private Boolean status;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
-    public UserInfoResponse(String username, String email, String phone, String address, String role, String fullName, LocalDateTime dob) {
+    public UserInfoResponse(Integer userId,String username, String email, String phone, String address, String role, String fullName, LocalDateTime dob,Boolean status) {
+        this.userId = userId;
         this.username = username;
         this.email = email;
         this.phone = phone;
@@ -30,33 +31,34 @@ public class UserInfoResponse {
         this.role = role;
         this.fullName = fullName;
         this.dob = dob;
+        this.status = status;
     }
     public UserInfoResponse() {
     }
 
     public UserInfoResponse(User user) {
-        this.id = user.getUserId();
+        this.userId = user.getUserId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.role = user.getRole().toString();
         this.fullName = user.getFullName();
-        this.isActive = user.getStatus();
+        this.status = user.getStatus();
         this.createdDate = user.getCreatedDate();
         this.address = user.getAddress();
         this.phone = user.getPhone();
     }
 
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
     public String getUsername() {
         return username;
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+      public Integer getUserId() {
+        return userId;
+    }
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
     public String getFullName() {
         return fullName;
@@ -106,11 +108,11 @@ public class UserInfoResponse {
     public void setRole(String role) {
         this.role = role;
     }
-    public Boolean getIsActive() {
-        return isActive;
+    public Boolean getstatus() {
+        return status;
     }
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setstatus(Boolean status) {
+        this.status = status;
     }
     public LocalDateTime getCreatedDate() {
         return createdDate;

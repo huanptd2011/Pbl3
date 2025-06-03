@@ -80,6 +80,12 @@ const routes = [
         meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
       },
       {
+        path: 'profile', // Đường dẫn con: /admin/profile
+        name: 'AdminProfile',
+        component: () => import('@/views/admin/AdminProfile.vue'), // Component Quản lý Hồ sơ Admin
+        meta: { requiresAuth: true, requiredRole: 'ADMIN' }, // Bảo vệ route con
+      },
+      {
         path: 'users', // Đường dẫn con: /admin/users
         name: 'AdminUsers',
         component: () => import('@/views/admin/AdminUsers.vue'), // Component Quản lý Người dùng

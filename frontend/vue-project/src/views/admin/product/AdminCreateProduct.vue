@@ -299,9 +299,6 @@ onMounted(() => {
      /* ... */
 }
 
-.card-body {
-}
-
 /* Style cho input, select, textarea */
 .form-control.calenda,
 .form-select.calenda {

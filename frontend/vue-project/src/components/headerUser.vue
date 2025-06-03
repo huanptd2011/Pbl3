@@ -19,14 +19,14 @@
               <router-link :to="item.path" class="nav-link">{{ item.title }}</router-link>
             </li>
 
-            <!-- Dropdown Danh mục -->
+           <!-- Dropdown Danh mục -->
             <li class="nav-item dropdown" @mouseenter="showCategoryDropdown = true" @mouseleave="showCategoryDropdown = false">
               <a class="nav-link dropdown-toggle" href="#">Danh mục</a>
               <ul class="dropdown-menu" :class="{ 'show': showCategoryDropdown }">
                 <li v-for="category in categories" :key="category.categoryId">
                   <router-link
                     class="dropdown-item"
-                    :to="`/products?category=${category.categoryId}`"
+                    :to="{ name: 'ProductCategory', params: { categoryId: category.categoryId } }"
                     @click="showCategoryDropdown = false"
                   >
                     {{ category.categoryName }}
@@ -34,7 +34,6 @@
                 </li>
               </ul>
             </li>
-
             <!-- Về chúng tôi -->
             <li class="nav-item">
               <router-link to="/about" class="nav-link">Về chúng tôi</router-link>
@@ -57,7 +56,7 @@
             />
           </div>
 
-         
+
 
           <router-link to="/cart" class="btn btn-link position-relative me-2 bg-gray rounded-5">
             <i class="fas fa-shopping-cart text-dark"></i>

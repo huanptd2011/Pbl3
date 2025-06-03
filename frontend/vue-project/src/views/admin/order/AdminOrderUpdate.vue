@@ -37,7 +37,7 @@
               </div>
               <div class="mb-2">
                 <strong>Trạng thái đơn hàng:</strong>
-                <span :class="getOrderStateClass(order.orderState)">{{ order.orderState }}</span>
+                <span class="ms-3" :class=" getOrderStateClass(order.orderState)">{{ order.orderState }}</span>
               </div>
               <div class="mb-2">
                 <strong>Trạng thái thanh toán:</strong>
@@ -406,13 +406,13 @@ function canUpdatePaymentState() {
 
 function getOrderStateClass(state) {
   switch (state) {
-    case 'Chờ xác nhận': return 'badge bg-warning text-dark';
-    case 'Đã xác nhận': return 'badge bg-info';
-    case 'Đang chuẩn bị': return 'badge bg-primary';
-    case 'Đang giao': return 'badge bg-secondary';
-    case 'Đã giao': return 'badge bg-success';
-    case 'Đã hủy': return 'badge bg-danger';
-    default: return 'badge bg-light text-dark';
+    case 'Chờ xác nhận': return 'status-badge status-pending';
+    case 'Đã xác nhận': return 'status-badge status-confirmed';
+    
+    case 'Đang giao': return 'status-badge status-shipping';
+    case 'Đã giao': return 'status-badge status-delivered';
+    case 'Đã hủy': return 'status-badge status-cancelled';
+    default: return 'status-badge bg-light text-dark';
   }
 }
 

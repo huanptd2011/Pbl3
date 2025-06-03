@@ -4,26 +4,27 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Quản lý Sản phẩm</span>
                 <div class="d-flex align-items-center">
-                     <select v-model="filterCategory" class="form-select form-select-sm me-2 calenda" style="width: 150px;">
-               <option value="">Tất cả Danh mục</option>
-               <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId" >
-                {{ category.categoryName }}
-            </option>
-              
-                </select>
+                    <select v-model="filterCategory" class="form-select form-select-sm me-2 calenda"
+                        style="width: 150px;">
+                        <option value="">Tất cả Danh mục</option>
+                        <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
+                            {{ category.categoryName }}
+                        </option>
 
-           <select v-model="filterStatus" class="form-select form-select-sm me-2 calenda" style="width: 120px;">
-               <option value="">Tất cả Trạng thái</option>
-               <option value="active">  Đang bán</option>
-               <option value="inactive">  Ngừng bán</option>
-           </select>
+                    </select>
+
+                    <select v-model="filterStatus" class="form-select form-select-sm me-2 calenda"
+                        style="width: 120px;">
+                        <option value="">Tất cả Trạng thái</option>
+                        <option value="active"> Đang bán</option>
+                        <option value="inactive"> Ngừng bán</option>
+                    </select>
 
 
                     <input type="text" class="form-control form-control-sm me-2 calenda"
                         placeholder="Tìm kiếm sản phẩm..." style="width: 200px;" v-model="searchKeyword"
                         @input="handleSearch">
-                    <button class="btn btn-primary btn-sm bg-main bor-main" @click="goToAddProduct"
-                     >
+                    <button class="btn btn-primary btn-sm bg-main bor-main" @click="goToAddProduct">
                         <i class="fas fa-plus me-1"></i>
                         Thêm Sản phẩm
                     </button>
@@ -39,7 +40,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            
+
                             <th>Tên Sản phẩm</th>
                             <th>Giá</th>
                             <th>Số lượng tồn</th>
@@ -52,22 +53,22 @@
                         <template v-if="paginatedProducts.length > 0">
                             <tr v-for="product in paginatedProducts" :key="product.id">
                                 <td>{{ product.productId }}</td>
-                                
+
                                 <td>{{ product.productName }}</td>
                                 <td>{{ formatCurrency(product.price) }}</td>
-                                <td>{{ product.totalInventory}}</td>
+                                <td>{{ product.totalInventory }}</td>
                                 <td>{{ product.category.categoryName }}</td>
 
                                 <td>
                                     <span
-                                        :class="['status-badge', product.isActive  ? 'status-active' : 'status-inactive']">
+                                        :class="['status-badge', product.isActive ? 'status-active' : 'status-inactive']">
                                         {{ product.isActive ? 'Đang bán' : 'Ngừng bán' }}
                                     </span>
                                 </td>
                                 <td>
-                                    <i class="fas fa-edit text-info me-3 icon " 
+                                    <i class="fas fa-edit text-info me-3 icon "
                                         @click="editProduct(product.productId)"></i>
-                                    <i class="fas fa-trash-alt text-danger icon" 
+                                    <i class="fas fa-trash-alt text-danger icon"
                                         @click="deleteProduct(product.productId)"></i>
                                 </td>
                             </tr>
@@ -120,7 +121,7 @@ import { useRouter } from 'vue-router'; // Để điều hướng sang trang th�
 
 const allProducts = ref([]);
 const filterCategory = ref('');
-const categories = ref([]); 
+const categories = ref([]);
 const filterStatus = ref('');
 const loadingProducts = ref(true);
 const searchKeyword = ref('');
@@ -136,12 +137,12 @@ async function fetchCategories() {
         console.log('Fetched categories:', categories.value);
     } catch (error) {
         console.error('Error fetching categories:', error);
-        categories.value = []; 
+        categories.value = [];
     }
 }
 
 async function fetchProducts() {
-    loadingProducts.value = true; 
+    loadingProducts.value = true;
 
 
     try {
@@ -152,9 +153,9 @@ async function fetchProducts() {
     } catch (error) {
         console.error('Error fetching products:', error);
         allProducts.value = [];
-        
+
     } finally {
-            loadingProducts.value = false;
+        loadingProducts.value = false;
     }
 }
 
@@ -188,7 +189,7 @@ const paginatedProducts = computed(() => {
 });
 
 const totalPages = computed(() => {
-  return Math.ceil(filterProduct.value.length / pageSize);
+    return Math.ceil(filterProduct.value.length / pageSize);
 });
 
 // Hàm xử lý khi gõ vào ô search (có thể thêm debounce nếu cần)
@@ -199,7 +200,7 @@ function handleSearch() {
     }
     searchTimeout = setTimeout(() => {
         currentPage.value = 1; // Reset về trang 1 khi search
-     
+
     }, 300); // Delay 300ms sau khi gõ xong
 }
 
@@ -207,7 +208,7 @@ function handleSearch() {
 function changePage(page) {
     if (page >= 1 && page <= totalPages.value) {
         currentPage.value = page;
-       
+
     }
 }
 
@@ -234,16 +235,16 @@ async function deleteProduct(productId) {
             await axios.delete(`http://localhost:8080/api/products/delete/${productId}`);
             console.log(`Product with ID ${productId} deleted.`);
             // Sau khi xóa thành công, fetch lại danh sách hoặc xóa khỏi mảng hiện tại
-             const index = allProducts.value.findIndex(p => p.productId === productId);
-      if (index !== -1) {
-        // Xóa sản phẩm khỏi mảng allProducts (Vue sẽ tự reactivity)
-        allProducts.value.splice(index, 1);
-        if (paginatedProducts.value.length === 0 && currentPage.value > 1) {
-             // Quay về trang trước đó
-             currentPage.value--;
-             // Computed property paginatedProducts sẽ tự cập nhật
-        }
-      }
+            const index = allProducts.value.findIndex(p => p.productId === productId);
+            if (index !== -1) {
+                // Xóa sản phẩm khỏi mảng allProducts (Vue sẽ tự reactivity)
+                allProducts.value.splice(index, 1);
+                if (paginatedProducts.value.length === 0 && currentPage.value > 1) {
+                    // Quay về trang trước đó
+                    currentPage.value--;
+                    // Computed property paginatedProducts sẽ tự cập nhật
+                }
+            }
 
         } catch (error) {
             console.error(`Error deleting product with ID ${productId}:`, error);
@@ -299,7 +300,7 @@ watch([searchKeyword, filterCategory, filterStatus], () => {
 .custom-orders-table tbody tr {
     border-color: #1e293b;
     height: 60px;
-      vertical-align: middle;
+    vertical-align: middle;
 }
 
 
@@ -324,7 +325,7 @@ watch([searchKeyword, filterCategory, filterStatus], () => {
     white-space: nowrap;
     vertical-align: baseline;
     border-radius: 4px;
-    
+
     /* Màu chữ mặc định */
 }
 
@@ -332,13 +333,13 @@ watch([searchKeyword, filterCategory, filterStatus], () => {
 .status-badge.status-active {
     background-color: #10b9812e;
     color: #139f81;
-    border: 0.2px solid  #139f81;
+    border: 0.2px solid #139f81;
 }
 
 .status-badge.status-inactive {
     background-color: #e2232330;
     color: #ef4444;
-    border: 0.2px solid  #ef4444;
+    border: 0.2px solid #ef4444;
 }
 
 /* Action Icons */
@@ -370,7 +371,7 @@ watch([searchKeyword, filterCategory, filterStatus], () => {
     /* Viền nút phân trang */
     color: #aeb9e1;
     /* Màu chữ nút phân trang */
-    
+
 }
 
 .pagination .page-item.active .page-link {
@@ -419,8 +420,17 @@ watch([searchKeyword, filterCategory, filterStatus], () => {
     opacity: 0.5;
     pointer-events: none;
 }
+
 input::placeholder {
-    
+
     color: #aeb9e1;
+}
+input:focus{
+    border-color: #aeb9e1;
+    box-shadow: 0 0 0 0.2rem rgba(203, 60, 255, 0.25);
+}
+.cl-note {
+    color: #aeb9e1;
+    font-style: italic;
 }
 </style>

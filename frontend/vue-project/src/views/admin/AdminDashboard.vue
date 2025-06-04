@@ -118,7 +118,7 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-4">
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
@@ -170,6 +170,62 @@
     </div>
 
 
+    <!-- sanr pham bans chay nhat -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            Sản phẩm Bán chạy Nhất
+            <div class="d-flex align-items-center">
+              <select v-model="productTimePeriod" class="form-select form-select-sm me-2 calenda" style="width: 100px;">
+                <option value="all-time">Thời đại</option>
+            <option value="last-7-days">Tuần</option>
+            <option value="last-30-days">Tháng</option>
+            <option value="last-year">Năm</option>
+              </select>
+              </div>
+          </div>
+          <div class="card-body">
+            <div v-if="loadingBestSellingProducts" class="text-center">Đang tải ...</div>
+            <div v-else-if="bestSellingProducts.length === 0" class="text-center"> Không có sản phẩm gần đây </div>
+            <div v-else>
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>
+                      <i class="fas fa-shopping-cart me-2 cl-main"></i>
+                      <span class="">ID</span>
+                    </th>
+                    <th>
+                      <i class="fas fa-user me-2 cl-main"></i>
+                      <span class="">Tên sản phẩm</span>
+                    </th>
+                    <th>
+                      <i class="fas fa-money-bill-wave me-2 cl-main"></i>
+                      <span class="">Giá</span>
+                    </th>
+                    <th>
+                      <i class="fas fa-check-circle me-2 cl-main"></i>
+                      <span class="">Số lượng tồn</span>
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="product in bestSellingProducts" :key="product.productId">
+                    <td>{{ product.productId }}</td>
+                    <td>{{ product.productName }}</td>
+                    <td>{{ formatCurrency(product.totalRevenue) }}</td>
+                    <td>{{ product.totalQuantity }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -187,7 +243,9 @@ const metrics = ref(null);
 const salesChartData = ref(null);
 const ordersChartData = ref(null);
 const recentOrders = ref([]);
+const bestSellingProducts = ref([]); // Biến để lưu sản phẩm bán chạy nhất
 const loadingRecentOrders = ref(true); // Thêm trạng thái loading cho bảng đơn hàng
+const loadingBestSellingProducts = ref(true); // Thêm trạng thái loading cho sản phẩm bán chạy nhất
 
 
 const salesChartCanvas = ref(null);
@@ -196,7 +254,7 @@ const ordersChartCanvas = ref(null);
 const salesTimePeriod = ref('daily'); // Mặc định kỳ là Ngay
 const salesStartDate = ref(''); // Ngày bắt đầu cho khoảng thời gian
 const salesEndDate = ref('');   // Ngày kết thúc cho khoảng thời gian
-
+const productTimePeriod = ref('last-30-days'); // Mặc định kỳ là Tháng
 // Hàm gọi API lấy số liệu tổng quan
 
 async function fetchMetrics() {
@@ -317,6 +375,31 @@ async function fetchRecentOrders() {
   }
 }
 
+async function fetchBestSellingProducts() {
+  loadingBestSellingProducts.value = true; // Bắt đầu loading
+  try {
+    let apiUrl = 'http://localhost:8080/api/dashboard/top-selling-products';
+    const params = new URLSearchParams();
+    if (productTimePeriod.value) { 
+      params.append('period', productTimePeriod.value);
+    }
+
+     params.append('limit', 5);
+    if (params.toString()) {
+      apiUrl += '?' + params.toString();
+    }
+
+    const response = await axios.get(apiUrl);
+    bestSellingProducts.value = response.data;
+  } catch (error) {
+    console.error('Error fetching best selling products:', error);
+    // Xử lý lỗi
+  }
+  finally {
+    loadingBestSellingProducts.value = false; // Kết thúc loading
+  }
+}
+
 // Hàm định dạng tiền tệ (ví dụ: thêm dấu phân cách hàng nghìn)
 function formatCurrency(value) {
   if (value == null) return '';
@@ -344,6 +427,7 @@ onMounted(() => {
   fetchSalesChartData();
   fetchOrdersChartData();
   fetchRecentOrders();
+  fetchBestSellingProducts();
 });
 
 // Watcher cho các biến của Biểu đồ Doanh thu

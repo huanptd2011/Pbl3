@@ -418,9 +418,9 @@ function getOrderStateClass(state) {
 
 function getPaymentStateClass(state) {
   switch (state) {
-    case 'Chưa thanh toán': return 'badge bg-warning text-dark';
-    case 'Đã thanh toán': return 'badge bg-success';
-    case 'Đã hoàn tiền': return 'badge bg-info';
+    case 'Chưa thanh toán': return 'status-badge status-pending ms-2';
+    case 'Đã thanh toán': return 'status-badge status-delivered ms-2';
+    case 'Đã hoàn tiền': return 'tatus-badge status-confirmed ms-2';
     default: return 'badge bg-light text-dark';
   }
 }

@@ -193,7 +193,7 @@ const loadingRecentOrders = ref(true); // Thêm trạng thái loading cho bảng
 const salesChartCanvas = ref(null);
 const ordersChartCanvas = ref(null);
 
-const salesTimePeriod = ref('monthly'); // Mặc định kỳ là Tháng
+const salesTimePeriod = ref('daily'); // Mặc định kỳ là Ngay
 const salesStartDate = ref(''); // Ngày bắt đầu cho khoảng thời gian
 const salesEndDate = ref('');   // Ngày kết thúc cho khoảng thời gian
 

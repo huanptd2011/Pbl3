@@ -8,7 +8,9 @@
                     <img :src="user.avatar || defaultAvatar" alt="Avatar" class="avatar">
                     <input type="file" id="avatar-upload" accept="image/*" @change="handleAvatarChange"
                         class="avatar-upload">
-                    <label for="avatar-upload" class="avatar-upload-label">Đổi ảnh</label>
+                    <label for="avatar-upload" class="avatar-upload-label">
+                        <i class="fas fa-pen"></i> 
+                    </label>
                 </div>
             </div>
 
@@ -17,35 +19,35 @@
                 <form @submit.prevent="saveProfile">
                     <div class="form-group">
                         <label for="username" class="form-label">Tên đăng nhập</label>
-                        <input type="text" id="username" v-model="user.username" disabled>
+                        <input type="text" class="form-control calenda" id="username" v-model="user.username" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="fullName" class="form-label">Họ và tên</label>
-                        <input type="text" id="fullname" v-model="user.fullName" required>
+                        <input type="text" class="form-control calenda" id="fullname" v-model="user.fullName" required>
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" v-model="user.email" disabled>
+                        <input type="email" class="form-control calenda" id="email" v-model="user.email" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="dob" class="form-label">Ngày sinh</label>
-                        <input type="date" id="dob" v-model="user.dob" :max="maxDate" required>
+                        <input type="date" class="form-control calenda" id="dob" v-model="user.dob" :max="maxDate" required>
                     </div>
 
                     <div class="form-group">
                         <label for="phone" class="form-label">Số điện thoại</label>
-                        <input type="tel" id="phone" v-model="user.phone" required>
+                        <input type="tel" class="form-control calenda" id="phone" v-model="user.phone" required>
                     </div>
 
                     <div class="form-group">
                         <label for="address" class="form-label">Địa chỉ</label>
-                        <textarea id="address" v-model="user.address" rows="3" required></textarea>
+                        <textarea id="address" class="form-control calenda" v-model="user.address" rows="3" required></textarea>
                     </div>
 
-                    <button type="submit" class="save-btn">Lưu thông tin</button>
+                    <button type="submit" class=" btn btn-primary">Lưu thông tin</button>
                 </form>
             </div>
         </div>
@@ -177,7 +179,7 @@ const saveProfile = async () => {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #42b983;
+    border: 3px solid #aeb9e1;
 }
 
 .avatar-upload {
@@ -185,19 +187,23 @@ const saveProfile = async () => {
 }
 
 .avatar-upload-label {
+    position: relative;
+    top: -50px;
+    left: 60%;
+    width: fit-content;
     display: block;
-    margin-top: 10px;
+    margin: 10px;
+    padding: 5px 10px;
     text-align: center;
-    background: #42b983;
+    background-color: #8b5cf6;
     color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
+    border-radius: 50px;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .avatar-upload-label:hover {
-    background: #3aa876;
+background-color: #7c3aed;
 }
 
 .form-group {
@@ -262,6 +268,13 @@ input[type="date"] {
     gap: 15px;
     line-height: 24px;
     padding: 18px 18px 18px 20px;
+}
+
+input[type="date"].calenda::-webkit-calendar-picker-indicator,
+input[type="month"].calenda::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+  /* Đảo màu icon để phù hợp với nền tối */
+  cursor: pointer;
 }
 
 </style>

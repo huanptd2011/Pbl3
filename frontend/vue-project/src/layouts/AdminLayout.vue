@@ -3,9 +3,8 @@
     <div class="sidebar  text-white p-3">
       <div class="d-flex  align-items-center justify-content-center mb-4 mt-3">
         <img
-          src="../assets/img/Đề xuất Kinh doanh Thuyết trình Kinh doanh theo Phong cách Khối màu Xanh dương Đậm Xám.png"
-          alt="Logo" class="" style="max-width: 40px;">
-        <h6 style="margin-bottom: 0;" >FOOT WEAR</h6>
+          src="../assets/img/logoAdmin.png"
+          alt="Logo" class="" style="max-width: 100%;">
       </div>
       <ul class="nav flex-column">
         <li class="nav-item">

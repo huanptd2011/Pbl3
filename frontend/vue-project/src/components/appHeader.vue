@@ -9,7 +9,7 @@
 
         <!-- Logo -->
         <router-link to="/" class="navbar-brand me-4">
-          <img src="@/assets/logo.jpeg" alt="ShoeStore" height="50" />
+          <img src="../assets/img/logoUser.png" alt="ShoeStore" height="50" />
         </router-link>
 
         <!-- Main Navigation -->
@@ -188,7 +188,6 @@ const gotoProductView = () => {
   if (searchQuery.value.trim()) {
     router.push({ path: '/products', query: { q: searchQuery.value } });
   }
-  searchQuery.value = "";
 };
 
 // Computed properties

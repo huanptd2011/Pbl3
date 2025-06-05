@@ -7,6 +7,55 @@ body {
   margin: 0;
 }
 
+.sticky-top{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+:root{
+  --submit-button: #211724;
+  --submit-button-hover: #5b5a61;
+  --reset-button: #211724;
+  --reset-button-hover: #5b5a61;
+  --goto-button: #211724;
+  --goto-button-hover: #5b5a61;
+}
+
+.submit-button,
+.reset-button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-button {
+  background-color: var(--submit-button);
+  color: white;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: var(--submit-button-hover);
+}
+
+.submit-button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.reset-button {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.reset-button:hover:not(:disabled) {
+  background-color: #cbd5e0;
+}
+
 
 .btn-theme {
   background-color: #b32d3d;
@@ -118,7 +167,6 @@ body {
 
 input.calenda::placeholder {
   color: #476879;
-  /* hoặc màu bạn muốn, ví dụ: #999, blue, etc. */
 }
 
 img {

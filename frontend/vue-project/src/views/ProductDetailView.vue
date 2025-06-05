@@ -63,14 +63,14 @@
 
                 <div>
             <button
-              class="btn btn-primary mt-3"
+              class="btn submit-button mt-3"
               :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
               @click="handleAddToCart">
               Thêm vào giỏ hàng
             </button>
 
              <button
-              class="btn btn-success mt-3 ms-2"
+              class="btn btn-buynow  mt-3 ms-2"
               :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
               @click="handleBuyNow">
               Mua ngay
@@ -98,7 +98,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-4 text-center mb-3 mb-md-0">
                             <div class="average-rating-big mb-2">
-                                <span class="display-4 fw-bold text-primary">{{ averageRating.toFixed(1) }}</span>
+                                <span class="display-4 fw-bold text">{{ averageRating.toFixed(1) }}</span>
                                 <span class="fs-4 text-muted">/5</span>
                             </div>
                             <div class="star-rating mb-2">
@@ -520,7 +520,7 @@ onMounted(() => {
 .form-control{
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #4299e1;
+    border: 1px solid #7f8b94;
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.2s;
@@ -529,19 +529,19 @@ onMounted(() => {
 
 .form-control:focus{
     outline: none;
-    border-color: #4299e1;
-    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+    border-color: #52626e;
+    box-shadow: 0 0 0 2px rgba(105, 123, 138, 0.2);
 }
 
 /* Style cho nút submit */
 .btn-primary {
-  background-color: #2945e2;
-  border-color: #3447f5;
+  background-color: #393a41;
+  border-color: #5a5c66;
 }
 
 .btn-primary:hover {
-  background-color: #1725e6;
-  border-color: #101dcf;
+  background-color: #585968;
+  border-color: #626377;
 }
 /* Avatar styles */
 .avatar-circle {
@@ -633,7 +633,7 @@ onMounted(() => {
   right: 30px;
   width: 50px;
   height: 50px;
-  background-color: #4e73df;
+  background-color: #24262c;
   color: white;
   border: none;
   display: flex;
@@ -648,7 +648,7 @@ onMounted(() => {
 
 .back-to-top-btn:hover {
   opacity: 1;
-  background-color: #2e59d9;
+  background-color: #303544;
   transform: translateY(-3px);
 }
 
@@ -657,6 +657,36 @@ onMounted(() => {
   animation: fadeIn 0.3s;
 }
 
+.btn-buynow {
+  background: white;
+  color: #e63946;
+  border: 1px solid #e63946;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-buynow:hover {
+  background: #e63946;
+  color: white;
+}   
+
+.submit-button{
+    background: white;
+  color: #2b2525;
+  border: 1px solid #1f1b1c;
+}
+
+.text-muted{
+    color: #999999 !important;
+}
+
+.text{
+    color: #ff4444;
+}
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 0.8; transform: translateY(0); }

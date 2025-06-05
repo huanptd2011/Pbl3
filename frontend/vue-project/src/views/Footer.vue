@@ -100,7 +100,7 @@ export default {
     margin-bottom: 20px; /* Khoảng cách dưới button */
     position:absolute;
     right: 160px;
-    bottom:50px;
+    bottom:45px;
 }
 
 .contact-button:hover {

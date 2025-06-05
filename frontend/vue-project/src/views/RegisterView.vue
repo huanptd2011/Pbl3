@@ -10,7 +10,7 @@
       <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="w-75">
           <a href="/" class="text-end mb-4 d-block">
-            <img src="../assets/img/Black And White Simple Shoes logo (500 x 500 px) (400 x 200 px).png" alt="Sneakers Logo" style="height: 40px ;">
+            <img src="../assets/img/logoUser.png" alt="Sneakers Logo" style="height: 40px ;">
           </a>
 
 

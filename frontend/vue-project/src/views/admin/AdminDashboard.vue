@@ -202,11 +202,11 @@
                     </th>
                     <th>
                       <i class="fas fa-money-bill-wave me-2 cl-main"></i>
-                      <span class="">Giá</span>
+                      <span class="">Giá bán</span>
                     </th>
                     <th>
                       <i class="fas fa-check-circle me-2 cl-main"></i>
-                      <span class="">Số lượng tồn</span>
+                      <span class="">Số lượng</span>
                     </th>
                     
                   </tr>

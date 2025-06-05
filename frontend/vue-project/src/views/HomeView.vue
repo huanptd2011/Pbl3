@@ -27,17 +27,24 @@
       </div>
     </section>
 
-    <!-- New Arrivals -->
-    <section class="new-arrivals pb-5 bg_main">
+
+    <section>
       <div class="container">
-        <div class="text-center py-5">
+        <div class="text-center py-5  ">
           <h2 class=" vollkorn-title ">Sản phẩm nổi bật</h2>
           <span class=" roboto-thin">Sự kết hợp hoàn hảo giữa công nghệ và thẩm mỹ.
             <br>
             Không chỉ đẹp mắt, mà còn vượt trội trong hiệu năng.</span>
           <!-- <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link> -->
         </div>
-        <div class="d-flex justify-content-between align-items-center mb-4">
+      </div>
+    </section>
+
+    <!-- New Arrivals -->
+    <section class="new-arrivals pb-5 pt-5  bg_main">
+      <div class="container">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 ">
           <h2 class="section-title">Sản phẩm bán chạy</h2>
           <router-link to="/products" class="btn btn-outline-dark">Xem tất cả</router-link>
         </div>
@@ -51,7 +58,7 @@
     </section>
 
     <!-- Recently Updated -->
-    <section class="best-sellers mb-5">
+    <section class="best-sellers mb-5 pt-5">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h2 class="section-title">Cập nhật gần đây</h2>
@@ -125,13 +132,13 @@ onMounted(fetchData)
   position: absolute;
   bottom: -10px;
   left: 0;
-  width: 50px;
+  width: 300px;
   height: 3px;
   background-color: #d32f2f;
 }
 
 .promo-banner {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('@/assets/promo-bg.jpg');
+  background: #fff;
   background-size: cover;
   background-position: center;
 }
@@ -151,5 +158,8 @@ onMounted(fetchData)
   /* Centers horizontally, anchors to the top vertically */
   background-repeat: no-repeat;
   /* Prevents the image from repeating */
+}
+.bg_main{
+  background-color: #f5f5f5;
 }
 </style>

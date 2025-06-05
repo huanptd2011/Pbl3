@@ -30,12 +30,11 @@ const userStore = useUserStore()
 
 <template>
   <div id="app-container"> 
-    <div class="content-wrapper">
-      <template v-if="!userStore.isAdmin">
+    <template v-if="!userStore.isAdmin">
         <headerUser v-if="userStore.isLoggedIn" />
         <appHeader v-else />
       </template>
-
+    <div class="content-wrapper">
       <RouterView /> 
     </div>
       

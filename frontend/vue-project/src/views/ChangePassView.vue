@@ -290,12 +290,11 @@ export default {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .label {
   font-weight: 500;
-  color: #4a5568;
+  color: #666;
 }
 
 .input-wrapper {
@@ -304,18 +303,19 @@ export default {
 
 .input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-  padding-right: 2.5rem;
+    border-radius: 0;
+  border-bottom: 1px solid #ced4da;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 0.5rem;
+  background-color: #fff !important;
 }
 
 .input:focus {
   outline: none;
-  border-color: #4299e1;
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+   border-color: #000;
+  box-shadow: none;
 }
 
 .input.is-error {
@@ -359,12 +359,12 @@ export default {
 }
 
 .submit-button {
-  background-color: #4299e1;
+  background-color: var(--submit-button);
   color: white;
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #3182ce;
+  background-color: var(--submit-button-hover);
 }
 
 .submit-button:disabled {

@@ -188,7 +188,6 @@ const gotoProductView = () => {
   if (searchQuery.value.trim()) {
     router.push({ path: '/products', query: { q: searchQuery.value } });
   }
-  searchQuery.value = "";
 };
 
 // Computed properties

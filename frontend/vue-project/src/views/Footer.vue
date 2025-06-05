@@ -1,11 +1,11 @@
 <template>
   <footer class="footer">
     <div class="footer-content">
-      <div class="social-icons">
+      <!-- <div class="social-icons">
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      </div>
+      </div> -->
       <nav class="footer-nav">
         <ul>
           <li><a href="#dc">123 Đường thời trang, Quận 1, TP. Hồ CHí Minh</a></li>
@@ -100,7 +100,7 @@ export default {
     margin-bottom: 20px; /* Khoảng cách dưới button */
     position:absolute;
     right: 160px;
-    bottom:50px;
+    bottom:45px;
 }
 
 .contact-button:hover {

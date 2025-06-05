@@ -1,140 +1,134 @@
 <template>
-  <div class="container mt-4">
-      <h1>Sản phẩm</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="mb-4 sticky-navbar">
+                    <h5>Bộ lọc</h5>
+                    <h6>Mức giá</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" v-model="priceFilter" value="0-1000000"
+                            id="price1">
+                        <label class="form-check-label" for="price1">
+                            Dưới 1 triệu
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" v-model="priceFilter" value="1000000-2000000"
+                            id="price2">
+                        <label class="form-check-label" for="price2">
+                            1 - 2 triệu
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" v-model="priceFilter" value="2000000-3000000"
+                            id="price3">
+                        <label class="form-check-label" for="price3">
+                            2 - 3 triệu
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" v-model="priceFilter" value="3000000-999999999"
+                            id="price4">
+                        <label class="form-check-label" for="price4">
+                            Trên 3 triệu
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" v-model="priceFilter" value="" id="priceAll"
+                            checked>
+                        <label class="form-check-label" for="priceAll">
+                            Tất cả
+                        </label>
+                    </div>
 
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item"><router-link to="/">Trang chủ</router-link></li>
-              <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
-          </ol>
-      </nav>
+                    <h6 class="mt-3">Thương hiệu</h6>
+                    <div class="form-check" v-for="brand in availableBrands" :key="brand">
+                        <input class="form-check-input" type="checkbox" v-model="brandFilter" :value="brand"
+                            :id="'brand-' + brand">
+                        <label class="form-check-label" :for="'brand-' + brand">
+                            {{ brand }}
+                        </label>
+                    </div>
 
-      <div class="row">
-          <div class="col-md-3">
-              <div class="mb-4">
-                  <h5>Bộ lọc</h5>
-                  <h6>Mức giá</h6>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" v-model="priceFilter" value="0-1000000" id="price1">
-                      <label class="form-check-label" for="price1">
-                          Dưới 1 triệu
-                      </label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" v-model="priceFilter" value="1000000-2000000" id="price2">
-                      <label class="form-check-label" for="price2">
-                          1 - 2 triệu
-                      </label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" v-model="priceFilter" value="2000000-3000000" id="price3">
-                      <label class="form-check-label" for="price3">
-                          2 - 3 triệu
-                      </label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" v-model="priceFilter" value="3000000-999999999" id="price4">
-                      <label class="form-check-label" for="price4">
-                          Trên 3 triệu
-                      </label>
-                  </div>
-                  <div class="form-check">
-                      <input class="form-check-input" type="radio" v-model="priceFilter" value="" id="priceAll" checked>
-                      <label class="form-check-label" for="priceAll">
-                          Tất cả
-                      </label>
-                  </div>
+                    <button class="btn btn-sm btn-outline-secondary mt-3" @click="resetFilters">Đặt lại bộ lọc</button>
+                </div>
+            </div>
 
-                  <h6 class="mt-3">Thương hiệu</h6>
-                  <div class="form-check" v-for="brand in availableBrands" :key="brand">
-                      <input class="form-check-input" type="checkbox" v-model="brandFilter" :value="brand" :id="'brand-' + brand">
-                      <label class="form-check-label" :for="'brand-' + brand">
-                          {{ brand }}
-                      </label>
-                  </div>
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="sort-options">
+                        <span class="me-2">Sắp xếp theo</span>
+                        <button class="btn btn-outline-secondary btn-sm me-2"
+                            :class="{ 'active': sortOption === 'relevant' }" @click="changeSortOption('relevant')">
+                            Liên quan
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm me-2"
+                            :class="{ 'active': sortOption === 'newest' }" @click="changeSortOption('newest')">
+                            Mới nhất
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm me-2"
+                            :class="{ 'active': sortOption === 'popular' }" @click="changeSortOption('popular')">
+                            Bán chạy
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" :class="{ 'active': sortOption === 'price' }"
+                            @click="changeSortOption('price')">
+                            Giá <i class="bi" :class="priceSortIcon"></i>
+                        </button>
+                    </div>
+                    <div class="page-info">
+                        {{ currentPage + 1 }}/{{ totalPages }}
+                    </div>
+                </div>
 
-                  <button class="btn btn-sm btn-outline-secondary mt-3" @click="resetFilters">Đặt lại bộ lọc</button>
-              </div>
-          </div>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col" v-for="product in filteredProducts" :key="product.productId">
+                        <div class="card h-100 product-card" @click="goToProductDetail(product.productId)">
+                            <div class="product-image-container">
+                                <img :src="product?.imageList?.[0]?.imageUrl || 'fallback-image.png'"
+                                    class=".product-image" alt="Product Image">
+                            </div>
 
-          <div class="col-md-9">
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                  <div class="sort-options">
-                      <span class="me-2">Sắp xếp theo</span>
-                      <button class="btn btn-outline-secondary btn-sm me-2"
-                          :class="{ 'active': sortOption === 'relevant' }"
-                          @click="changeSortOption('relevant')">
-                          Liên quan
-                      </button>
-                      <button class="btn btn-outline-secondary btn-sm me-2"
-                          :class="{ 'active': sortOption === 'newest' }"
-                          @click="changeSortOption('newest')">
-                          Mới nhất
-                      </button>
-                      <button class="btn btn-outline-secondary btn-sm me-2"
-                          :class="{ 'active': sortOption === 'popular' }"
-                          @click="changeSortOption('popular')">
-                          Bán chạy
-                      </button>
-                      <button class="btn btn-outline-secondary btn-sm"
-                          :class="{ 'active': sortOption === 'price' }"
-                          @click="changeSortOption('price')">
-                          Giá <i class="bi" :class="priceSortIcon"></i>
-                      </button>
-                  </div>
-                  <div class="page-info">
-                      {{ currentPage + 1 }}/{{ totalPages }}
-                  </div>
-              </div>
 
-              <div class="row row-cols-1 row-cols-md-3 g-4">
-                  <div class="col" v-for="product in filteredProducts" :key="product.productId">
-                      <div class="card h-100 product-card" @click="goToProductDetail(product.productId)">
-                        <div class="product-image-container">
-                            <img :src="product?.imageList?.[0]?.imageUrl || 'fallback-image.png'" class=".product-image" alt="Product Image">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ product.productName }}</h6>
+                                <p class="card-text fw-bold">{{ formatPrice(product.price) }}</p>
+                                <p class="card-text text-muted-product small">{{ product.brand }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent" v-if="product.comingSoon">
+                                <small class="text-muted">Coming soon</small>
+                            </div>
                         </div>
+                    </div>
+                </div>
 
-                          
-                          <div class="card-body">
-                              <h6 class="card-title">{{ product.productName }}</h6>
-                              <p class="card-text fw-bold">{{ formatPrice(product.price) }}</p>
-                              <p class="card-text text-muted-product small">{{ product.brand }}</p>
-                          </div>
-                          <div class="card-footer bg-transparent" v-if="product.comingSoon">
-                              <small class="text-muted">Coming soon</small>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                <div class="col-12 text-center mt-4" v-if="filteredProducts.length === 0 && searchKeyword.trim()">
+                    <p>Không tìm thấy sản phẩm nào với từ khóa "{{ searchKeyword }}"</p>
+                </div>
+                <div class="col-12 text-center mt-4"
+                    v-if="filteredProducts.length === 0 && !searchKeyword.trim() && !isLoading">
+                    <p>Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
+                </div>
+                <div class="col-12 text-center mt-4" v-if="isLoading">
+                    <p>Đang tải sản phẩm...</p>
+                </div>
 
-              <div class="col-12 text-center mt-4" v-if="filteredProducts.length === 0 && searchKeyword.trim()">
-                  <p>Không tìm thấy sản phẩm nào với từ khóa "{{ searchKeyword }}"</p>
-              </div>
-              <div class="col-12 text-center mt-4"
-                  v-if="filteredProducts.length === 0 && !searchKeyword.trim() && !isLoading">
-                  <p>Không tìm thấy sản phẩm nào phù hợp với bộ lọc.</p>
-              </div>
-              <div class="col-12 text-center mt-4" v-if="isLoading">
-                  <p>Đang tải sản phẩm...</p>
-              </div>
-
-              <nav aria-label="Page navigation" v-if="totalPages > 1" class="mt-4">
-                  <ul class="pagination justify-content-center">
-                      <li class="page-item" :class="{ 'disabled': currentPage === 0 }">
-                          <button class="page-link" @click="prevPage">Trước</button>
-                      </li>
-                      <li class="page-item" v-for="page in visiblePages" :key="page"
-                          :class="{ 'active': page === currentPage + 1 }">
-                          <button class="page-link" @click="goToPage(page - 1)">{{ page }}</button>
-                      </li>
-                      <li class="page-item" :class="{ 'disabled': currentPage >= totalPages - 1 }">
-                          <button class="page-link" @click="nextPage">Sau</button>
-                      </li>
-                  </ul>
-              </nav>
-          </div>
-      </div>
-  </div>
+                <nav aria-label="Page navigation" v-if="totalPages > 1" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" :class="{ 'disabled': currentPage === 0 }">
+                            <button class="page-link" @click="prevPage">Trước</button>
+                        </li>
+                        <li class="page-item" v-for="page in visiblePages" :key="page"
+                            :class="{ 'active': page === currentPage + 1 }">
+                            <button class="page-link" @click="goToPage(page - 1)">{{ page }}</button>
+                        </li>
+                        <li class="page-item" :class="{ 'disabled': currentPage >= totalPages - 1 }">
+                            <button class="page-link" @click="nextPage">Sau</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -384,7 +378,7 @@ onMounted(() => {
 
 <style scoped>
 .sort-options .btn.active {
-    background-color: #32445e;
+    background-color: #2b2f35;
     color: white;
 }
 
@@ -415,13 +409,14 @@ onMounted(() => {
 }
 
 
-.active>.page-link, .page-link.active{
+.active>.page-link,
+.page-link.active {
     background-color: #32445e;
     border: none;
 }
 
-.page-link:focus{
-    color:#cfd4db
+.page-link:focus {
+    color: #cfd4db
 }
 
 .page-link {
@@ -430,25 +425,31 @@ onMounted(() => {
 
 .product-image-container {
     width: 100%;
-    height: 180px; /* Chiều cao cố định cho vùng ảnh */
+    height: 180px;
+    /* Chiều cao cố định cho vùng ảnh */
     overflow: hidden;
-    background-color: #ffffff; /* Nền nhẹ cho vùng ảnh */
-    display: flex; /* Dùng flexbox để căn giữa ảnh */
+    background-color: #ffffff;
+    /* Nền nhẹ cho vùng ảnh */
+    display: flex;
+    /* Dùng flexbox để căn giữa ảnh */
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid #eee; /* Đường kẻ dưới ảnh */
+    border-bottom: 1px solid #eee;
+    /* Đường kẻ dưới ảnh */
     padding: 10px 0;
 }
 
 .product-image {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Đảm bảo ảnh hiển thị đầy đủ mà không bị cắt */
-    margin: 10px; /* Khoảng cách giữa ảnh và viền container */
+    object-fit: cover;
+    /* Đảm bảo ảnh hiển thị đầy đủ mà không bị cắt */
+    margin: 10px;
+    /* Khoảng cách giữa ảnh và viền container */
     /* Remove any default Bootstrap `card-img-top` rounded corners if they conflict */
-    border: #dfdada solid 1px; /* Thêm viền xung quanh ảnh */
+    border: #dfdada solid 1px;
+    /* Thêm viền xung quanh ảnh */
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
 }
-
 </style>

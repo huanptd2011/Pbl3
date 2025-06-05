@@ -301,7 +301,7 @@ onMounted(() => {
 }
 
 .status-tabs button.active {
-  background: #1d3557;
+  background: var(--reset-button);
   color: white;
   border-color: #1d3557;
 }
@@ -310,7 +310,7 @@ onMounted(() => {
   background: #e63946;
   color: white;
   border-radius: 50%;
-  padding: 2px 6px;
+  padding: 3px 6px;
   font-size: 0.8rem;
   margin-left: 5px;
 }
@@ -454,7 +454,7 @@ onMounted(() => {
 }
 
 .detail-btn {
-  background: #1d3557;
+  background: var(--submit-button);
   color: white;
   border: none;
 }
@@ -518,7 +518,7 @@ onMounted(() => {
   display: inline-block;
   margin-top: 15px;
   padding: 10px 20px;
-  background: #42b983;
+  background: var(--submit-button);
   color: white;
   text-decoration: none;
   border-radius: 4px;

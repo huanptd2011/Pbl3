@@ -103,7 +103,10 @@ export default {
               lastName: this.form.lastName,
               phone: this.form.phone
             });
-            console.log(response)
+            if (response.data.status === 409) {
+              alert("Email đã được sử dụng!");
+              return;
+            }
             alert("Đăng ký thành công!");
           } catch (error) {
               if (error.response) {

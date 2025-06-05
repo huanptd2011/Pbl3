@@ -14,7 +14,9 @@
             @change="handleAvatarChange"
             class="avatar-upload"
           >
-          <label for="avatar-upload" class="avatar-upload-label">Đổi ảnh</label>
+          <label for="avatar-upload" class="avatar-upload-label">
+                        <i class="fas fa-pen"></i> 
+                    </label>
         </div>
       </div>
 
@@ -217,7 +219,7 @@ const saveProfile = async () => {
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #42b983;
+  border: 3px solid #c9d3d0;
 }
 
 .avatar-upload {
@@ -225,19 +227,23 @@ const saveProfile = async () => {
 }
 
 .avatar-upload-label {
-  display: block;
-  margin-top: 10px;
-  text-align: center;
-  background: #42b983;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.3s;
+ position: relative;
+    top: -50px;
+    left: 60%;
+    width: fit-content;
+    display: block;
+    margin: 10px;
+    padding: 5px 10px;
+    text-align: center;
+    background-color: #9f9ca7;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
 .avatar-upload-label:hover {
-  background: #3aa876;
+  background: #747a78;
 }
 
 .form-group {
@@ -264,7 +270,7 @@ textarea {
 }
 
 .save-btn {
-  background: #42b983;
+  background: var(--submit-button);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -275,7 +281,7 @@ textarea {
 }
 
 .save-btn:hover {
-  background: #3aa876;
+  background:var(--submit-button-hover);
 }
 
 @media (max-width: 768px) {

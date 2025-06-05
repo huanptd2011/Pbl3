@@ -1,21 +1,18 @@
 <template>
-  <div class="container-fluid vh-100">
-    <div class="row h-100">
+  <div class="container-fluid vh-100 p-5">
+    <div class="row border">
       <!-- Hình ảnh bên trái -->
-      <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-light">
-        <div class="text-center">
-          <h1 class="display-4 text-muted">TUXEDO</h1>
-          <h3 class="text-muted">LOAFER PATENT</h3>
-          <img src="@/assets/img/images.jpeg" alt="Tuxedo Shoes" class="img-fluid w-75 mt-4">
-        </div>
+      <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center " style="background-image: url(https://i.pinimg.com/originals/d5/53/fd/d553fd8172563455f80fe22edb33f4b6.jpg); ">
+        <img src="https://i.pinimg.com/originals/d5/53/fd/d553fd8172563455f80fe22edb33f4b6.jpg" alt="Loafer Patent" class="img-fluid w-75">
       </div>
 
       <!-- Form bên phải -->
       <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="w-75">
-          <div class="text-end mb-4">
-            <img src="@/assets/logo.jpeg" alt="Logo" style="height: 40px;">
-          </div>
+          <a href="/" class="text-end mb-4 d-block">
+            <img src="../assets/img/Black And White Simple Shoes logo (500 x 500 px) (400 x 200 px).png" alt="Sneakers Logo" style="height: 40px ;">
+          </a>
+
 
           <h2 class="mb-4 fw-bold">Tạo tài khoản</h2>
 
@@ -55,9 +52,9 @@
             </div>
           </form>
 
-          <div class="text-end mt-4">
+          <!-- <div class="text-end mt-4">
             <small><a href="#">Điều khoản & Điều kiện của NHN</a></small>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -158,4 +155,13 @@ h3 {
 .btn-dark {
   border-radius: 0;
 }
+.border{
+  width: 90%;
+  position: relative;
+  margin: auto;
+  top: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 </style>

@@ -13,7 +13,7 @@ const userStore = useUserStore()
 // userStore.logout() // <--- Dòng này đã bị loại bỏ
 </script>
 
-<template>
+<!-- <template>
   <div>
     <template v-if="!userStore.isAdmin">
       <headerUser v-if="userStore.isLoggedIn" />
@@ -26,4 +26,35 @@ const userStore = useUserStore()
       <AppFooter />
     </template>
   </div>
+</template> -->
+
+<template>
+  <div id="app-container"> 
+    <div class="content-wrapper">
+      <template v-if="!userStore.isAdmin">
+        <headerUser v-if="userStore.isLoggedIn" />
+        <appHeader v-else />
+      </template>
+
+      <RouterView /> 
+    </div>
+      
+    <template v-if="!userStore.isAdmin">
+      <AppFooter />
+    </template>
+  </div>
 </template>
+
+<style>
+  #app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  
+</style>

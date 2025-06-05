@@ -1,31 +1,27 @@
 <template>
-  <div class="container-fluid vh-100">
-    <div class="row h-100">
-      <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center bg-light">
-        <div class="text-center">
-          <h1 class="mb-3 fw-bold">MATISSE</h1>
-          <p class="mb-4">LOAFER PATENT</p>
-          <img src="@/assets/logo.jpeg" alt="Loafer Patent" class="img-fluid w-75">
-        </div>
+  <div class="container-fluid vh-100 p-5">
+    <div class="row border ">
+      <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center " style="background-image: url(https://i.pinimg.com/originals/d5/53/fd/d553fd8172563455f80fe22edb33f4b6.jpg);">
+        <img src="https://i.pinimg.com/originals/d5/53/fd/d553fd8172563455f80fe22edb33f4b6.jpg" alt="Loafer Patent" class="img-fluid w-75">
       </div>
 
       <div class="col-md-6 d-flex align-items-center justify-content-center">
         <div class="w-75">
-          <div class="text-end mb-4">
-            <img src="@/assets/logo.jpeg" alt="Sneakers Logo" style="height: 40px;">
-          </div>
+          <a href="/" class="text-end mb-4 d-block">
+            <img src="../assets/img/Black And White Simple Shoes logo (500 x 500 px) (400 x 200 px).png" alt="Sneakers Logo" style="height: 40px;">
+          </a>
 
           <h2 class="mb-4 fw-bold">Đăng nhập</h2>
 
           <form @submit.prevent="submitForm">
             <div class="mb-3">
               <label for="usernameOrEmail" class="form-label">Tên tài khoản/ Email</label>
-              <input type="text" v-model="form.usernameOrEmail" class="form-control" id="usernameOrEmail" placeholder="Username/Email" required>
+              <input type="text" v-model="form.usernameOrEmail" class="form-control" id="usernameOrEmail"  required>
             </div>
 
             <div class="mb-4">
               <label for="password" class="form-label">Mật khẩu</label>
-              <input type="password" v-model="form.password" class="form-control" id="password" placeholder="Mật khẩu" required>
+              <input type="password" v-model="form.password" class="form-control" id="password"  required>
             </div>
 
             <div class="d-grid mb-3">
@@ -43,9 +39,7 @@
               <small>Chưa có tài khoản? <router-link to="/register">Đăng ký ngay bây giờ</router-link></small>
             </div>
 
-            <div class="text-center">
-              <small><a href="#">Điều khoản & Điều kiện của NHN</a></small>
-            </div>
+            
           </form>
         </div>
       </div>
@@ -144,8 +138,12 @@ p {
 
 .form-control {
   border-radius: 0;
-  border: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 0.75rem;
+  background-color: #fff !important;
 }
 
 .form-control:focus {
@@ -184,4 +182,15 @@ a:hover {
 .spinner-border {
     margin-right: 5px;
 }
+
+.border{
+  width: 90%;
+  position: relative;
+  margin: auto;
+  top: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
 </style>

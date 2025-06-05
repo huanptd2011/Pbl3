@@ -44,7 +44,7 @@ public class DashboardService {
      */
     public DashboardSummaryResponse getDashboardSummary() {
         // Get total revenue
-        BigDecimal totalRevenue = orderRepository.sumTotalRevenue();
+        BigDecimal totalRevenue = orderRepository.sumTotalRevenue("Đã giao");
         
         // Get total orders
         long totalOrders = orderRepository.count();

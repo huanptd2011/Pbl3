@@ -111,7 +111,7 @@ public class OrderService {
     }
 
     public List<OrderResponse> getAllOrders() {
-        return orderRepository.findAll().stream()
+        return orderRepository.findAllSortedByDateDesc().stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }

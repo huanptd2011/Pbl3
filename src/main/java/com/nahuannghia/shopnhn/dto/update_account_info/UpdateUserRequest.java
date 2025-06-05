@@ -1,12 +1,13 @@
 package com.nahuannghia.shopnhn.dto.update_account_info;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import java.time.LocalDateTime;
 
 public class UpdateUserRequest {
     @NotBlank(message = "Email cannot be blank")
@@ -28,8 +29,12 @@ public class UpdateUserRequest {
     private LocalDateTime dob; // Date of Birth in "yyyy-MM-dd" format
 //    private String gender;
     private String avatarUrl; // URL of the avatar image
+    private String gender;
 //    private String isActive; // Account status (e.g., "ACTIVE", "INACTIVE")
     //
+    
+
+
       public UpdateUserRequest() {
     }
 //    public UpdateUserRequest(
@@ -50,13 +55,14 @@ public class UpdateUserRequest {
 //    }
 
 
-    public UpdateUserRequest(String email, String fullName, String phone, String address, LocalDateTime dob, String avatarUrl) {
+    public UpdateUserRequest(String email, String fullName, String phone, String address, LocalDateTime dob, String avatarUrl, String gender) {
         this.email = email;
         this.fullName = fullName;
         this.phone = phone;
         this.address = address;
         this.dob = dob;
         this.avatarUrl = avatarUrl;
+        this.gender = gender;
     }
 
     public String getEmail() {
@@ -76,6 +82,14 @@ public class UpdateUserRequest {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+          public String getGender() {
+        return gender;
+    }
+
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 //    public String getPassword() {
 //        return password;

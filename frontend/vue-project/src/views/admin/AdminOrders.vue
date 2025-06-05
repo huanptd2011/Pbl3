@@ -7,7 +7,6 @@
                     <select v-model="filterStatus" class="form-select form-select-sm me-2 calenda" style="width: 150px;">
                         <option value="">Tất cả Trạng thái</option>
                         <option value="Chờ xác nhận">Chờ xác nhận</option>
-                        <option value="Đã xác nhận">Đã xác nhận</option>
                         <option value="Đang giao">Đang giao</option>
                         <option value="Đã giao">Đã giao</option>
                         <option value="Đã hủy">Đã hủy</option>
@@ -213,7 +212,6 @@ function formatDate(dateString) {
 function getStatusClass(status) {
     const statusClasses = {
         'Chờ xác nhận': 'status-pending',
-        'Đã xác nhận': 'status-confirmed',
         'Đang giao': 'status-shipping',
         'Đã giao': 'status-delivered',
         'Đã hủy': 'status-cancelled'
@@ -337,12 +335,6 @@ watch([searchKeyword, filterStatus, filterPaymentStatus], () => {
     background-color: #f59e0b2e;
     color: #f59e0b;
     border: 0.2px solid #f59e0b;
-}
-
-.status-badge.status-confirmed {
-    background-color: #3b82f62e;
-    color: #3b82f6;
-    border: 0.2px solid #3b82f6;
 }
 
 .status-badge.status-shipping {

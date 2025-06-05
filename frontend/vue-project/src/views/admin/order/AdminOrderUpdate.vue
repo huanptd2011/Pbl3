@@ -261,8 +261,6 @@ const availableOrderStates = computed(() => {
 
   switch (currentState) {
     case "Chờ xác nhận":
-      return ["Đã xác nhận","Đang giao", "Đã hủy"];
-    case "Đã xác nhận":
       return ["Đang giao", "Đã hủy"];
     case "Đang giao":
       return ["Đã giao","Đã hủy"];
@@ -391,7 +389,7 @@ function calculateSubtotal() {
 }
 
 function canUpdateOrderState() {
-  return ['Chờ xác nhận', 'Đã xác nhận', 'Đang giao','Đã giao'].includes(order.value.orderState);
+  return ['Chờ xác nhận','Đang giao','Đã giao'].includes(order.value.orderState);
 }
 
 function canUpdatePaymentState() {
@@ -407,8 +405,6 @@ function canUpdatePaymentState() {
 function getOrderStateClass(state) {
   switch (state) {
     case 'Chờ xác nhận': return 'status-badge status-pending';
-    case 'Đã xác nhận': return 'status-badge status-confirmed';
-    
     case 'Đang giao': return 'status-badge status-shipping';
     case 'Đã giao': return 'status-badge status-delivered';
     case 'Đã hủy': return 'status-badge status-cancelled';

@@ -258,7 +258,8 @@ const fetchProduct = async () => {
       sizeColorList: data.sizeColorList?.map(item => ({
         color: item.colour || item.color, // Handle different property names
         size: item.size,
-        quantity: item.quantity
+        quantity: item.quantity,
+        status : item.isActive
       })) || []
     };
   } catch (error) {
@@ -276,23 +277,27 @@ onMounted(async () => {
 });
 const availableColors = computed(() => {
   if (!product.value?.sizeColorList) return [];
-  const colors = product.value.sizeColorList.map(item => item.color);
-  return [...new Set(colors)]; // Loại bỏ màu trùng lặp
+  const colors = product.value.sizeColorList
+    .filter(item => item.status) // Chỉ lấy item isActive = true
+    .map(item => item.color);
+  return [...new Set(colors)];
 });
+
 
 const availableSizes = computed(() => {
   if (!product.value?.sizeColorList || !selectedColor.value) return [];
   return product.value.sizeColorList
-    .filter(item => item.color === selectedColor.value)
+    .filter(item => item.status && item.color === selectedColor.value)
     .map(item => item.size);
 });
 
+
 const getQuantity = (color, size) => {
-    const item = product.value?.sizeColorList.find(
-        sc => sc.color === color && sc.size === size
-    )
-    return item?.quantity ?? 0
-}
+  const item = product.value?.sizeColorList.find(
+    sc => sc.status && sc.color === color && sc.size === size
+  );
+  return item?.quantity ?? 0;
+};
 
 const formatPrice = (price) => {
     return price?.toLocaleString('vi-VN') ?? ''
@@ -672,7 +677,7 @@ onMounted(() => {
 .btn-buynow:hover {
   background: #e63946;
   color: white;
-}   
+}
 
 .submit-button{
     background: white;

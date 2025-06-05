@@ -101,6 +101,7 @@ async function fetchUserData(userId) {
   try {
     const response = await axios.get(`http://localhost:8080/api/users/${userId}`);
     user.value = response.data;
+    const ttt = response.data;
   } catch (error) {
     console.error(`Lỗi khi lấy thông tin người dùng ${userId}:`, error);
     alert('Không thể tải thông tin người dùng.');

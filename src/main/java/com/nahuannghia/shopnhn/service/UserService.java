@@ -60,9 +60,13 @@ public class UserService {
                 user.getAddress(),
                 user.getRole().toString(),
                 user.getFullName(),
+                user.getGender(),
                 user.getDob(),
-                user.getStatus()
+                user.getStatus(),
+                user.getAvatar(),
+                user.getCreatedDate()
         );
+
     }
 
     public List<UserInfoResponse> getAllCustomer(){
@@ -250,6 +254,9 @@ public class UserService {
         if(userInfo.getDob() != null){
             user.setDob(userInfo.getDob());
         }
+        if(userInfo.getGender() != null) {
+            user.setGender(userInfo.getGender());
+        }
         if(userInfo.getAvatarUrl() != null){
             user.setAvatar(userInfo.getAvatarUrl());
         }
@@ -265,26 +272,27 @@ public class UserService {
                 user.getAddress(),
                 user.getRole().toString(),
                 user.getFullName(),
+                user.getGender(),
                 user.getDob(),
-                user.getStatus()
+                user.getStatus(),
+                user.getAvatar(),
+                user.getCreatedDate()
         );
 
-        return new UpdateUserResponse(
-                200,
-                user.getUsername(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getAddress(),
-                user.getRole().toString(),
-                user.getFullName(),
-                user.getStatus() != null ? user.getStatus().toString() : null,
-                user.getCreatedDate() != null ? user.getCreatedDate().toString() : null,
-                user.getUpdatedDate() != null ? user.getUpdatedDate() : null,
-                user.getLastLogin() != null ? user.getLastLogin().toString() : null,
-                userInfoResponse,
-                LocalDateTime.now()
-        );
-    }
+    return   new UpdateUserResponse(
+    200,                                
+    user.getUsername(),
+    user.getEmail(),                    
+    user.getPhone(),                   
+    user.getFullName(),                
+    user.getAddress(),                  
+    user.getGender(), 
+    user.getDob(),                    
+    user.getAvatar(),              
+    userInfoResponse,                  
+    LocalDateTime.now()               
+);
+}
 
     private Optional<User> findUserByUsernameOrEmail(String usernameOrEmail) {
         Optional<User> userByEmail = userRepository.findByEmail(usernameOrEmail);

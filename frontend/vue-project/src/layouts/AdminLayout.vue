@@ -148,4 +148,14 @@ const logoutAdmin = () => {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   /* Đường kẻ phân cách */
 }
+/* Ẩn phần sidebar và nút đăng xuất khi in */
+@media print {
+  .sidebar {
+    display: none !important;
+  }
+
+  .mt-auto {
+    display: none !important;
+  }
+}
 </style>

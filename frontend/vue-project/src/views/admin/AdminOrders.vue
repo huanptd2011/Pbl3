@@ -21,11 +21,6 @@
 
                     <input type="text" class="form-control form-control-sm me-2 calenda"
                         placeholder="Tìm kiếm đơn hàng..." style="width: 200px;" v-model="searchKeyword">
-
-                    <button class="btn btn-success btn-sm bg-success bor-success me-2" @click="exportOrders">
-                        <i class="fas fa-download me-1"></i>
-                        Xuất Excel
-                    </button>
                 </div>
             </div>
             <div class="card-body">
@@ -235,11 +230,6 @@ function viewOrderDetail(orderId) {
 }
 
 
-// Hàm xuất Excel
-function exportOrders() {
-    // Logic xuất Excel
-    window.open('/admin/order/export', '_blank');
-}
 
 // Fetch data khi component được mount
 onMounted(() => {

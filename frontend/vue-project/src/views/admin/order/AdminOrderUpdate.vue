@@ -468,12 +468,10 @@ onMounted(() => {
 }
 
 @media print {
-  /* Ẩn tất cả nội dung ban đầu */
   body * {
     visibility: hidden;
   }
 
-  /* Chỉ hiển thị vùng cần in */
   #printArea,
   #printArea * {
     visibility: visible;
@@ -481,32 +479,18 @@ onMounted(() => {
 
   #printArea {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
-    padding: 20px;
     background: white;
+    padding: 20px;
   }
 
-  /* Ẩn các phần không cần thiết */
-  button,
-  .btn,
-  .card-header,
-  .modal,
-  .mt-4,
-  .modal-backdrop {
+  .sidebar, .mt-auto, button, .nav, .modal {
     display: none !important;
   }
-
-  /* Tùy chỉnh bảng hoặc text nếu cần */
-  .table {
-    font-size: 14px;
-  }
-
-  .text-primary {
-    color: black !important;
-  }
 }
+
 
 .fixed{
   position: fixed;

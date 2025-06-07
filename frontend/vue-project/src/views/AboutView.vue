@@ -46,14 +46,14 @@
       <div class="container">
         <h2 class="section-title">Liên hệ</h2>
         <ul class="contact-list">
-          <li class="contact-item">Địa chỉ: 123 Đường Thời Trang, Quận 1, TP. Hồ Chí Minh</li>
+          <li class="contact-item">Địa chỉ: 54 Nguyễn Lương Bằng, Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng, Việt Nam</li>
           <li class="contact-item">Hotline: 0909 123 456</li>
           <li class="contact-item">Email: contact@nhnshoes.vn</li>
         </ul>
       </div>
     </section>
 
-    
+
   </div>
 </template>
 

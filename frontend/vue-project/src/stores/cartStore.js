@@ -127,6 +127,8 @@ export const useCartStore = defineStore('cart', {
         removeSelectedItems() {
             this.items = this.items.filter((item) => !item.isSelected)
         },
+
+        
     },
 
     getters: {

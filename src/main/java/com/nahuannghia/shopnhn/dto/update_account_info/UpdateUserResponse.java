@@ -25,14 +25,12 @@ public class UpdateUserResponse {
     public int getStatus() {
         return status;
     }
-    public UpdateUserResponse(int status, String message, String username, String email, String password, String phone,
+    public UpdateUserResponse(int status, String username, String email, String phone,
             String fullName, String address, String gender, LocalDateTime dob, String avatarUrl, UserInfoResponse updatedUser,
             LocalDateTime timestamp) {
         this.status = status;
-        this.message = message;
         this.username = username;
         this.email = email;
-        this.password = password;
         this.phone = phone;
         this.fullName = fullName;
         this.address = address;

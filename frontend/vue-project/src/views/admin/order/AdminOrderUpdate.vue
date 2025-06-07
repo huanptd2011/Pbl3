@@ -261,8 +261,6 @@ const availableOrderStates = computed(() => {
 
   switch (currentState) {
     case "Chờ xác nhận":
-      return ["Đã xác nhận","Đang giao", "Đã hủy"];
-    case "Đã xác nhận":
       return ["Đang giao", "Đã hủy"];
     case "Đang giao":
       return ["Đã giao","Đã hủy"];
@@ -391,7 +389,7 @@ function calculateSubtotal() {
 }
 
 function canUpdateOrderState() {
-  return ['Chờ xác nhận', 'Đã xác nhận', 'Đang giao','Đã giao'].includes(order.value.orderState);
+  return ['Chờ xác nhận','Đang giao','Đã giao'].includes(order.value.orderState);
 }
 
 function canUpdatePaymentState() {
@@ -407,8 +405,6 @@ function canUpdatePaymentState() {
 function getOrderStateClass(state) {
   switch (state) {
     case 'Chờ xác nhận': return 'status-badge status-pending';
-    case 'Đã xác nhận': return 'status-badge status-confirmed';
-    
     case 'Đang giao': return 'status-badge status-shipping';
     case 'Đã giao': return 'status-badge status-delivered';
     case 'Đã hủy': return 'status-badge status-cancelled';
@@ -472,12 +468,10 @@ onMounted(() => {
 }
 
 @media print {
-  /* Ẩn tất cả nội dung ban đầu */
   body * {
     visibility: hidden;
   }
 
-  /* Chỉ hiển thị vùng cần in */
   #printArea,
   #printArea * {
     visibility: visible;
@@ -485,32 +479,18 @@ onMounted(() => {
 
   #printArea {
     position: absolute;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
-    padding: 20px;
     background: white;
+    padding: 20px;
   }
 
-  /* Ẩn các phần không cần thiết */
-  button,
-  .btn,
-  .card-header,
-  .modal,
-  .mt-4,
-  .modal-backdrop {
+  .sidebar, .mt-auto, button, .nav, .modal {
     display: none !important;
   }
-
-  /* Tùy chỉnh bảng hoặc text nếu cần */
-  .table {
-    font-size: 14px;
-  }
-
-  .text-primary {
-    color: black !important;
-  }
 }
+
 
 .fixed{
   position: fixed;

@@ -7,7 +7,6 @@
                     <select v-model="filterStatus" class="form-select form-select-sm me-2 calenda" style="width: 150px;">
                         <option value="">Tất cả Trạng thái</option>
                         <option value="Chờ xác nhận">Chờ xác nhận</option>
-                        <option value="Đã xác nhận">Đã xác nhận</option>
                         <option value="Đang giao">Đang giao</option>
                         <option value="Đã giao">Đã giao</option>
                         <option value="Đã hủy">Đã hủy</option>
@@ -22,11 +21,6 @@
 
                     <input type="text" class="form-control form-control-sm me-2 calenda"
                         placeholder="Tìm kiếm đơn hàng..." style="width: 200px;" v-model="searchKeyword">
-
-                    <button class="btn btn-success btn-sm bg-success bor-success me-2" @click="exportOrders">
-                        <i class="fas fa-download me-1"></i>
-                        Xuất Excel
-                    </button>
                 </div>
             </div>
             <div class="card-body">
@@ -213,7 +207,6 @@ function formatDate(dateString) {
 function getStatusClass(status) {
     const statusClasses = {
         'Chờ xác nhận': 'status-pending',
-        'Đã xác nhận': 'status-confirmed',
         'Đang giao': 'status-shipping',
         'Đã giao': 'status-delivered',
         'Đã hủy': 'status-cancelled'
@@ -237,11 +230,6 @@ function viewOrderDetail(orderId) {
 }
 
 
-// Hàm xuất Excel
-function exportOrders() {
-    // Logic xuất Excel
-    window.open('/admin/order/export', '_blank');
-}
 
 // Fetch data khi component được mount
 onMounted(() => {
@@ -337,12 +325,6 @@ watch([searchKeyword, filterStatus, filterPaymentStatus], () => {
     background-color: #f59e0b2e;
     color: #f59e0b;
     border: 0.2px solid #f59e0b;
-}
-
-.status-badge.status-confirmed {
-    background-color: #3b82f62e;
-    color: #3b82f6;
-    border: 0.2px solid #3b82f6;
 }
 
 .status-badge.status-shipping {

@@ -57,5 +57,9 @@ public class OrderController {
         OrderPaymentStateResponse response = orderService.updatePaymentStateOrder(request);
         return ResponseEntity.ok(response);
     }
-
+    @PutMapping("/{orderId}/{status}")
+    public OrderResponse updateOrderStatus(@PathVariable("orderId") Integer orderId,
+                                           @PathVariable("status") String status) {
+        return orderService.updateOrderStatus(orderId, status);
+    }
 }

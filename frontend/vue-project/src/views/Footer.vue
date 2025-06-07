@@ -8,7 +8,7 @@
       </div>
       <nav class="footer-nav">
         <ul>
-          <li><a href="#dc">123 Đường thời trang, Quận 1, TP. Hồ CHí Minh</a></li>
+          <li><a href="#dc">54 Nguyễn Lương Bằng, Hoà Khánh Bắc, Liên Chiểu, Đà Nẵng , Việt Nam</a></li>
           <li><a href="#hotline">0909 123 456</a></li>
           <li><a href="#email">contact@nhnshoes.vn</a></li>
         </ul>
@@ -74,7 +74,7 @@ export default {
     gap: 30px; /* Khoảng cách giữa các mục menu */
     flex-wrap: wrap; /* Cho phép xuống dòng nếu màn hình nhỏ */
     justify-content: center;
-   
+
 }
 
 .footer-nav a {
@@ -118,7 +118,7 @@ export default {
 .copyright {
     font-size: 14px;
     color: #888; /* Màu chữ bản quyền hơi nhạt */
-   
+
 }
 
 /* Responsive adjustments */

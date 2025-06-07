@@ -182,7 +182,7 @@ const props = defineProps({
 });
 
 // Constants
-const defaultPage = 0;
+// const defaultPage = 0;
 const defaultSize = 9;
 
 // Reactive state
@@ -190,7 +190,7 @@ const searchKeyword = ref('');
 const products = ref([]);
 const currentPage = ref(0);
 const pageSize = ref(defaultSize);
-const totalPages = ref(1);
+// const totalPages = ref(1);
 const totalElements = ref(0);
 const route = useRoute();
 const router = useRouter();
@@ -213,11 +213,14 @@ const filteredProducts = computed(() => {
     let filtered = [...products.value];
 
     // Apply category filter first
-    const categoryIdToFilter = selectedCategoryId.value || props.categoryId || route.params.categoryId;
-    if (categoryIdToFilter) {
-        filtered = filtered.filter(product => {
-            return product.category && product.category.categoryId == categoryIdToFilter;
-        });
+    const categoryIdToFilter = selectedCategoryId.value !== undefined && selectedCategoryId.value !== null
+    ? selectedCategoryId.value
+    : (props.categoryId || route.params.categoryId);
+
+if (categoryIdToFilter) {
+    filtered = filtered.filter(product => {
+        return product.category && product.category.categoryId == categoryIdToFilter;
+    });
     }
 
     // Apply price filter
@@ -324,27 +327,34 @@ const extractBrandsAndCategories = () => {
     const categories = new Map();
 
     products.value.forEach(product => {
-        if (product.brand) {
+        // Thêm brand nếu có
+        if (product?.brand) {
             brands.add(product.brand);
         }
-        if (product.category) {
-            categories.set(product.category.categoryId, product.category);
+
+        // Thêm category nếu có
+        const category = product?.category;
+        if (category?.categoryId) {
+            categories.set(category.categoryId, category);
         }
     });
 
+    // Gán danh sách brand và category đã sắp xếp
     availableBrands.value = Array.from(brands).sort();
     availableCategories.value = Array.from(categories.values()).sort((a, b) =>
         a.categoryName.localeCompare(b.categoryName)
     );
 };
 
-// Set category name based on selected category
 const setCategoryName = () => {
-    const categoryIdToFind = selectedCategoryId.value || props.categoryId || route.params.categoryId;
+    const categoryIdToFind = selectedCategoryId.value;
+
     if (categoryIdToFind) {
         const category = availableCategories.value.find(cat => cat.categoryId == categoryIdToFind);
         categoryName.value = category ? category.categoryName : 'Danh mục';
-        selectedCategoryId.value = categoryIdToFind;
+    } else {
+        // Nếu chọn "Tất cả danh mục"
+        categoryName.value = 'Tất cả danh mục';
     }
 };
 
@@ -439,7 +449,9 @@ watch(() => route.params.categoryId, (newCategoryId) => {
 watch([priceFilter, brandFilter, selectedCategoryId], () => {
     currentPage.value = 0; // Reset to first page when filters change
 });
-
+watch(selectedCategoryId, () => {
+    setCategoryName();
+});
 // Navigation to product detail
 const goToProductDetail = (productId) => {
     router.push({

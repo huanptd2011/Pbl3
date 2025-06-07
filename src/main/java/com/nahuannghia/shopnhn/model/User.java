@@ -56,7 +56,8 @@ public class User {
 
     @Column(name = "fullName")
     private String fullName;
-
+    @Column(name ="gender")
+    private String gender;
     @Column(name = "userDob")
     private LocalDateTime dob;
 
@@ -146,6 +147,13 @@ public class User {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+        public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public LocalDateTime getLastLogin() {

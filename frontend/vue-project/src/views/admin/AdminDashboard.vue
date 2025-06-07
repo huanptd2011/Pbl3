@@ -208,7 +208,7 @@
                       <i class="fas fa-check-circle me-2 cl-main"></i>
                       <span class="">Số lượng</span>
                     </th>
-                    
+
                   </tr>
                 </thead>
                 <tbody>
@@ -261,6 +261,8 @@ async function fetchMetrics() {
   try {
     const response = await axios.get('http://localhost:8080/api/dashboard/summary');
     metrics.value = response.data;
+    const vvv = response.data;
+    console.log('Metrics fetched:', vvv);
   } catch (error) {
     console.error('Error fetching metrics:', error);
     // Xử lý lỗi (ví dụ: hiển thị thông báo)
@@ -380,7 +382,7 @@ async function fetchBestSellingProducts() {
   try {
     let apiUrl = 'http://localhost:8080/api/dashboard/top-selling-products';
     const params = new URLSearchParams();
-    if (productTimePeriod.value) { 
+    if (productTimePeriod.value) {
       params.append('period', productTimePeriod.value);
     }
 

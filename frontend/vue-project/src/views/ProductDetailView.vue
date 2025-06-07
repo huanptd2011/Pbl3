@@ -7,7 +7,8 @@
                     <div class="carousel-inner">
                         <div v-for="(img, index) in product.imageList" :key="index"
                             :class="['carousel-item', { active: index === 0 }]">
-                            <img :src="img?.imageUrl || 'fallback-image.png'" class="d-block w-100 rounded" alt="Product Image" />
+                            <img :src="img?.imageUrl || 'fallback-image.png'" class="d-block w-100 rounded"
+                                alt="Product Image" />
                         </div>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel"
@@ -29,7 +30,7 @@
                 <p class="mt-3">{{ product.productDescription }}</p>
 
                 <!-- Lựa chọn màu sắc -->
-                <div class="mb-3" v-if="availableColors.length > 0 ">
+                <div class="mb-3" v-if="availableColors.length > 0">
                     <label class="form-label-product fw-semibold">Chọn màu:</label>
                     <div class="d-flex gap-2 flex-wrap">
                         <button v-for="color in availableColors" :key="color" class="btn"
@@ -62,20 +63,18 @@
                 </div>
 
                 <div>
-            <button
-              class="btn submit-button mt-3"
-              :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
-              @click="handleAddToCart">
-              Thêm vào giỏ hàng
-            </button>
+                    <button class="btn submit-button mt-3"
+                        :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
+                        @click="handleAddToCart">
+                        Thêm vào giỏ hàng
+                    </button>
 
-             <button
-              class="btn btn-buynow  mt-3 ms-2"
-              :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
-              @click="handleBuyNow">
-              Mua ngay
-            </button>
-        </div>
+                    <button class="btn btn-buynow  mt-3 ms-2"
+                        :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
+                        @click="handleBuyNow">
+                        Mua ngay
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -112,12 +111,12 @@
                         <div class="col-md-8">
                             <div v-for="i in 5" :key="i" class="rating-progress mb-2">
                                 <div class="d-flex align-items-center">
-                                    <span class="me-2 text-nowrap">{{ 6-i }} ★</span>
+                                    <span class="me-2 text-nowrap">{{ 6 - i }} ★</span>
                                     <div class="progress flex-grow-1" style="height: 8px;">
                                         <div class="progress-bar bg-warning"
-                                            :style="{ width: getRatingPercentage(6-i) + '%' }"></div>
+                                            :style="{ width: getRatingPercentage(6 - i) + '%' }"></div>
                                     </div>
-                                    <span class="ms-2 text-muted small">{{ getRatingCount(6-i) }}</span>
+                                    <span class="ms-2 text-muted small">{{ getRatingCount(6 - i) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -132,11 +131,8 @@
                             <div class="mb-3">
                                 <label class="form-label d-block mb-2" style="color: black;">Đánh giá của bạn</label>
                                 <div class="rating-input">
-                                    <span v-for="star in 5" :key="star"
-                                        @click="setRating(star)"
-                                        @mouseover="hoverRating = star"
-                                        @mouseleave="hoverRating = 0"
-                                        :class="['star', {
+                                    <span v-for="star in 5" :key="star" @click="setRating(star)"
+                                        @mouseover="hoverRating = star" @mouseleave="hoverRating = 0" :class="['star', {
                                             'filled': star <= (hoverRating || newReview.rating),
                                             'selected': star <= newReview.rating
                                         }]">
@@ -146,8 +142,7 @@
                             </div>
                             <div class="mb-3">
                                 <textarea class="form-control" v-model="newReview.content"
-                                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..."
-                                    rows="4" required></textarea>
+                                    placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..." rows="4" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary px-4 py-2">
                                 <i class="bi bi-send-fill me-2"></i>Gửi đánh giá
@@ -157,7 +152,8 @@
                 </div>
                 <div v-else class="card-fix border-0 shadow-sm mb-4">
                     <div class="card-body p-4 text-center">
-                        <p class="mb-0">Vui lòng <a href="#" @click.prevent="redirectToLogin" class="text-primary">đăng nhập</a> để viết đánh giá.</p>
+                        <p class="mb-0">Vui lòng <a href="#" @click.prevent="redirectToLogin" class="text-primary">đăng
+                                nhập</a> để viết đánh giá.</p>
                     </div>
                 </div>
 
@@ -170,7 +166,8 @@
                         </div>
                     </div>
 
-                    <div v-for="review in visibleReviews" :key="review.reviewId" class="card-fix border-0 shadow-sm mb-3">
+                    <div v-for="review in visibleReviews" :key="review.reviewId"
+                        class="card-fix border-0 shadow-sm mb-3">
                         <div class="card-body p-4">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div>
@@ -178,13 +175,13 @@
                                         <div class="avatar-circle me-2">
                                             <img v-if="review.user.avatar"
                                                 :src="review.user.avatar || 'fallback-avatar.png'"
-                                                :alt="review.user.username"
-                                                @error="handleImageError"
+                                                :alt="review.user.username" @error="handleImageError"
                                                 class="avatar-image">
                                         </div>
                                         <div>
-                                            <h5 class="card-title mb-1 fw-semibold">{{review.user.username}}</h5>
-                                            <span class="text-muted small"><strong>{{ formatDate(review.reviewDate) }}</strong></span>
+                                            <h5 class="card-title mb-1 fw-semibold">{{ review.user.username }}</h5>
+                                            <span class="text-muted small"><strong>{{ formatDate(review.reviewDate)
+                                                    }}</strong></span>
                                         </div>
                                     </div>
                                     <div class="star-rating small mb-2">
@@ -213,13 +210,10 @@
     </div>
 
     <!-- Nút quay lại đầu trang -->
-    <button
-    v-show="showBackToTop"
-    @click="scrollToTop"
-    class="back-to-top-btn rounded-circle shadow"
-    aria-label="Quay lại đầu trang">
-    <i class="fa-solid fa-arrow-up"></i>
-  </button>
+    <button v-show="showBackToTop" @click="scrollToTop" class="back-to-top-btn rounded-circle shadow"
+        aria-label="Quay lại đầu trang">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
 </template>
 
 <script setup>
@@ -228,6 +222,8 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useCartStore } from '@/stores/cartStore'
 import { useUserStore } from '@/stores/user';
+import { useBuyNowStore } from '@/stores/buyNowStore';
+
 
 const route = useRoute()
 const router = useRouter(); // <-- Sử dụng useRouter
@@ -241,7 +237,7 @@ const selectedSize = ref(null)
 const quantityToAdd = ref(1); // <-- Thêm state cho số lượng muốn thêm (mặc định là 1)
 
 const cartStore = useCartStore(); // <-- Khởi tạo store
-
+const buyNowStore = useBuyNowStore(); // <-- Khởi tạo store cho mua ngay
 
 
 // function handleImageError(event) {
@@ -250,49 +246,54 @@ const cartStore = useCartStore(); // <-- Khởi tạo store
 
 // Gọi API lấy dữ liệu sản phẩm
 const fetchProduct = async () => {
-  try {
-    const response = await axios.get(`http://localhost:8080/api/products/${productId}`);
-    const data = response.data;
-    product.value = {
-      ...data,
-      sizeColorList: data.sizeColorList?.map(item => ({
-        color: item.colour || item.color, // Handle different property names
-        size: item.size,
-        quantity: item.quantity
-      })) || []
-    };
-  } catch (error) {
-    console.error('Lỗi khi tải sản phẩm:', error);
-  }
+    try {
+        const response = await axios.get(`http://localhost:8080/api/products/${productId}`);
+        const data = response.data;
+        product.value = {
+            ...data,
+            sizeColorList: data.sizeColorList?.map(item => ({
+                color: item.colour || item.color, // Handle different property names
+                size: item.size,
+                quantity: item.quantity,
+                status: item.isActive
+            })) || []
+        };
+    } catch (error) {
+        console.error('Lỗi khi tải sản phẩm:', error);
+    }
 };
 
 onMounted(fetchProduct)
 
 onMounted(async () => {
-  await fetchProduct();
-  console.log("Product data:", product.value);
-  console.log("Available colors:", availableColors.value);
-  console.log("Available sizes when color selected:", availableSizes.value);
+    await fetchProduct();
+    console.log("Product data:", product.value);
+    console.log("Available colors:", availableColors.value);
+    console.log("Available sizes when color selected:", availableSizes.value);
 });
 const availableColors = computed(() => {
-  if (!product.value?.sizeColorList) return [];
-  const colors = product.value.sizeColorList.map(item => item.color);
-  return [...new Set(colors)]; // Loại bỏ màu trùng lặp
+    if (!product.value?.sizeColorList) return [];
+    const colors = product.value.sizeColorList
+        .filter(item => item.status) // Chỉ lấy item isActive = true
+        .map(item => item.color);
+    return [...new Set(colors)];
 });
 
+
 const availableSizes = computed(() => {
-  if (!product.value?.sizeColorList || !selectedColor.value) return [];
-  return product.value.sizeColorList
-    .filter(item => item.color === selectedColor.value)
-    .map(item => item.size);
+    if (!product.value?.sizeColorList || !selectedColor.value) return [];
+    return product.value.sizeColorList
+        .filter(item => item.status && item.color === selectedColor.value)
+        .map(item => item.size);
 });
+
 
 const getQuantity = (color, size) => {
     const item = product.value?.sizeColorList.find(
-        sc => sc.color === color && sc.size === size
-    )
-    return item?.quantity ?? 0
-}
+        sc => sc.status && sc.color === color && sc.size === size
+    );
+    return item?.quantity ?? 0;
+};
 
 const formatPrice = (price) => {
     return price?.toLocaleString('vi-VN') ?? ''
@@ -310,59 +311,59 @@ const selectSize = (size) => {
 //Thêm vào giỏ hàng
 const handleAddToCart = () => {
 
-  if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
-    alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
-    return;
-  }
+    if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
+        alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
+        return;
+    }
 
-  //check đăng nhập
+    //check đăng nhập
     const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
-      const isAuthenticated = authStore.isLoggedIn;
+    const isAuthenticated = authStore.isLoggedIn;
 
-          if (!isAuthenticated) {
-              // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
-              alert('Vui lòng đăng nhập!');
-              router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
-              return;
-          }
+    if (!isAuthenticated) {
+        // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
+        alert('Vui lòng đăng nhập!');
+        router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
+        return;
+    }
 
-  const itemToAdd = {
-    productId: product.value.productId,
-    name: product.value.productName,
-    imageUrl: product.value.imageList && product.value.imageList.length > 0 ? product.value.imageList[0].imageUrl : 'placeholder.jpg',
-    price: product.value.price,
-    color: selectedColor.value,
-    size: selectedSize.value,
-    quantity: quantityToAdd.value,
-  };
-  alert('Đã thêm vào giỏ hàng');
-  cartStore.addItem(itemToAdd);
+    const itemToAdd = {
+        productId: product.value.productId,
+        name: product.value.productName,
+        imageUrl: product.value.imageList && product.value.imageList.length > 0 ? product.value.imageList[0].imageUrl : 'placeholder.jpg',
+        price: product.value.price,
+        color: selectedColor.value,
+        size: selectedSize.value,
+        quantity: quantityToAdd.value,
+    };
+    alert('Đã thêm vào giỏ hàng');
+    cartStore.addItem(itemToAdd);
 };
 
 // <-- THÊM HÀM NÀY để xử lý logic khi nhấn nút "Mua ngay"
 const handleBuyNow = () => {
     // Kiểm tra điều kiện tương tự như "Thêm vào giỏ hàng"
-     if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
+    if (!product.value || !selectedColor.value || !selectedSize.value || getQuantity(selectedColor.value, selectedSize.value) <= 0) {
         console.warn('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         return;
-     }
+    }
 
-  //check đăng nhập
-  const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
+    //check đăng nhập
+    const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
     const isAuthenticated = authStore.isLoggedIn;
 
-        if (!isAuthenticated) {
-            // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
-            alert('Vui lòng đăng nhập!');
-            router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
-            return;
-        }
+    if (!isAuthenticated) {
+        // Nếu người dùng chưa đăng nhập, chuyển hướng họ đến trang đăng nhập
+        alert('Vui lòng đăng nhập!');
+        router.push({ name: 'Login' }); // Chuyển hướng đến trang Login
+        return;
+    }
 
     // Tạo đối tượng chi tiết sản phẩm (biến thể) để thêm vào giỏ
     const itemToBuy = {
         productId: product.value.productId,
-        name: product.value.productName,
+        productName: product.value.productName,
         imageUrl: product.value.imageList && product.value.imageList.length > 0 ? product.value.imageList[0].imageUrl : 'placeholder.jpg',
         price: product.value.price,
         color: selectedColor.value,
@@ -370,15 +371,12 @@ const handleBuyNow = () => {
         quantity: quantityToAdd.value, // Mua ngay thường là 1, nhưng có thể dùng quantityToAdd nếu có input số lượng
         brand: product.value.brand
     };
+    
+    buyNowStore.setBuyNowItem(itemToBuy);
+    console.log('Buy Now item set:', buyNowStore.buyNowItem);
 
-    // <-- Gọi action 'addItem' của cart store để thêm sản phẩm vào giỏ hàng (hoặc cập nhật số lượng nếu đã có)
-    cartStore.addItem(itemToBuy);
+    router.push({ name: 'Checkout' });
 
-    // <-- Điều hướng người dùng đến trang thanh toán (/checkout)
-    router.push({ name: 'Checkout' }); // Sử dụng tên route 'Checkout' như đã định nghĩa trong router/index.js
-    // Hoặc bạn có thể dùng: router.push('/checkout');
-
-    // Lưu ý: Mua ngay thường không reset lựa chọn sau khi thêm vì người dùng đã chuyển trang
 };
 
 
@@ -488,15 +486,15 @@ const showBackToTop = ref(false)
 
 // Hàm xử lý scroll
 const handleScroll = () => {
-  showBackToTop.value = window.scrollY > 300
+    showBackToTop.value = window.scrollY > 300
 }
 
 // Hàm cuộn lên đầu trang
 const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    })
 }
 
 
@@ -517,7 +515,7 @@ onMounted(() => {
     border: #ddd 1px solid;
 }
 
-.form-control{
+.form-control {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #7f8b94;
@@ -527,7 +525,7 @@ onMounted(() => {
     padding-right: 2.5rem;
 }
 
-.form-control:focus{
+.form-control:focus {
     outline: none;
     border-color: #52626e;
     box-shadow: 0 0 0 2px rgba(105, 123, 138, 0.2);
@@ -535,14 +533,15 @@ onMounted(() => {
 
 /* Style cho nút submit */
 .btn-primary {
-  background-color: #393a41;
-  border-color: #5a5c66;
+    background-color: #393a41;
+    border-color: #5a5c66;
 }
 
 .btn-primary:hover {
-  background-color: #585968;
-  border-color: #626377;
+    background-color: #585968;
+    border-color: #626377;
 }
+
 /* Avatar styles */
 .avatar-circle {
     width: 50px;
@@ -550,7 +549,8 @@ onMounted(() => {
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    background-color: #f0f0f0; /* Màu nền fallback */
+    background-color: #f0f0f0;
+    /* Màu nền fallback */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -628,68 +628,76 @@ onMounted(() => {
 
 /* Style cho nút back to top */
 .back-to-top-btn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  background-color: #24262c;
-  color: white;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  cursor: pointer;
-  z-index: 99;
-  opacity: 0.8;
-  transition: all 0.3s ease;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: #24262c;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 99;
+    opacity: 0.8;
+    transition: all 0.3s ease;
 }
 
 .back-to-top-btn:hover {
-  opacity: 1;
-  background-color: #303544;
-  transform: translateY(-3px);
+    opacity: 1;
+    background-color: #303544;
+    transform: translateY(-3px);
 }
 
 /* Hiệu ứng khi xuất hiện */
 .back-to-top-btn {
-  animation: fadeIn 0.3s;
+    animation: fadeIn 0.3s;
 }
 
 .btn-buynow {
-  background: white;
-  color: #e63946;
-  border: 1px solid #e63946;
-  padding: 0.75rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
+    background: white;
+    color: #e63946;
+    border: 1px solid #e63946;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .btn-buynow:hover {
-  background: #e63946;
-  color: white;
-}   
-
-.submit-button{
-    background: white;
-  color: #2b2525;
-  border: 1px solid #1f1b1c;
+    background: #e63946;
+    color: white;
 }
 
-.text-muted{
+.submit-button {
+    background: white;
+    color: #2b2525;
+    border: 1px solid #1f1b1c;
+}
+
+.text-muted {
     color: #999999 !important;
 }
 
-.text{
+.text {
     color: #ff4444;
 }
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 0.8; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 0.8;
+        transform: translateY(0);
+    }
 
 }
 </style>

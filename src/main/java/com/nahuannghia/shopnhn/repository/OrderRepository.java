@@ -17,13 +17,16 @@ import com.nahuannghia.shopnhn.model.Order;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o WHERE o.user.userId = :userId ORDER BY o.orderDate DESC")
-            List<Order> getAllOrderByUserId(@Param("userId") Integer userId);
+    List<Order> getAllOrderByUserId(@Param("userId") Integer userId);
+    @Query("SELECT o FROM Order o ORDER BY o.orderDate DESC")
+    List<Order> findAllSortedByDateDesc();
+
 
     // Có thể thêm các phương thức tùy chỉnh nếu cần
     boolean existsByPaymentMethod_PaymentMethodId(Integer paymentMethodId);
 
-    @Query("SELECT SUM(o.totalPrice) FROM Order o")
-    BigDecimal sumTotalRevenue();
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderState LIKE %:state%")
+    BigDecimal sumTotalRevenue(@Param("state") String state);
 
     @Query("SELECT COUNT(o) FROM Order o WHERE o.orderState = :state")
     long countByOrderState(@Param("state") String state);
@@ -46,19 +49,21 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
             "GROUP BY p.id, p.productName "
             + "ORDER BY SUM(od.quantity) DESC")
     List<Object[]> findTopSellingProducts(LocalDateTime startDate, LocalDateTime endDate);
+
     @Query("SELECT o FROM Order o ORDER BY o.orderDate DESC")
     List<Order> findTopByOrderByOrderDateDesc();
 
-@Query("SELECT new com.nahuannghia.shopnhn.Response.OrderResponse(" +
-       "o.orderId, o.user.id, " +
-       "new com.nahuannghia.shopnhn.Response.PaymentMethodResponse(o.paymentMethod.paymentMethodId, o.paymentMethod.paymentMethodName), " +
-       "o.orderDate, o.totalPrice, o.orderState, o.note) " +
-       "FROM Order o WHERE o.user.id = :userId")
-List<OrderResponse> findOrdersByUserId(@Param("userId") Integer userId);
-@Query("SELECT new com.nahuannghia.shopnhn.Response.OrderResponse(" +
-       "o.orderId, o.user.id, " +
-       "new com.nahuannghia.shopnhn.Response.PaymentMethodResponse(o.paymentMethod.paymentMethodId, o.paymentMethod.paymentMethodName), " +
-       "o.orderDate, o.totalPrice, o.orderState, o.note) " +
-       "FROM Order o WHERE o.user.id = :userId AND LOWER(o.orderState) = LOWER(:orderState)")
-List<OrderResponse> findOrdersByUserIdAndOrderState(@Param("userId") Integer userId, @Param("orderState") String orderState);
+    @Query("SELECT new com.nahuannghia.shopnhn.Response.OrderResponse("
+            + "o.orderId, o.user.id, "
+            + "new com.nahuannghia.shopnhn.Response.PaymentMethodResponse(o.paymentMethod.paymentMethodId, o.paymentMethod.paymentMethodName), "
+            + "o.orderDate, o.totalPrice, o.orderState, o.note) "
+            + "FROM Order o WHERE o.user.id = :userId")
+    List<OrderResponse> findOrdersByUserId(@Param("userId") Integer userId);
+
+    @Query("SELECT new com.nahuannghia.shopnhn.Response.OrderResponse("
+            + "o.orderId, o.user.id, "
+            + "new com.nahuannghia.shopnhn.Response.PaymentMethodResponse(o.paymentMethod.paymentMethodId, o.paymentMethod.paymentMethodName), "
+            + "o.orderDate, o.totalPrice, o.orderState, o.note) "
+            + "FROM Order o WHERE o.user.id = :userId AND LOWER(o.orderState) = LOWER(:orderState)")
+    List<OrderResponse> findOrdersByUserIdAndOrderState(@Param("userId") Integer userId, @Param("orderState") String orderState);
 }

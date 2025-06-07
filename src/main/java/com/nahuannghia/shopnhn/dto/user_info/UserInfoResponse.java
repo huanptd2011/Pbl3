@@ -22,7 +22,8 @@ public class UserInfoResponse {
     private LocalDateTime createdDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedDate;
-    public UserInfoResponse(Integer userId,String username, String email, String phone, String address, String role, String fullName, LocalDateTime dob,Boolean status) {
+    public UserInfoResponse(Integer userId,String username, String email, String phone, String address, String role, String fullName,String gender, LocalDateTime dob,Boolean status,
+                            String avatarUrl, LocalDateTime createdDate) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -30,8 +31,12 @@ public class UserInfoResponse {
         this.address = address;
         this.role = role;
         this.fullName = fullName;
+        this.gender = gender;
         this.dob = dob;
         this.status = status;
+        this.avatarUrl = avatarUrl;
+        this.createdDate = createdDate;
+        this.updatedDate = LocalDateTime.now();
     }
     public UserInfoResponse() {
     }

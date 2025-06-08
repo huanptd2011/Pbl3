@@ -92,7 +92,7 @@
 
   const cartStore = useCartStore();
   const userStore = useUserStore();
- 
+
 
   onMounted(async () => {
     await cartStore.loadUserCart(userStore.user.userId);
@@ -136,12 +136,17 @@
   // update quantity item
   const handleUpdateQuantity = (item, event) => {
       const newQuantity = parseInt(event.target.value, 10);
-
+      const maxQuantity = item.quantity
       if (isNaN(newQuantity) || newQuantity < 0) {
           alert('Số lượng không hợp lệ. Vui lòng nhập số nguyên dương.');
-          event.target.value = item.quantity;
+          event.target.value = 1;
           return;
       }
+    if (newQuantity > maxQuantity) {
+      alert(`Số lượng không được vượt quá tồn kho (${maxQuantity}).`);
+      event.target.value = item.quantity;
+      return;
+    }
 
       cartStore.updateItemQuantity(item.cartItemId, newQuantity);
   };
@@ -203,7 +208,7 @@
 
 .product-card:hover{
     transform: none;
-    
+
 }
 
 

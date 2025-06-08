@@ -28,7 +28,7 @@
                 <p class="text-muted-product">Thương hiệu: {{ product.brand }}</p>
                 <h4 class="text-danger fw-bold">{{ formatPrice(product.price) }}₫</h4>
                 <p class="mt-3">{{ product.productDescription }}</p>
-      
+
                 <div class="d-flex align-items-center mb-3">
 
                 <!-- Lựa chọn màu sắc -->
@@ -585,7 +585,7 @@ onMounted(() => {
 
 .form-control {
     width: 100%;
-   
+
     border: 1px solid #7f8b94;
     border-radius: 6px;
     font-size: 1rem;

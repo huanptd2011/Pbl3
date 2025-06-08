@@ -88,14 +88,14 @@ public class DashboardService {
         switch (period.toLowerCase()) {
             case "daily":
                 formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                orderRepository.findOrdersBetweenDates(start, end).forEach(order -> {
+                orderRepository.findOrdersdeliveredBetweenDates("Đã giao",start, end).forEach(order -> {
                     String dateKey = order.getOrderDate().format(formatter);
                     aggregatedData.merge(dateKey, order.getTotalPrice(), BigDecimal::add);
                 });
                 break;
                 
             case "weekly":
-                orderRepository.findOrdersBetweenDates(start, end).forEach(order -> {
+                orderRepository.findOrdersdeliveredBetweenDates("Đã giao",start, end).forEach(order -> {
                     LocalDate orderDate = order.getOrderDate().toLocalDate();
                     String weekKey = orderDate.getYear() + "-W" + orderDate.get(java.time.temporal.WeekFields.ISO.weekOfWeekBasedYear());
                     aggregatedData.merge(weekKey, order.getTotalPrice(), BigDecimal::add);
@@ -104,7 +104,7 @@ public class DashboardService {
                 
             case "monthly":
                 formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-                orderRepository.findOrdersBetweenDates(start, end).forEach(order -> {
+                orderRepository.findOrdersdeliveredBetweenDates("Đã giao",start, end).forEach(order -> {
                     String monthKey = order.getOrderDate().format(formatter);
                     aggregatedData.merge(monthKey, order.getTotalPrice(), BigDecimal::add);
                 });
@@ -112,7 +112,7 @@ public class DashboardService {
                 
             case "yearly":
                 formatter = DateTimeFormatter.ofPattern("yyyy");
-                orderRepository.findOrdersBetweenDates(start, end).forEach(order -> {
+                orderRepository.findOrdersdeliveredBetweenDates("Đã giao",start, end).forEach(order -> {
                     String yearKey = order.getOrderDate().format(formatter);
                     aggregatedData.merge(yearKey, order.getTotalPrice(), BigDecimal::add);
                 });
@@ -121,7 +121,7 @@ public class DashboardService {
             default:
                 // Default to daily if invalid period is provided
                 formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                orderRepository.findOrdersBetweenDates(start, end).forEach(order -> {
+                orderRepository.findOrdersdeliveredBetweenDates("Đã giao",start, end).forEach(order -> {
                     String dateKey = order.getOrderDate().format(formatter);
                     aggregatedData.merge(dateKey, order.getTotalPrice(), BigDecimal::add);
                 });

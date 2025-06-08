@@ -264,8 +264,8 @@ const availableOrderStates = computed(() => {
       return ["Đang giao", "Đã hủy"];
     case "Đang giao":
       return ["Đã giao","Đã hủy"];
-    case "Đã giao":
-      return ["Đã hủy"];
+    // case "Đã giao":
+    //   return ["Đã hủy"];
     default:
       return [];
   }
@@ -389,7 +389,7 @@ function calculateSubtotal() {
 }
 
 function canUpdateOrderState() {
-  return ['Chờ xác nhận','Đang giao','Đã giao'].includes(order.value.orderState);
+  return ['Chờ xác nhận','Đang giao'].includes(order.value.orderState);
 }
 
 function canUpdatePaymentState() {

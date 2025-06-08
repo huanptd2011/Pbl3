@@ -4,9 +4,9 @@
 
       <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-              <li class="breadcrumb-item"><router-link to="/">Trang chủ</router-link></li>
+              <li class="breadcrumb-item"><router-link to="/" style="color: #0A1330">Trang chủ</router-link></li>
               <li class="breadcrumb-item" v-if="categoryName">
-                  <router-link to="/products">Sản phẩm</router-link>
+                  <router-link to="/products" style="color: #0A1330">Sản phẩm</router-link>
               </li>
               <li class="breadcrumb-item active" aria-current="page">
                   {{ categoryName || 'Sản phẩm' }}

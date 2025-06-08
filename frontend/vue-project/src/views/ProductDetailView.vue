@@ -28,9 +28,11 @@
                 <p class="text-muted-product">Thương hiệu: {{ product.brand }}</p>
                 <h4 class="text-danger fw-bold">{{ formatPrice(product.price) }}₫</h4>
                 <p class="mt-3">{{ product.productDescription }}</p>
+      
+                <div class="d-flex align-items-center mb-3">
 
                 <!-- Lựa chọn màu sắc -->
-                <div class="mb-3" v-if="availableColors.length > 0">
+                <div class=" me-5" v-if="availableColors.length > 0">
                     <label class="form-label-product fw-semibold">Chọn màu:</label>
                     <div class="d-flex gap-2 flex-wrap">
                         <button v-for="color in availableColors" :key="color" class="btn"
@@ -42,7 +44,7 @@
                 </div>
 
                 <!-- Lựa chọn size -->
-                <div class="mb-3" v-if="selectedColor && availableSizes.length > 0">
+                <div class="" v-if="selectedColor && availableSizes.length > 0">
                     <label class="form-label-product fw-semibold">Chọn size:</label>
                     <div class="d-flex gap-2 flex-wrap">
                         <button v-for="size in availableSizes" :key="size" class="btn"
@@ -52,14 +54,32 @@
                         </button>
                     </div>
                 </div>
-
+                </div>
 
                 <!-- Tồn kho -->
                 <div class="mb-3" v-if="selectedColor && selectedSize">
                     <p>
-                        <span class="fw-semibold">Số lượng còn lại:</span>
+                        <span class="text">Số lượng còn lại:</span>
                         {{ getQuantity(selectedColor, selectedSize) }}
                     </p>
+                </div>
+
+
+                <div class="mb-3" v-if="selectedColor && selectedSize && getQuantity(selectedColor, selectedSize) > 0">
+                    <label for="quantityInput" class="form-label-product fw-semibold">Số lượng:</label>
+                    <div class="input-group quantity-selector">
+                        <button class="btn btn-outline-secondary" type="button" @click="decrementQuantity"
+                            :disabled="quantityToAdd <= 1">
+                              -
+                        </button>
+                        <input type="number" id="quantityInput" class="form-control text-center"
+                            v-model.number="quantityToAdd" min="1" :max="getQuantity(selectedColor, selectedSize)"
+                            @change="validateQuantity" />
+                        <button class="btn btn-outline-secondary" type="button" @click="incrementQuantity"
+                            :disabled="quantityToAdd >= getQuantity(selectedColor, selectedSize)">
+                        +
+                        </button>
+                    </div>
                 </div>
 
                 <div>
@@ -181,7 +201,7 @@
                                         <div>
                                             <h5 class="card-title mb-1 fw-semibold">{{ review.user.username }}</h5>
                                             <span class="text-muted small"><strong>{{ formatDate(review.reviewDate)
-                                                    }}</strong></span>
+                                            }}</strong></span>
                                         </div>
                                     </div>
                                     <div class="star-rating small mb-2">
@@ -235,7 +255,7 @@ const product = ref({ sizeColorList: [] });
 const selectedColor = ref(null)
 const selectedSize = ref(null)
 const quantityToAdd = ref(1); // <-- Thêm state cho số lượng muốn thêm (mặc định là 1)
-
+const errorMessage = ref('')
 const cartStore = useCartStore(); // <-- Khởi tạo store
 const buyNowStore = useBuyNowStore(); // <-- Khởi tạo store cho mua ngay
 
@@ -301,12 +321,52 @@ const formatPrice = (price) => {
 
 const selectColor = (color) => {
     selectedColor.value = color
-    selectedSize.value = null // reset size khi đổi màu
+    selectedSize.value = null
+    quantityToAdd.value = 1
+  errorMessage.value = ''
 }
 
 const selectSize = (size) => {
     selectedSize.value = size
+    quantityToAdd.value = 1
+  errorMessage.value = ''
 }
+
+
+// Hàm tăng số lượng
+const incrementQuantity = () => {
+    const maxQuantity = getQuantity(selectedColor.value, selectedSize.value);
+    if (quantityToAdd.value < maxQuantity) {
+        quantityToAdd.value++;
+    }
+  validateQuantity()
+};
+
+// Hàm giảm số lượng
+const decrementQuantity = () => {
+    if (quantityToAdd.value > 1) {
+        quantityToAdd.value--;
+    }
+  validateQuantity()
+};
+
+// Hàm kiểm tra số lượng nhập vào
+const validateQuantity = () => {
+  const maxQuantity = getQuantity(selectedColor.value, selectedSize.value);
+  errorMessage.value = ''; // Reset thông báo lỗi
+
+  // Đảm bảo quantityToAdd là số nguyên dương
+  if (quantityToAdd.value === null || isNaN(quantityToAdd.value) || quantityToAdd.value < 1) {
+    quantityToAdd.value = 1; // Đặt về 1 nếu không hợp lệ
+    errorMessage.value = 'Số lượng phải lớn hơn hoặc bằng 1.';
+    return;
+  }
+
+  // Kiểm tra nếu số lượng lớn hơn tồn kho
+  if (quantityToAdd.value > maxQuantity) {
+    errorMessage.value = `Số lượng không được vượt quá tồn kho (${maxQuantity}).`;
+  }
+};
 
 //Thêm vào giỏ hàng
 const handleAddToCart = () => {
@@ -315,6 +375,10 @@ const handleAddToCart = () => {
         alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         return;
     }
+  if (errorMessage.value) {
+    alert(errorMessage.value);
+    return;
+  }
 
     //check đăng nhập
     const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
@@ -348,6 +412,10 @@ const handleBuyNow = () => {
         alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         return;
     }
+  if (errorMessage.value) {
+    alert(errorMessage.value); // Hoặc hiển thị lỗi một cách khác
+    return;
+  }
 
     //check đăng nhập
     const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
@@ -371,7 +439,7 @@ const handleBuyNow = () => {
         quantity: quantityToAdd.value, // Mua ngay thường là 1, nhưng có thể dùng quantityToAdd nếu có input số lượng
         brand: product.value.brand
     };
-    
+
     buyNowStore.setBuyNowItem(itemToBuy);
     console.log('Buy Now item set:', buyNowStore.buyNowItem);
 
@@ -517,12 +585,12 @@ onMounted(() => {
 
 .form-control {
     width: 100%;
-    padding: 0.75rem;
+   
     border: 1px solid #7f8b94;
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.2s;
-    padding-right: 2.5rem;
+
 }
 
 .form-control:focus {
@@ -699,5 +767,23 @@ onMounted(() => {
         transform: translateY(0);
     }
 
+}
+
+.quantity-selector {
+    width: 150px;
+
+}
+
+.quantity-selector .form-control {
+    flex: 1;
+    text-align: center;
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+.quantity-selector .form-control::-webkit-outer-spin-button,
+.quantity-selector .form-control::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 </style>

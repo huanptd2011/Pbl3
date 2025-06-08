@@ -47,7 +47,7 @@ public class DashboardService {
         BigDecimal totalRevenue = orderRepository.sumTotalRevenue("Đã giao");
         
         // Get total orders
-        long totalOrders = orderRepository.count();
+        long totalOrders = orderRepository.countByOrderState("Đã giao");
         
         // Get total users
         long totalUsers = userRepository.count();

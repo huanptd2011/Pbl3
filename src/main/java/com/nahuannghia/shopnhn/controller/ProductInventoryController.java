@@ -1,5 +1,7 @@
 package com.nahuannghia.shopnhn.controller;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,12 @@ public class ProductInventoryController {
                                                     @PathVariable String color,
                                                     @PathVariable String size,
                                                     @RequestBody ProductInventoryRequest request) {
-        return productInventoryService.updateProductInventory(productId, color, size, request);
+
+    String decodedColor = URLDecoder.decode(color, StandardCharsets.UTF_8);
+    String decodedSize = URLDecoder.decode(size, StandardCharsets.UTF_8);
+    System.out.println("Decoded Color: " + decodedColor);
+    System.out.println("Decoded Size: " + decodedSize);
+    return productInventoryService.updateProductInventory(productId,decodedColor, decodedSize, request);
     }
 
     // DELETE: Xóa tồn kho theo productId + color + size

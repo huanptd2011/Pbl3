@@ -317,6 +317,7 @@ async function fetchProductDetails() {
   }
 }
 
+
 // Cập nhật trạng thái đơn hàng
 async function updateOrderStatus() {
   if (isUpdatingOrder.value) return;
@@ -332,7 +333,24 @@ async function updateOrderStatus() {
       orderId: order.value.orderId,
       orderState: updateOrderForm.value.orderState
     };
+
+    // Cập nhật trạng thái đơn hàng
     await axios.put(`http://localhost:8080/api/orders/status`, updateData);
+
+   if (updateOrderForm.value.orderState === "Đã hủy") {
+  for (const item of order.value.orderDetails) {
+    const inventoryUpdate = {
+      quantity: item.quantity // hoặc item.quantity + item.returnedQuantity nếu có logic hoàn trả
+    };
+    const encodedColor = encodeURIComponent(item.color);
+const encodedSize = encodeURIComponent(item.size);
+
+    const url = `http://localhost:8080/api/product-inventory/update/${item.productId}/${encodedColor}/${encodedSize}`;
+    await axios.put(url, inventoryUpdate);
+    // await axios.put(`http://localhost:8080/api/inventory/update/${item.productId}/${encodedColor}/${encodedSize}`, inventoryUpdate);
+  }
+}
+
     order.value.orderState = updateOrderForm.value.orderState;
     showUpdateOrderModal.value = false;
     alert('Cập nhật trạng thái đơn hàng thành công!');
@@ -343,6 +361,7 @@ async function updateOrderStatus() {
     isUpdatingOrder.value = false;
   }
 }
+
 
 // Cập nhật trạng thái thanh toán
 async function updatePaymentStatus() {

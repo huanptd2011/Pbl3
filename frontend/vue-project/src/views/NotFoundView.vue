@@ -1,15 +1,30 @@
 <template>
   <div class="not-found-container">
     <div class="error-content">
-      <!-- Error Icon -->
+      <!-- Icon lỗi -->
       <div class="error-icon">
-        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" stroke="#f59e0b" stroke-width="2" />
-          <text x="12" y="16" text-anchor="middle" font-size="10" fill="#f59e0b" font-weight="bold">404</text>
+        <svg
+          width="120"
+          height="120"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2" />
+          <text
+            x="12"
+            y="16"
+            text-anchor="middle"
+            font-size="10"
+            fill="#ef4444"
+            font-weight="bold"
+          >
+            404
+          </text>
         </svg>
       </div>
 
-      <!-- Error Message -->
+      <!-- Thông báo lỗi -->
       <div class="error-message">
         <h1 class="error-title">404 - Không tìm thấy trang</h1>
         <p class="error-description">
@@ -17,33 +32,49 @@
         </p>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Các nút hành động -->
       <div class="error-actions">
         <button @click="goHome" class="btn btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/>
-            <polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2" />
           </svg>
           Về trang chủ
         </button>
 
         <button @click="goBack" class="btn btn-secondary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="m12 19-7-7 7-7" stroke="currentColor" stroke-width="2"/>
-            <path d="M19 12H5" stroke="currentColor" stroke-width="2"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="m12 19-7-7 7-7" stroke="currentColor" stroke-width="2" />
+            <path d="M19 12H5" stroke="currentColor" stroke-width="2" />
           </svg>
           Quay lại
         </button>
       </div>
 
-      <!-- Additional Info -->
+      <!-- Thông tin thêm -->
       <div class="error-info">
         <p class="error-code">Mã lỗi: NOT_FOUND</p>
         <p class="error-timestamp">{{ currentTime }}</p>
       </div>
     </div>
 
-    <!-- Decorative Background -->
+    <!-- Trang trí nền -->
     <div class="background-decoration">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>
@@ -99,107 +130,151 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .not-found-container {
   position: relative;
   min-height: 100vh;
-  padding: 40px 20px;
-  background: #fff1f2; /* nền đỏ nhạt */
   display: flex;
-  align-items: center;
   justify-content: center;
-  text-align: center;
+  align-items: center;
+  background: #f9fafb;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .error-content {
-  max-width: 600px;
-  margin: auto;
-  z-index: 1;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 480px;
+  text-align: center;
+  z-index: 10;
 }
 
 .error-icon {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .error-title {
+  margin: 0 0 12px;
   font-size: 28px;
-  font-weight: bold;
-  color: #dc2626; /* đỏ đậm */
-  margin-bottom: 10px;
+  color: #ef4444;
+  font-weight: 700;
 }
 
 .error-description {
-  color: #7f1d1d; /* đỏ tối hơn */
-  margin-bottom: 30px;
+  margin-bottom: 32px;
+  color: #6b7280;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
-.error-actions .btn {
-  margin: 0 10px;
-  padding: 10px 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  display: inline-flex;
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
   cursor: pointer;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: background-color 0.3s, color 0.3s;
+  user-select: none;
+  background: transparent;
+  color: #374151;
+  font-size: 14px;
+}
+
+.btn svg {
+  stroke-width: 2;
 }
 
 .btn-primary {
-  background-color: #b91c1c; /* đỏ đậm */
+  background-color: #ef4444;
   color: white;
-  border: none;
+  border-color: #ef4444;
+}
+
+.btn-primary:hover {
+  background-color: #dc2626;
+  border-color: #dc2626;
 }
 
 .btn-secondary {
-  background-color: #f87171; /* đỏ nhạt */
-  color: white;
-  border: none;
+  background-color: #e5e7eb;
+  color: #374151;
+  border-color: #d1d5db;
 }
 
-.btn:hover {
-  opacity: 0.85;
+.btn-secondary:hover {
+  background-color: #d1d5db;
 }
 
 .error-info {
-  margin-top: 30px;
-  font-size: 14px;
-  color: #991b1b; /* đỏ sẫm */
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 .background-decoration {
   position: absolute;
-  inset: 0;
-  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  z-index: 1;
 }
 
 .circle {
   position: absolute;
   border-radius: 50%;
   opacity: 0.15;
+  background-color: #ef4444;
+  animation: pulse 4s infinite ease-in-out;
 }
 
 .circle-1 {
-  width: 200px;
-  height: 200px;
-  background: #f87171; /* đỏ nhạt */
-  top: -50px;
-  left: -50px;
+  width: 180px;
+  height: 180px;
+  top: 10%;
+  left: 15%;
+  animation-delay: 0s;
 }
 
 .circle-2 {
-  width: 150px;
-  height: 150px;
-  background: #ef4444; /* đỏ trung bình */
-  bottom: 80px;
-  right: -40px;
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  left: 60%;
+  animation-delay: 1.5s;
 }
 
 .circle-3 {
-  width: 100px;
-  height: 100px;
-  background: #fee2e2; /* đỏ rất nhạt */
-  bottom: 0;
-  left: 20%;
+  width: 150px;
+  height: 150px;
+  top: 75%;
+  left: 30%;
+  animation-delay: 3s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
 }
 </style>

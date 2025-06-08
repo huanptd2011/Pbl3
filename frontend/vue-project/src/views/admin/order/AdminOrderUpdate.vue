@@ -316,7 +316,7 @@ async function fetchProductDetails() {
     }
   }
 }
-
+const cancel = 'cancel'
 
 // Cập nhật trạng thái đơn hàng
 async function updateOrderStatus() {
@@ -328,8 +328,18 @@ async function updateOrderStatus() {
   }
 
   isUpdatingOrder.value = true;
-  try {
-    const updateData = {
+  try { 
+   if (updateOrderForm.value.orderState === "Đã hủy") {
+    console.log("Đã hủy đơn hàng");
+    const response = await axios.put(`http://localhost:8080/api/orders/${order.value.orderId}/${cancel}`)
+    console.log("Response:", response.data);
+    order.value.orderState = updateOrderForm.value.orderState;
+    showUpdateOrderModal.value = false;
+    alert('Cập nhật trạng thái đơn hàng thành công!');
+    return;
+   }
+
+   const updateData = {
       orderId: order.value.orderId,
       orderState: updateOrderForm.value.orderState
     };
@@ -337,19 +347,6 @@ async function updateOrderStatus() {
     // Cập nhật trạng thái đơn hàng
     await axios.put(`http://localhost:8080/api/orders/status`, updateData);
 
-   if (updateOrderForm.value.orderState === "Đã hủy") {
-  for (const item of order.value.orderDetails) {
-    const inventoryUpdate = {
-      quantity: item.quantity // hoặc item.quantity + item.returnedQuantity nếu có logic hoàn trả
-    };
-    const encodedColor = encodeURIComponent(item.color);
-const encodedSize = encodeURIComponent(item.size);
-
-    const url = `http://localhost:8080/api/product-inventory/update/${item.productId}/${encodedColor}/${encodedSize}`;
-    await axios.put(url, inventoryUpdate);
-    // await axios.put(`http://localhost:8080/api/inventory/update/${item.productId}/${encodedColor}/${encodedSize}`, inventoryUpdate);
-  }
-}
 
     order.value.orderState = updateOrderForm.value.orderState;
     showUpdateOrderModal.value = false;

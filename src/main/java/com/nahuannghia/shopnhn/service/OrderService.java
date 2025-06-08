@@ -127,6 +127,16 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         if(Objects.equals(newStatus, "cancel")){
             order.setOrderState("Đã hủy");
+            List<OrderDetailResponse> list = orderDetailService.getOrderDetailByOrderId(orderId);
+            for(OrderDetailResponse response : list){
+                Product product = productRepository.findById(response.getProductId()).orElseThrow(
+                        () -> new RuntimeException("Product not found"));
+                var productInventory = productInventoryRepository.findByProductInventoryId_ProductIdAndProductInventoryId_ColorAndProductInventoryId_Size(product.getProductId(), response.getColor(), response.getSize());
+                productInventoryService.updateProductInventory(product.getProductId(), response.getColor(), response.getSize(),
+                        new ProductInventoryRequest(product.getProductId(),
+                                response.getColor(),
+                                response.getSize(), productInventory.get().getQuantity() + response.getQuantity()));
+            }
         }
         if(Objects.equals(newStatus, "complete")){
             order.setOrderState("Đã giao");

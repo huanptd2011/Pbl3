@@ -80,17 +80,20 @@
                         +
                         </button>
                     </div>
+                  <p v-if="!isQuantityValid" class="text-danger mt-2">
+                    Số lượng bạn nhập vượt quá số lượng còn lại. Vui lòng nhập lại.
+                  </p>
                 </div>
 
                 <div>
                     <button class="btn submit-button mt-3"
-                        :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
+                        :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0 ||!isQuantityValid"
                         @click="handleAddToCart">
                         Thêm vào giỏ hàng
                     </button>
 
                     <button class="btn btn-buynow  mt-3 ms-2"
-                        :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0"
+                        :disabled="!selectedColor || !selectedSize || getQuantity(selectedColor, selectedSize) <= 0 || !isQuantityValid"
                         @click="handleBuyNow">
                         Mua ngay
                     </button>
@@ -256,6 +259,7 @@ const selectedColor = ref(null)
 const selectedSize = ref(null)
 const quantityToAdd = ref(1); // <-- Thêm state cho số lượng muốn thêm (mặc định là 1)
 const errorMessage = ref('')
+const isQuantityValid = ref(true)
 const cartStore = useCartStore(); // <-- Khởi tạo store
 const buyNowStore = useBuyNowStore(); // <-- Khởi tạo store cho mua ngay
 
@@ -353,19 +357,21 @@ const decrementQuantity = () => {
 // Hàm kiểm tra số lượng nhập vào
 const validateQuantity = () => {
   const maxQuantity = getQuantity(selectedColor.value, selectedSize.value);
-  errorMessage.value = ''; // Reset thông báo lỗi
+
 
   // Đảm bảo quantityToAdd là số nguyên dương
   if (quantityToAdd.value === null || isNaN(quantityToAdd.value) || quantityToAdd.value < 1) {
     quantityToAdd.value = 1; // Đặt về 1 nếu không hợp lệ
-    errorMessage.value = 'Số lượng phải lớn hơn hoặc bằng 1.';
+    isQuantityValid.value = false
     return;
   }
 
   // Kiểm tra nếu số lượng lớn hơn tồn kho
   if (quantityToAdd.value > maxQuantity) {
-    errorMessage.value = `Số lượng không được vượt quá tồn kho (${maxQuantity}).`;
+    isQuantityValid.value = false
+    return;
   }
+  isQuantityValid.value = true
 };
 
 //Thêm vào giỏ hàng
@@ -375,10 +381,10 @@ const handleAddToCart = () => {
         alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         return;
     }
-  if (errorMessage.value) {
-    alert(errorMessage.value);
-    return;
-  }
+  // if (errorMessage.value) {
+  //   alert(errorMessage.value);
+  //   return;
+  // }
 
     //check đăng nhập
     const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store
@@ -412,10 +418,10 @@ const handleBuyNow = () => {
         alert('Vui lòng chọn màu, size và đảm bảo còn hàng.');
         return;
     }
-  if (errorMessage.value) {
-    alert(errorMessage.value); // Hoặc hiển thị lỗi một cách khác
-    return;
-  }
+  // if (errorMessage.value) {
+  //   alert(errorMessage.value); // Hoặc hiển thị lỗi một cách khác
+  //   return;
+  // }
 
     //check đăng nhập
     const authStore = useUserStore();  // Lấy trạng thái đăng nhập từ store

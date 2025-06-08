@@ -92,9 +92,11 @@
 
   const cartStore = useCartStore();
   const userStore = useUserStore();
+ 
 
   onMounted(async () => {
     await cartStore.loadUserCart(userStore.user.userId);
+    console.log('Cart items after load:', cartStore.items);
   });
 
   const formatPrice = (price) => {
@@ -114,13 +116,15 @@
   });
 
   const handleItemSelection = (item) => {
+    cartStore.setItemSelected(item.productId, item.color, item.size, item.isSelected)
       console.log(`Item ${item.name} (${item.color}, ${item.size}) đã được ${item.isSelected ? 'chọn' : 'bỏ chọn'}`);
   };
 
   const handleSelectAll = (event) => {
-      console.log('Checkbox "Chọn tất cả" thay đổi:', event.target.checked);
-  };
-
+  const isChecked = event.target.checked;
+  cartStore.setAllItemsSelected(isChecked);
+  console.log('Hộp kiểm "Chọn tất cả" thay đổi:', isChecked);
+};
 
   // Xóa cart item
   const handleRemoveItem = (item) => {

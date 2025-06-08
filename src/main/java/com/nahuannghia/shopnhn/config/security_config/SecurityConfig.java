@@ -46,7 +46,8 @@ public class SecurityConfig {
                             "/api/product-categories/**",
                             "/api/product-inventory/**",
                             "/api/product-images/**",
-                            "/api/dashboard/**").permitAll()
+                            "/api/dashboard/**",
+                            "api/email/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                 .anyRequest().permitAll()
             )

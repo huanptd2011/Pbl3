@@ -14,6 +14,7 @@ const routes = [
   { path: '/contact', name: 'Contact', component: () => import('@/views/ContactView.vue') },
   { path: '/login', name: 'Login', component: () => import('@/views/LoginView.vue') },
   { path: '/register', name: 'Register', component: () => import('@/views/RegisterView.vue') },
+  { path: '/forgot-password', name: 'ForgotPassword', component: () => import('@/views/ForgotPasswordView.vue') },
 
   // --- AUTHENTICATED USER ROUTES ---
   {
@@ -51,6 +52,11 @@ const routes = [
     name: 'ChangePassword',
     component: () => import('@/views/ChangePassView.vue'),
     meta: { requiresAuth: true, requiredRoles: ['CUSTOMER'] }
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: () => import('@/views/ResetPasswordView.vue'),
   },
 
   // --- ADMIN ROUTES ---

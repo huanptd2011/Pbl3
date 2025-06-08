@@ -132,7 +132,7 @@ const navItems = [
 ];
 const isAuthPage = computed(() => {
   const path = router.currentRoute.value.path;
-  return path === '/login' || path === '/register'|| path.startsWith('/admin')||path ==='/unauthorized' ;
+  return path === '/login' || path === '/register'|| path.startsWith('/admin')||path ==='/unauthorized'||path ==='/reset-password' ||path === '/forgot-password' ;
 });
 
 // Fetch categories from API

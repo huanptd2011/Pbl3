@@ -150,7 +150,7 @@ const navItems = [
 ];
 const isAuthPage = computed(() => {
   const path = router.currentRoute.value.path;
-  return path === '/login' || path === '/register'||path ==='/unauthorized'  || path.startsWith('/admin');
+  return path === '/login' || path === '/register'||path ==='/unauthorized' ||path ==='/reset-password' ||path === '/forgot-password' || path.startsWith('/admin');
 });
 // Fetch categories from API
 const fetchCategories = async () => {

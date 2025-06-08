@@ -32,14 +32,14 @@
             </div>
 
             <div class="text-start mb-3">
-              <small><a href="#">Quên mật khẩu?</a></small>
+              <small><router-link to="/forgot-password">Quên mật khẩu?</router-link></small>
             </div>
 
             <div class="text-center mb-3">
               <small>Chưa có tài khoản? <router-link to="/register">Đăng ký ngay bây giờ</router-link></small>
             </div>
 
-            
+
           </form>
         </div>
       </div>

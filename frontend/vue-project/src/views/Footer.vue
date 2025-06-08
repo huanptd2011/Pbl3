@@ -29,7 +29,7 @@ export default {
   setup() {
     const isAuthPage = computed(() => {
       const path = router.currentRoute.value.path;
-      return path === '/login' || path === '/register' ||path ==='/unauthorized'  || path.startsWith('/admin');
+      return path === '/login' || path === '/register' ||path ==='/unauthorized'  || path.startsWith('/admin') ||path ==='/reset-password' ||path === '/forgot-password';
     });
     return { isAuthPage };
   }

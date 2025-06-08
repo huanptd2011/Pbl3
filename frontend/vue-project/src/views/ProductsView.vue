@@ -1,5 +1,17 @@
 <template>
     <div class="container mt-4">
+
+      <h1>Sản phẩm</h1>
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" ><router-link to="/" style="color: #0A1330">Trang chủ</router-link></li>
+
+          <li class="breadcrumb-item active" aria-current="page">
+            Sản phẩm
+          </li>
+        </ol>
+      </nav>
         <div class="row">
             <div class="col-md-3">
                 <div class="mb-4 sticky-navbar">

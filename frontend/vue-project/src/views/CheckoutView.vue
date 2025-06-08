@@ -221,6 +221,11 @@ const placeOrder = async () => {
       if (vnPayResponse.data && vnPayResponse.data.url) {
         window.location.href = vnPayResponse.data.url;
         const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload);
+        const updateData = {
+          orderId: response.data.orderId,
+          paymentState: 'Đã thanh toán',
+        };
+        await axios.put(`http://localhost:8080/api/orders/payment-status`, updateData);
         if (buyNowStore.buyNowItem) {
           buyNowStore.clearBuyNowItem(); // Xóa sản phẩm mua ngay
         } else {

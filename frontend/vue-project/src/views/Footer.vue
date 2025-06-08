@@ -27,10 +27,21 @@ import { computed } from 'vue';
 export default {
   name: 'AppFooter',
   setup() {
-    const isAuthPage = computed(() => {
-      const path = router.currentRoute.value.path;
-      return path === '/login' || path === '/register' ||path ==='/unauthorized'  || path.startsWith('/admin') ||path ==='/reset-password' ||path === '/forgot-password';
-    });
+const isAuthPage = computed(() => {
+  const currentRoute = router.currentRoute.value;
+  const path = currentRoute.path;
+  const name = currentRoute.name;
+
+  return (
+    path === '/login' ||
+    path === '/register' ||
+    path === '/unauthorized' ||
+    path === '/reset-password' ||
+    path === '/forgot-password' ||
+    path.startsWith('/admin') ||
+    name === 'NotFound' // ✅ check theo name chứ không check theo path
+  );
+});
     return { isAuthPage };
   }
 }

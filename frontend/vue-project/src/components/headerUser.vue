@@ -131,10 +131,20 @@ const navItems = [
   { title: 'Sản phẩm', path: '/products' },
 ];
 const isAuthPage = computed(() => {
-  const path = router.currentRoute.value.path;
-  return path === '/login' || path === '/register'|| path.startsWith('/admin')||path ==='/unauthorized'||path ==='/reset-password' ||path === '/forgot-password' ;
-});
+  const currentRoute = router.currentRoute.value;
+  const path = currentRoute.path;
+  const name = currentRoute.name;
 
+  return (
+    path === '/login' ||
+    path === '/register' ||
+    path === '/unauthorized' ||
+    path === '/reset-password' ||
+    path === '/forgot-password' ||
+    path.startsWith('/admin') ||
+    name === 'NotFound' // ✅ check theo name chứ không check theo path
+  );
+});
 // Fetch categories from API
 const fetchCategories = async () => {
   try {

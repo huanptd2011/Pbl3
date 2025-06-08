@@ -50,7 +50,7 @@
           </form>
 
           <div class="text-start mt-3">
-            <small><router-link to="/">Quay lại đăng nhập</router-link></small>
+            <small><router-link to="/login">Quay lại đăng nhập</router-link></small>
           </div>
         </div>
       </div>

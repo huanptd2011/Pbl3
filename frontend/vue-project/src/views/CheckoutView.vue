@@ -254,12 +254,7 @@ const placeOrder = async () => {
 
     alert('Đặt hàng thành công!');
 
-    // --- CHUYỂN HƯỚNG SAU KHI ĐẶT HÀNG THÀNH CÔNG ---
-    // Do bạn không có route OrderConfirmation với params, chúng ta sẽ chuyển hướng về giỏ hàng
-    router.push({ name: 'Cart' });
-    // Nếu bạn muốn một trang xác nhận đơn hàng, bạn cần định nghĩa route đó trong router/index.js
-    // Ví dụ: { path: '/order-confirmation', name: 'OrderConfirmation', component: OrderConfirmationView }
-    // Và sau đó sử dụng: router.push({ name: 'OrderConfirmation' });
+    router.push({ name: 'Order' });
 
   } catch (error) {
     console.error('Lỗi khi đặt hàng:', error.response?.data || error.message);

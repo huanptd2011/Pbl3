@@ -227,13 +227,7 @@ const placeOrder = async () => {
           const productIds = orderPayload.listOrderDetail.map(item => item.productId);
 
           cartStore.removeItems(productIds);
-
-          console.log("Đã xóa các sản phẩm khỏi giỏ hàng:", productIds);
           cartStore.removeSelectedItems(); 
-          console.log("cac san pham con lai trong gio hang:", cartStore.items);
-          cartStore.setAllItemsSelected(true)
-          console.log("cac san pham con lai trong gio hang:", cartStore.loadUserCart(userStore.user.userId));
-          // Xóa các sản phẩm khỏi giỏ hàng
         }
         return; 
       } else {

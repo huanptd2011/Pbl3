@@ -26,7 +26,7 @@
                 <li v-for="category in categories" :key="category.categoryId">
                   <router-link
                     class="dropdown-item"
-                    :to="`/products?category=${category.categoryId}`"
+                    :to="{ name: 'ProductCategory', params: { categoryId: category.categoryId } }"
                     @click="showCategoryDropdown = false"
                   >
                     {{ category.categoryName }}
@@ -34,7 +34,6 @@
                 </li>
               </ul>
             </li>
-
             <!-- About -->
             <li class="nav-item">
               <router-link to="/about" class="nav-link">Về chúng tôi</router-link>
@@ -83,7 +82,7 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div class="mobile-menu" :class="{ 'show': mobileMenuOpen }">
+        <div class="mobile-menu" :class="{ 'show': mobileMenuOpen }">
       <div class="mobile-menu-header">
         <button class="btn btn-close" @click="toggleMobileMenu"></button>
       </div>

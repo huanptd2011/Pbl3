@@ -215,28 +215,35 @@ const placeOrder = async () => {
       return;
     }
 
-    const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    console.log("Kết quả từ backend:", response.data);
-
     // Xử lý VNPay redirect
     if (selectedPaymentMethod.value === 2) { // Giả sử ID 2 là VNPay
-      const vnPayResponse = await axios.get(`http://localhost:8080/api/vn-pay/create/${response.data.totalPrice}`);
-
+      const vnPayResponse = await axios.get(`http://localhost:8080/api/vn-pay/create/${orderPayload.totalPrice}`);
       if (vnPayResponse.data && vnPayResponse.data.url) {
         window.location.href = vnPayResponse.data.url;
-        return; // Ngừng xử lý tiếp nếu đã chuyển hướng
+        const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload);
+        if (buyNowStore.buyNowItem) {
+          buyNowStore.clearBuyNowItem(); // Xóa sản phẩm mua ngay
+        } else {
+          const productIds = orderPayload.listOrderDetail.map(item => item.productId);
+
+          cartStore.removeItems(productIds);
+
+          console.log("Đã xóa các sản phẩm khỏi giỏ hàng:", productIds);
+          cartStore.removeSelectedItems(); 
+          console.log("cac san pham con lai trong gio hang:", cartStore.items);
+          cartStore.setAllItemsSelected(true)
+          console.log("cac san pham con lai trong gio hang:", cartStore.loadUserCart(userStore.user.userId));
+          // Xóa các sản phẩm khỏi giỏ hàng
+        }
+        return; 
       } else {
         alert('Không thể tạo link thanh toán VNPay.');
         return;
       }
     }
 
-    // Sau khi đặt hàng thành công (đối với COD hoặc VNPay nếu không redirect)
-    // Xóa sản phẩm khỏi giỏ hàng HOẶC xóa sản phẩm mua ngay
+    const response = await axios.post('http://localhost:8080/api/orders/add', orderPayload);
+
     if (buyNowStore.buyNowItem) {
       buyNowStore.clearBuyNowItem(); // Xóa sản phẩm mua ngay
     } else {
@@ -244,12 +251,7 @@ const placeOrder = async () => {
 
       cartStore.removeItems(productIds);
 
-      console.log("Đã xóa các sản phẩm khỏi giỏ hàng:", productIds);
       cartStore.removeSelectedItems(); 
-      console.log("cac san pham con lai trong gio hang:", cartStore.items);
-      cartStore.setAllItemsSelected(true)
-      console.log("cac san pham con lai trong gio hang:", cartStore.loadUserCart(userStore.user.userId));
-      // Xóa các sản phẩm khỏi giỏ hàng
     }
 
     alert('Đặt hàng thành công!');

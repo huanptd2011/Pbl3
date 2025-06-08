@@ -108,6 +108,7 @@ export default {
               return;
             }
             alert("Đăng ký thành công!");
+            this.$router.push('/login');
           } catch (error) {
               if (error.response) {
                 console.error("Máy chủ phản hồi với:", error.response.status, error.response.data);

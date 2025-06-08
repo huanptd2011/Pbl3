@@ -1,7 +1,7 @@
 <template>
   <div class="unauthorized-container">
     <div class="error-content">
-      <!-- Error Icon -->
+      <!-- Icon lỗi -->
       <div class="error-icon">
         <svg
           width="120"
@@ -16,7 +16,7 @@
         </svg>
       </div>
 
-      <!-- Error Message -->
+      <!-- Thông báo lỗi -->
       <div class="error-message">
         <h1 class="error-title">403 - Không có quyền truy cập</h1>
         <p class="error-description">
@@ -25,7 +25,7 @@
         </p>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Các nút hành động -->
       <div class="error-actions">
         <button @click="goHome" class="btn btn-primary">
           <svg
@@ -59,7 +59,7 @@
           Quay lại
         </button>
 
-        <router-link to="/login" class="btn btn-outline">
+        <button @click="goLogin" class="btn btn-outline">
           <svg
             width="20"
             height="20"
@@ -76,17 +76,17 @@
             <line x1="15" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" />
           </svg>
           Đăng nhập lại
-        </router-link>
+        </button>
       </div>
 
-      <!-- Additional Info -->
+      <!-- Thông tin thêm -->
       <div class="error-info">
         <p class="error-code">Mã lỗi: UNAUTHORIZED_ACCESS</p>
         <p class="error-timestamp">{{ currentTime }}</p>
       </div>
     </div>
 
-    <!-- Decorative Background -->
+    <!-- Trang trí nền -->
     <div class="background-decoration">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>
@@ -97,7 +97,7 @@
 
 <script>
 import { useUserStore } from '@/stores/user'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -106,6 +106,10 @@ export default {
     const router = useRouter()
     const currentTime = ref('')
 
+    // Tham chiếu store người dùng
+    const userStore = useUserStore()
+
+    // Hàm quay về trang trước hoặc trang chủ nếu không có lịch sử
     const goBack = () => {
       if (window.history.length > 1) {
         router.go(-1)
@@ -114,26 +118,39 @@ export default {
       }
     }
 
-    const userStore = useUserStore()
-
+    // Hàm trở về trang chủ và đăng xuất
     const goHome = () => {
       userStore.logout()
       router.push('/')
     }
 
+    // Hàm chuyển đến trang đăng nhập và đăng xuất
+    const goLogin = () => {
+      userStore.logout()
+      router.push('/login')
+    }
+
+    // Cập nhật thời gian hiện tại theo định dạng Việt Nam
     const updateTime = () => {
       currentTime.value = new Date().toLocaleString('vi-VN')
     }
 
+    // Biến để lưu ID interval để clear khi component unmount
+    let intervalId = null
+
     onMounted(() => {
       updateTime()
-      // Update time every second
-      setInterval(updateTime, 1000)
+      intervalId = setInterval(updateTime, 1000)
+    })
+
+    onBeforeUnmount(() => {
+      clearInterval(intervalId)
     })
 
     return {
       goBack,
       goHome,
+      goLogin,
       currentTime,
     }
   },
@@ -141,134 +158,109 @@ export default {
 </script>
 
 <style scoped>
+/* Bạn có thể tùy chỉnh style theo ý muốn */
+
 .unauthorized-container {
+  position: relative;
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  align-items: center;
+  background: #f9fafb;
   padding: 20px;
-  position: relative;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .error-content {
-  text-align: center;
   background: white;
-  padding: 3rem 2rem;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
-  position: relative;
-  z-index: 2;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 480px;
+  text-align: center;
+  z-index: 10;
 }
 
 .error-icon {
-  margin-bottom: 2rem;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
+  margin-bottom: 24px;
 }
 
 .error-title {
-  font-size: 2.5rem;
+  margin: 0 0 12px;
+  font-size: 28px;
+  color: #ef4444;
   font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1rem;
-  line-height: 1.2;
 }
 
 .error-description {
-  font-size: 1.1rem;
+  margin-bottom: 32px;
   color: #6b7280;
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .error-actions {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
 }
 
 .btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 12px 24px;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 10px 20px;
   font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
   cursor: pointer;
-  font-size: 1rem;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: background-color 0.3s, color 0.3s;
+  user-select: none;
+  background: transparent;
+  color: #374151;
+  font-size: 14px;
+}
+
+.btn svg {
+  stroke-width: 2;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: #ef4444;
   color: white;
+  border-color: #ef4444;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+  background-color: #dc2626;
+  border-color: #dc2626;
 }
 
 .btn-secondary {
-  background: #f3f4f6;
+  background-color: #e5e7eb;
   color: #374151;
-  border: 2px solid #e5e7eb;
+  border-color: #d1d5db;
 }
 
 .btn-secondary:hover {
-  background: #e5e7eb;
-  transform: translateY(-2px);
+  background-color: #d1d5db;
 }
 
 .btn-outline {
-  background: transparent;
-  color: #667eea;
-  border: 2px solid #667eea;
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 .btn-outline:hover {
-  background: #667eea;
+  background-color: #ef4444;
   color: white;
-  transform: translateY(-2px);
 }
 
 .error-info {
-  border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
-  font-size: 0.875rem;
+  font-size: 12px;
   color: #9ca3af;
-}
-
-.error-code {
-  margin-bottom: 0.5rem;
-  font-family: 'Courier New', monospace;
-}
-
-.error-timestamp {
-  margin: 0;
 }
 
 .background-decoration {
@@ -277,86 +269,50 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .circle {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  animation: float 6s ease-in-out infinite;
+  opacity: 0.15;
+  background-color: #ef4444;
+  animation: pulse 4s infinite ease-in-out;
 }
 
 .circle-1 {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
   top: 10%;
-  left: 10%;
+  left: 15%;
   animation-delay: 0s;
 }
 
 .circle-2 {
-  width: 150px;
-  height: 150px;
-  top: 60%;
-  right: 10%;
-  animation-delay: 2s;
+  width: 250px;
+  height: 250px;
+  top: 50%;
+  left: 60%;
+  animation-delay: 1.5s;
 }
 
 .circle-3 {
-  width: 80px;
-  height: 80px;
-  bottom: 20%;
-  left: 20%;
-  animation-delay: 4s;
+  width: 150px;
+  height: 150px;
+  top: 75%;
+  left: 30%;
+  animation-delay: 3s;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
   }
   50% {
-    transform: translateY(-20px);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .error-content {
-    padding: 2rem 1.5rem;
-  }
-
-  .error-title {
-    font-size: 2rem;
-  }
-
-  .error-description {
-    font-size: 1rem;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .unauthorized-container {
-    padding: 15px;
-  }
-
-  .error-content {
-    padding: 1.5rem 1rem;
-  }
-
-  .error-title {
-    font-size: 1.8rem;
-  }
-
-  .error-icon svg {
-    width: 80px;
-    height: 80px;
+    transform: scale(1.1);
+    opacity: 0.3;
   }
 }
 </style>

@@ -53,15 +53,17 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
- const userStore = useUserStore()
+
 export default {
   name: 'NotFound',
   setup() {
     const router = useRouter()
+    const userStore = useUserStore()
     const currentTime = ref('')
+    let intervalId = null
 
     const goBack = () => {
       if (window.history.length > 1) {
@@ -82,7 +84,11 @@ export default {
 
     onMounted(() => {
       updateTime()
-      setInterval(updateTime, 1000)
+      intervalId = setInterval(updateTime, 1000)
+    })
+
+    onBeforeUnmount(() => {
+      clearInterval(intervalId)
     })
 
     return {
@@ -93,13 +99,12 @@ export default {
   }
 }
 </script>
-
 <style scoped>
 .not-found-container {
   position: relative;
   min-height: 100vh;
   padding: 40px 20px;
-  background: #fffbe6;
+  background: #fff1f2; /* nền đỏ nhạt */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,12 +124,12 @@ export default {
 .error-title {
   font-size: 28px;
   font-weight: bold;
-  color: #f59e0b;
+  color: #dc2626; /* đỏ đậm */
   margin-bottom: 10px;
 }
 
 .error-description {
-  color: #4b5563;
+  color: #7f1d1d; /* đỏ tối hơn */
   margin-bottom: 30px;
 }
 
@@ -140,25 +145,25 @@ export default {
 }
 
 .btn-primary {
-  background-color: #3b82f6;
+  background-color: #b91c1c; /* đỏ đậm */
   color: white;
   border: none;
 }
 
 .btn-secondary {
-  background-color: #e5e7eb;
-  color: #111827;
+  background-color: #f87171; /* đỏ nhạt */
+  color: white;
   border: none;
 }
 
 .btn:hover {
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 .error-info {
   margin-top: 30px;
   font-size: 14px;
-  color: #6b7280;
+  color: #991b1b; /* đỏ sẫm */
 }
 
 .background-decoration {
@@ -171,13 +176,13 @@ export default {
 .circle {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.2;
+  opacity: 0.15;
 }
 
 .circle-1 {
   width: 200px;
   height: 200px;
-  background: #facc15;
+  background: #f87171; /* đỏ nhạt */
   top: -50px;
   left: -50px;
 }
@@ -185,7 +190,7 @@ export default {
 .circle-2 {
   width: 150px;
   height: 150px;
-  background: #fbbf24;
+  background: #ef4444; /* đỏ trung bình */
   bottom: 80px;
   right: -40px;
 }
@@ -193,7 +198,7 @@ export default {
 .circle-3 {
   width: 100px;
   height: 100px;
-  background: #fde68a;
+  background: #fee2e2; /* đỏ rất nhạt */
   bottom: 0;
   left: 20%;
 }

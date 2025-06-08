@@ -1,48 +1,29 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import { useUserStore } from './stores/user' // Đảm bảo đường dẫn đúng đến store của bạn
-import appHeader from './components/appHeader.vue' // Đảm bảo đường dẫn đúng đến component appHeader
-import headerUser from './components/headerUser.vue' // Đảm bảo đường dẫn đúng đến component headerUser
-import AppFooter from './views/Footer.vue' // Đảm bảo đường dẫn đúng đến component Footer
+import { useUserStore } from './stores/user'
+import appHeader from './components/appHeader.vue'
+import headerUser from './components/headerUser.vue'
+import AppFooter from './views/Footer.vue'
 
 const userStore = useUserStore()
-
-// !!! LƯU Ý: Đã bỏ dòng userStore.logout() ở đây.
-// Nếu bạn muốn đăng xuất khi tải lại trang, hãy xem xét logic khác
-// hoặc chỉ gọi nó ở một nút/event cụ thể.
-// userStore.logout() // <--- Dòng này đã bị loại bỏ
 </script>
 
-<!-- <template>
-  <div>
-    <template v-if="!userStore.isAdmin">
-      <headerUser v-if="userStore.isLoggedIn" />
-      <appHeader v-else />
-    </template>
-
-    <RouterView />
-     
-    <template v-if="!userStore.isAdmin">
-      <AppFooter />
-    </template>
-  </div>
-</template> -->
-
 <template>
-  <div id="app-container"> 
-    <template v-if="!userStore.isAdmin">
-        <headerUser v-if="userStore.isLoggedIn" />
-        <appHeader v-else />
-      </template>
+  <div id="app-container">
+    <!-- Hiển thị header tùy theo trạng thái đăng nhập -->
+    <headerUser v-if="userStore.isLoggedIn" />
+    <appHeader v-else />
+
+    <!-- Nội dung chính -->
     <div class="content-wrapper">
-      <RouterView /> 
+      <RouterView />
     </div>
-      
-    <template v-if="!userStore.isAdmin">
-      <AppFooter />
-    </template>
+
+    <!-- Hiển thị footer -->
+    <AppFooter />
   </div>
 </template>
+
 
 <style>
   #app-container {
@@ -55,5 +36,5 @@ const userStore = useUserStore()
     overflow-y: auto;
   }
 
-  
+
 </style>

@@ -60,7 +60,7 @@
             </div>
           </li>
 
-        
+
           <!-- Cart -->
           <li class="nav-item me-2">
             <router-link to="/cart" class="btn btn-link position-relative bg-gray rounded-5">
@@ -150,9 +150,8 @@ const navItems = [
 ];
 const isAuthPage = computed(() => {
   const path = router.currentRoute.value.path;
-  return path === '/login' || path === '/register';
+  return path === '/login' || path === '/register'||path ==='/unauthorized'  || path.startsWith('/admin');
 });
-
 // Fetch categories from API
 const fetchCategories = async () => {
   try {

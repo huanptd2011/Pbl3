@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky-top">
+  <header class="sticky-top" v-if="!isAuthPage">
     <div class="container">
       <div class="d-flex align-items-center justify-content-between py-3">
         <!-- Mobile menu toggle -->
@@ -130,6 +130,10 @@ const navItems = [
   { title: 'Trang chủ', path: '/' },
   { title: 'Sản phẩm', path: '/products' },
 ];
+const isAuthPage = computed(() => {
+  const path = router.currentRoute.value.path;
+  return path === '/login' || path === '/register'|| path.startsWith('/admin')||path ==='/unauthorized' ;
+});
 
 // Fetch categories from API
 const fetchCategories = async () => {

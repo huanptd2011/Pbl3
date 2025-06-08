@@ -5,6 +5,7 @@ import { useCartStore } from '@/stores/cartStore'
 export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
+    initialized: false, // Thêm flag để track việc khởi tạo
     user: {
       username: '',
       email: '',
@@ -41,12 +42,41 @@ export const useUserStore = defineStore('user', {
         dob: userData.dob ? userData.dob.substring(0, 10) : '', // xử lý an toàn hơn với ISO date
       };
       this.isLoggedIn = true;
+      this.initialized = true;
 
       // Lưu vào localStorage
       localStorage.setItem('user', JSON.stringify(this.user));
     },
 
-    // Load lại từ localStorage khi reload trang
+    // Kiểm tra auth từ localStorage
+    async checkAuth() {
+      try {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+
+          // Kiểm tra token có hợp lệ không (có thể gọi API để verify)
+          if (parsedUser.token) {
+            this.user = {
+              ...this.user,
+              ...parsedUser
+            };
+            this.isLoggedIn = true;
+          } else {
+            this.logout();
+          }
+        } else {
+          this.logout();
+        }
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra auth:', error);
+        this.logout();
+      } finally {
+        this.initialized = true;
+      }
+    },
+
+    // Load lại từ localStorage khi reload trang (deprecated - dùng checkAuth thay thế)
     loadUserFromStorage() {
       const savedUser = localStorage.getItem('user');
       if (savedUser) {
@@ -64,6 +94,7 @@ export const useUserStore = defineStore('user', {
       } else {
         this.logout();
       }
+      this.initialized = true;
     },
 
     // Đăng xuất
@@ -72,6 +103,7 @@ export const useUserStore = defineStore('user', {
       cartStore.clearUserCart();
 
       this.isLoggedIn = false;
+      this.initialized = true;
       this.user = {
         username: '',
         email: '',
@@ -87,6 +119,11 @@ export const useUserStore = defineStore('user', {
       };
 
       localStorage.removeItem('user');
+    },
+
+    // Reset initialized flag (nếu cần)
+    resetInitialized() {
+      this.initialized = false;
     }
   },
 

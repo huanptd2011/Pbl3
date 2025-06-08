@@ -15,7 +15,7 @@
             class="avatar-upload"
           >
           <label for="avatar-upload" class="avatar-upload-label">
-                        <i class="fas fa-pen"></i> 
+                        <i class="fas fa-pen"></i>
                     </label>
         </div>
       </div>
@@ -93,7 +93,7 @@
 
 <script setup>
 
-import { ref, onMounted } from 'vue'
+import { ref} from 'vue'
 import { useUserStore } from '@/stores/user'
 import axios from 'axios'
 import defaultAvatar from '@/assets/default-avatar.jpg'
@@ -166,7 +166,7 @@ const saveProfile = async () => {
     console.log('Payload:', payload)
 
 
-    const response = await axios.put(`http://localhost:8080/api/users/${userStore.user.userId}`, payload)
+    await axios.put(`http://localhost:8080/api/users/${userStore.user.userId}`, payload)
 
     // Cập nhật lại store nếu cần
     userStore.setUser({

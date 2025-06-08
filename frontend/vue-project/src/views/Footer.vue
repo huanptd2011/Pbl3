@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" v-if="!isAuthPage">
     <div class="footer-content">
       <div class="social-icons">
         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -21,9 +21,20 @@
 </template>
 
 <script>
+import router from '@/router';
+import { computed } from 'vue';
+
 export default {
-  name: 'AppFooter'
+  name: 'AppFooter',
+  setup() {
+    const isAuthPage = computed(() => {
+      const path = router.currentRoute.value.path;
+      return path === '/login' || path === '/register' ||path ==='/unauthorized'  || path.startsWith('/admin');
+    });
+    return { isAuthPage };
+  }
 }
+
 </script>
 
 <style scoped>
